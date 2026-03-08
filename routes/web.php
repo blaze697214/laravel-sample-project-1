@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -13,9 +14,7 @@ Route::post('/logout',[AuthController::class,'logout'])->name('logout');
 
 Route::middleware(['auth','role:admin'])->prefix('admin')->group(function(){
 
-    Route::get('/dashboard',function(){
-        return view('admin.dashboard');
-    });
+    Route::get('/dashboard',[DashboardController::class, 'dashboard']);
 
 });
 Route::middleware(['auth','role:cdc'])->prefix('cdc')->group(function(){

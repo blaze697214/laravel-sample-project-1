@@ -44,6 +44,7 @@ class AuthController extends Controller
             'email' => 'Invalid Email',
             'password' => 'Invalid Password'
         ]);
+        
     }
 
     public function logout()

@@ -38,6 +38,26 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class, 'user_role');
     }
 
+    public function createdUsers()
+    {
+        return $this->hasMany(User::class,'created_by');
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class,'created_by');
+    }
+
+    public function programme()
+    {
+        return $this->belongsTo(Programme::class);
+    }
+
+    public function curriculumYears()
+    {
+        return $this->hasMany(CurriculumYears::class,'created_by');
+    }
+
     /**
      * Get the attributes that should be cast.
      *
