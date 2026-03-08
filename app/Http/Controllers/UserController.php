@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Programme;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -12,7 +16,21 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $roles = Role::all();
+
+        $programmes = Programme::all();
+
+        $users = User::with(['roles', 'programme'])
+            ->whereHas('roles', function ($q) {
+                $q->whereIn('name', ['cdc', 'hod']);
+            })
+            ->get();
+
+        return view('admin.users', compact(
+            'roles',
+            'programmes',
+            'users'
+        ));
     }
 
     /**
@@ -28,7 +46,19 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = User::create([
+
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => Hash::make($request->input('password')),
+            'programme_id' => $request->input('programme_id'),
+            'created_by' => Auth::id(),
+
+        ]);
+
+        $user->roles()->attach($request->input('role_id'));
+
+        return back()->with('success', 'User created');
     }
 
     /**
@@ -50,16 +80,30 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        $user->update([
+
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'programme_id' => $request->input('programme_id'),
+
+        ]);
+
+        return back()->with('success', 'User updated');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy($id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        $user->delete();
+
+        return back()->with('success', 'User deleted');
     }
 }

@@ -1,4 +1,4 @@
-@extends('layout.admin')
+@extends('layouts.admin')
 
 @section('content')
 
@@ -86,7 +86,7 @@
 
                 @foreach($programmeFaculty as $programme)
 
-                    <tr class="hover:bg-gray-50">
+                    <tr class="hover:bg-gray-50 border-gray-200">
 
                         <td class="px-4 py-3">
                             {{ $programme->name }}
@@ -152,7 +152,7 @@
                         </td>
 
                         <td class="px-4 py-3">
-                            {{ $user->roles->first()->name}}
+                            {{ $user->roles->first()->name }}
                         </td>
 
                         <td class="px-4 py-3 text-gray-500">

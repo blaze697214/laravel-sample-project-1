@@ -23,7 +23,7 @@
                 </h3>
 
                 <p class="text-sm text-slate-400">
-                    {{ auth()->user()->roles->first()->name }}  
+                    {{ auth()->user()->roles->first()->name }}
                 </p>
             </div>
         </div>
@@ -37,17 +37,17 @@
                 Dashboard
             </a>
 
-            <a href="/admin/users"
-            class="block px-6 py-3 hover:bg-slate-800 transition">
-                Users
-            </a>
-
             <a href="/admin/programmes"
             class="block px-6 py-3 hover:bg-slate-800 transition">
                 Programmes
             </a>
 
-            <a href="/admin/courses"
+            <a href="/admin/users"
+            class="block px-6 py-3 hover:bg-slate-800 transition">
+                Users
+            </a>
+
+            {{-- <a href="/admin/courses"
             class="block px-6 py-3 hover:bg-slate-800 transition">
                 Courses
             </a>
@@ -65,7 +65,7 @@
             <a href="/admin/semester"
             class="block px-6 py-3 hover:bg-slate-800 transition">
                 Semester Placement
-            </a>
+            </a> --}}
 
         </nav>
 
