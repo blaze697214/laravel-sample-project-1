@@ -11,7 +11,7 @@
 
 
     @if (session('success'))
-        <div class="bg-green-100 border border-green-300 text-green-700 px-4 py-2 rounded mb-6">
+        <div id="successMessage" class="bg-green-100 border border-green-300 text-green-700 px-4 py-2 rounded mb-6">
             {{ session('success') }}
         </div>
     @endif
@@ -175,9 +175,9 @@
 
                         <tr>
                             <th class="px-4 py-3 text-sm font-semibold text-gray-600 w-100">Title</th>
-                            <th class="px-4 py-3 text-sm font-semibold text-gray-600 w-30">Abbrev</th>
+                            <th class="px-4 py-3 text-sm font-semibold text-gray-600 w-60">Abbrev</th>
                             <th class="px-4 py-3 text-sm font-semibold text-gray-600 w-60">Programmes</th>
-                            <th class="px-4 py-3 text-sm font-semibold text-gray-600">Actions</th>
+                            <th class="px-4 py-3 text-sm font-semibold text-gray-600 text-center">Actions</th>
                         </tr>
 
                     </thead>
@@ -189,46 +189,60 @@
                             @foreach ($courses[$level->id] as $course)
                                 <tr class="hover:bg-gray-50">
 
-                                    <td class="px-4 py-3">
-                                        {{ $course->title }}
-                                    </td>
+                                    <form method="POST" action="{{ route('cdc.schemes.courses.update', $course->id) }}">
+                                        @csrf
+                                        @method('PUT')
+
+                                        <td class="px-4 py-3">
+                                            <input type="text" name="title" value="{{ $course->title }}"
+                                                class="border border-gray-300 rounded px-2 py-1 w-60">
+                                        </td>
 
 
-                                    <td class="px-4 py-3">
-                                        {{ $course->abbrevation }}
-                                    </td>
+                                        <td class="px-4 py-3">
+                                            <input type="text" name="abbrevation" value="{{ $course->abbrevation }}"
+                                                class="border border-gray-300 rounded px-2 py-1 w-30">
+                                        </td>
 
 
-                                    <td class="px-4 py-3 white-space:normal">
+                                        <td class="px-4 py-3 white-space:normal">
 
-                                        @foreach ($course->programmes as $prog)
-                                            <span
-                                                class="inline-flex items-center bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded mr-1 mb-1">
+                                            @foreach ($course->programmes as $prog)
+                                                <span
+                                                    class="inline-flex items-center bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded mr-1 mb-1">
 
-                                                {{ $prog->abbrevation }}
+                                                    {{ $prog->abbrevation }}
 
-                                                @if ($prog->pivot->is_elective)
-                                                    <span class="ml-1 text-purple-600 font-medium">
-                                                        (Elective)
-                                                    </span>
-                                                @endif
+                                                    @if ($prog->pivot->is_elective)
+                                                        <span class="ml-1 text-purple-600 font-medium">
+                                                            (Elective)
+                                                        </span>
+                                                    @endif
 
-                                            </span>
-                                        @endforeach
+                                                </span>
+                                            @endforeach
 
-                                    </td>
+                                        </td>
 
 
-                                    <td class="px-4 py-3 space-x-2">
+                                        <td class="px-4 py-3 space-x-2 flex justify-center">
 
-                                        <button
-                                            class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">
-                                            Edit
-                                        </button>
+                                            <button type="submit"
+                                                class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm w-30">
+                                                Edit
+                                            </button>
+                                    </form>
 
-                                        <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">
+                                    <form method="POST" action="{{ route('cdc.schemes.courses.destroy', $course->id) }}">
+
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button type="submit"
+                                            class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm w-30    ">
                                             Delete
                                         </button>
+                                    </form>
 
                                     </td>
 
@@ -284,5 +298,14 @@
             });
 
         });
+        setTimeout(function() {
+
+            const msg = document.getElementById('successMessage');
+
+            if (msg) {
+                msg.style.display = 'none';
+            }
+
+        }, 2000);
     </script>
 @endsection

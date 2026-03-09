@@ -31,4 +31,14 @@ class Courses extends Model
     {
         return $this->belongsToMany(Programme::class,'programme_course','course_id','programme_id')->withPivot('is_elective');
     }
+
+    public function electiveGroup()
+    {
+        return $this->belongsToMany(ElectiveGroup::class,'elective_group_courses');
+    }
+
+    public function classAwardConfigurations()
+    {
+        return $this->belongsToMany(ClassAwardConfiguration::class,'class_award_compulsory_courses');
+    }
 }

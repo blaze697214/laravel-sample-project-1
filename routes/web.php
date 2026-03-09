@@ -61,6 +61,10 @@ Route::middleware(['auth', 'role:cdc'])->prefix('cdc')->name('cdc.')->group(func
 
     Route::post('/schemes/{scheme}/courses',[CDCCourseController::class, 'store'])->name('schemes.courses.store');
 
+    Route::put('/schemes/courses/{course}', [CDCCourseController::class,'update'])->name('schemes.courses.update');
+
+    Route::delete('/schemes/courses/{course}', [CDCCourseController::class,'destroy'])->name('schemes.courses.destroy');
+
 });
 Route::middleware(['auth', 'role:hod'])->prefix('hod')->name('hod.')->group(function () {
 

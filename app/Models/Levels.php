@@ -26,4 +26,14 @@ class Levels extends Model
     {
         return $this->hasMany(Courses::class);
     }
+
+    public function programmeLevelDetails()
+    {
+        return $this->hasMany(ProgrammeLevelDetail::class);
+    }
+
+    public function electiveGroups()
+    {   
+        return $this->hasMany(ElectiveGroup::class);
+    }
 }

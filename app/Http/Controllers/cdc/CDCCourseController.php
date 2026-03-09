@@ -106,16 +106,39 @@ class CDCCourseController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $courseId)
     {
-        //
+
+        $request->validate([
+            'title' => 'required',
+            'abbrevation' => 'required',
+        ]);
+
+        $course = Courses::findOrFail($courseId);
+
+        $course->update([
+            'title' => $request->input('title'),
+            'abbrevation' => $request->input('abbrevation'),
+        ]);
+
+        return back()->with('success', 'Course updated');
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($courseId)
     {
-        //
+
+        $course = Courses::findOrFail($courseId);
+
+        /* remove pivot records first */
+        $course->programmes()->detach();
+
+        $course->delete();
+
+        return back()->with('success', 'Course deleted');
+
     }
 }

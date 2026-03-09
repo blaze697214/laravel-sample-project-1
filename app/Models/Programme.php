@@ -10,6 +10,11 @@ class Programme extends Model
     /** @use HasFactory<\Database\Factories\ProgrammeFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'abbrevation',
+    ];
+
     public function users()
     {
         return $this->hasMany(User::class);
@@ -17,11 +22,27 @@ class Programme extends Model
 
     public function courses()
     {
-        return $this->belongsToMany(Courses::class,'programme_course','programme_id','course_id')->withPivot('is_elective');
+        return $this->belongsToMany(Courses::class, 'programme_course', 'programme_id', 'course_id')->withPivot('is_elective');
     }
 
-    protected $fillable = [
-        'name',
-        'abbrevation'
-    ];
+    public function programmeLevelDetails()
+    {
+        return $this->hasMany(ProgrammeLevelDetail::class);
+    }
+
+    public function electiveGroups()
+    {   
+        return $this->hasMany(ElectiveGroup::class);
+    }
+
+    public function classAwardConfigurations()
+    {
+        return $this->hasMany(ClassAwardConfiguration::class);
+    }
+
+    public function semesterPlacements()
+    {
+        return $this->hasMany(SemesterPlacement::class);
+    }
+    
 }

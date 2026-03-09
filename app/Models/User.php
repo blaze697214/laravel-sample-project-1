@@ -21,7 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'programme_id'
+        'programme_id',
     ];
 
     /**
@@ -41,12 +41,12 @@ class User extends Authenticatable
 
     public function createdUsers()
     {
-        return $this->hasMany(User::class,'created_by');
+        return $this->hasMany(User::class, 'created_by');
     }
 
     public function creator()
     {
-        return $this->belongsTo(User::class,'created_by');
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     public function programme()
@@ -56,15 +56,25 @@ class User extends Authenticatable
 
     public function curriculumYears()
     {
-        return $this->hasMany(CurriculumYears::class,'created_by');
+        return $this->hasMany(CurriculumYears::class, 'created_by');
     }
+
+    public function courseDetails()
+    {
+        return $this->hasMany(CourseDetail::class, 'created_by');
+    }
+
+    public function classAwardConfigurations()
+    {
+        return $this->hasMany(ClassAwardConfiguration::class);
+    }
+    
 
     /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
      */
-
     protected function casts(): array
     {
         return [
