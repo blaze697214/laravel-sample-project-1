@@ -1,0 +1,121 @@
+<?php
+
+namespace App\Http\Controllers\cdc;
+
+use App\Http\Controllers\Controller;
+use App\Models\Courses;
+use App\Models\CurriculumYears;
+use App\Models\Levels;
+use App\Models\Programme;
+use Illuminate\Http\Request;
+
+class CDCCourseController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create($schemeId)
+    {
+
+        $scheme = CurriculumYears::findOrFail($schemeId);
+
+        $levels = Levels::where('curriculum_year_id', $schemeId)
+            ->orderByRaw('order_no = 0')
+            ->orderBy('order_no')
+            ->get();
+
+        $programmes = Programme::all();
+
+        $courses = Courses::where('curriculum_year_id', $schemeId)
+            ->with('programmes')
+            ->get()
+            ->groupBy('level_id');
+
+        return view(
+            'cdc.schemes.courses',
+            compact('scheme', 'levels', 'programmes', 'courses')
+        );
+
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request, $schemeId)
+    {
+
+        $request->validate([
+            'title' => 'required',
+            'abbrevation' => 'required',
+            'level_id' => 'required',
+        ]);
+
+        $course = Courses::create([
+
+            'title' => $request->input('title'),
+            'abbrevation' => $request->input('abbrevation'),
+            'curriculum_year_id' => $schemeId,
+            'level_id' => $request->input('level_id'),
+
+        ]);
+
+        $data = [];
+
+        if ($request->input('offered')) {
+
+            foreach ($request->input('offered') as $programmeId) {
+
+                $data[$programmeId] = [
+                    'is_elective' => isset($request->input('elective')[$programmeId]),
+                ];
+
+            }
+
+            $course->programmes()->attach($data);
+
+        }
+
+        return back()->with('success', 'Course created');
+
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
+    }
+}

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('abbrevation');
-            $table->foreignId('curriculum_year_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('curriculum_year_id')->constrained('curriculum_years')->cascadeOnDelete();
             $table->foreignId('level_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

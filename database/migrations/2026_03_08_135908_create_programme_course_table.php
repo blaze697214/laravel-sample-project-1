@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('levels', function (Blueprint $table) {
+        Schema::create('programme_course', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('curriculum_year_id')->constrained('curriculum_years')->cascadeOnDelete();
-            $table->string('name');
-            $table->tinyInteger('order_no');
-            $table->boolean('is_audit');
+            $table->foreignId('programme_id')->constrained('programmes')->cascadeOnDelete();
+            $table->foreignId('course_id')->constrained('courses')->cascadeOnDelete();
+            $table->boolean('is_elective');
             $table->timestamps();
-            $table->unique(['curriculum_year_id', 'order_no']);
         });
     }
 
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('levels');
+        Schema::dropIfExists('programme_course');
     }
 };

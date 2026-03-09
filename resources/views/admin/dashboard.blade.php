@@ -15,7 +15,7 @@
         </h2>
 
         <p class="text-gray-600 mt-1">
-            Role: {{ auth()->user()->roles->first()->name }}
+            Role: {{ ucfirst(auth()->user()->roles->first()->name) }}
         </p>
 
     </div>
@@ -145,14 +145,14 @@
 
                 @foreach($recentUsers as $user)
 
-                    <tr class="hover:bg-gray-50">
+                    <tr class="hover:bg-gray-50 border-gray-200">
 
                         <td class="px-4 py-3">
                             {{ $user->name }}
                         </td>
 
-                        <td class="px-4 py-3">
-                            {{ $user->roles->first()->name }}
+                        <td class="px-4 py-3 text-sm font-medium text-gray-600">
+                            {{ strtoupper($user->roles->first()->name) ?? '-' }}
                         </td>
 
                         <td class="px-4 py-3 text-gray-500">

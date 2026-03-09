@@ -10,6 +10,16 @@ class CurriculumYears extends Model
     /** @use HasFactory<\Database\Factories\CurriculumYearsFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'year_start',
+        'year_end',
+        'total_credits',
+        'total_marks',
+        'created_by',
+        'is_active',
+        'is_locked'
+    ];
+
     public function creator()
     {
         return $this->belongsTo(User::class,'created_by');

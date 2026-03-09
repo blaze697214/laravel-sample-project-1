@@ -17,13 +17,13 @@ class RoleMiddleware
     public function handle(Request $request, Closure $next, $role): Response
     {
         if (!Auth::check()) {
-            abort(403);
+            return redirect()->route('login');
         }
 
         $user = Auth::user();
 
         if (!$user->roles()->where('name', $role)->exists()) {
-            abort(403);
+            return redirect()->route('login');
         }
 
         return $next($request);

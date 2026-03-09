@@ -23,7 +23,7 @@
                 </h3>
 
                 <p class="text-sm text-slate-400">
-                    {{ auth()->user()->roles->first()->name }}
+                    {{ ucfirst(auth()->user()->roles->first()->name) }}
                 </p>
             </div>
         </div>

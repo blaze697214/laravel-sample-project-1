@@ -18,8 +18,8 @@ return new class extends Migration
             $table->smallInteger('total_credits');
             $table->smallInteger('total_marks');
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
-            $table->boolean('is_active');
-            $table->boolean('is_locked');
+            $table->boolean('is_active')->nullable();
+            $table->boolean('is_locked')->nullable();
             $table->timestamps();
         });
     }

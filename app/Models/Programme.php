@@ -15,7 +15,13 @@ class Programme extends Model
         return $this->hasMany(User::class);
     }
 
+    public function courses()
+    {
+        return $this->belongsToMany(Courses::class,'programme_course','programme_id','course_id')->withPivot('is_elective');
+    }
+
     protected $fillable = [
-        'name'
+        'name',
+        'abbrevation'
     ];
 }

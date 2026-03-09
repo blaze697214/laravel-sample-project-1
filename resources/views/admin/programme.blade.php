@@ -16,13 +16,24 @@
         <form method="POST" action="{{ route('admin.programmes.store') }}" class="space-y-4">
             @csrf
 
-            <div>
-                <label class="block text-sm font-medium text-gray-600 mb-1">
-                    Programme Name
-                </label>
+            <div class="flex gap-10">
+                <div class="basis-2/3">
+                    <label class="block text-sm font-medium text-gray-600 mb-1">
+                        Programme Name
+                    </label>
 
-                <input type="text" name="name" required
-                    class="w-80 border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <input type="text" name="name" required
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+
+                <div class="basis-1/3">
+                    <label class="block text-sm font-medium text-gray-600 mb-1">
+                        Programme Abbrevation
+                    </label>
+
+                    <input type="text" name="abbrevation" required
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
             </div>
 
             <button type="submit"
@@ -60,6 +71,10 @@
                         </th>
 
                         <th class="px-4 py-3 text-sm font-semibold text-gray-600">
+                            Programme Abbrevation
+                        </th>
+
+                        <th class="px-4 py-3 text-sm font-semibold text-gray-600">
                             Actions
                         </th>
 
@@ -86,8 +101,12 @@
                                     @method('PUT')
 
                                     <input type="text" name="name" value="{{ $programme->name }}"
-                                        class="border border-gray-300 rounded px-2 py-1 w-48">
+                                        class="border border-gray-300 rounded px-2 py-1 w-60">
+                            </td>
 
+                            <td class="px-4 py-3">
+                                <input type="text" name="abbrevation" value="{{ $programme->abbrevation }}"
+                                    class="border border-gray-300 rounded px-2 py-1 w-48">
                             </td>
 
 

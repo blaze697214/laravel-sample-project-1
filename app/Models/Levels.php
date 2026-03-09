@@ -10,6 +10,13 @@ class Levels extends Model
     /** @use HasFactory<\Database\Factories\LevelsFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'curriculum_year_id',
+        'name',
+        'order_no',
+        'is_audit'
+    ];
+
     public function curriculumYear()
     {
         return $this->belongsTo(CurriculumYears::class);

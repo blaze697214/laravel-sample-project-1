@@ -29,11 +29,11 @@ class DatabaseSeeder extends Seeder
             'email' => 'cdc@gmail.com',
             'password' => Hash::make('cdc123')
         ]);
-        $hod = User::factory()->create([
-            'name' => 'blaze31',
-            'email' => 'hod@gmail.com',
-            'password' => Hash::make('hod123')
-        ]);
+        // $hod = User::factory()->create([
+        //     'name' => 'blaze31',
+        //     'email' => 'hod@gmail.com',
+        //     'password' => Hash::make('hod123')
+        // ]);
 
         $adminRole = Role::create(['name' => 'admin']);
         $cdcRole = Role::create(['name' => 'cdc']);
@@ -42,6 +42,6 @@ class DatabaseSeeder extends Seeder
 
         $admin->roles()->attach($adminRole->id);
         $cdc->roles()->attach($cdcRole->id);
-        $hod->roles()->attach($hodRole->id);
+        // $hod->roles()->attach($hodRole->id);
     }
 }

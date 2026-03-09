@@ -21,20 +21,22 @@ class AuthController extends Controller
         {
             $user = Auth::user();
 
+            $request->session()->regenerate();
+
             if($user->roles->contains('name','admin')){
-                return redirect('/admin/dashboard');
+                return redirect()->intended('/admin/dashboard');
             }
 
             if($user->roles->contains('name','cdc')){
-                return redirect('/cdc/dashboard');
+                return redirect()->intended('/cdc/dashboard');
             }
 
             if($user->roles->contains('name','hod')){
-                return redirect('/hod/dashboard');
+                return redirect()->intended('/hod/dashboard');
             }
 
             if($user->roles->contains('name','faculty')){
-                return redirect('/faculty/dashboard');
+                return redirect()->intended('/faculty/dashboard');
             }
 
             return redirect('/');
@@ -44,12 +46,14 @@ class AuthController extends Controller
             'email' => 'Invalid Email',
             'password' => 'Invalid Password'
         ]);
-        
+
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
+        $request->session()->invalidate();
+        // $request->session()->regenerateToken();
         return redirect('/login');
     }
 }

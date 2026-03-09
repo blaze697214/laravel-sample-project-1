@@ -8,9 +8,8 @@ use App\Models\Programme;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class DashboardController extends Controller
+class AdminDashBoardController extends Controller
 {
-    //
     public function dashboard()
     {
 

@@ -20,6 +20,7 @@ class ProgrammeController extends Controller
     {
         Programme::create([
             'name'=>$request->input('name'),
+            'abbrevation'=>$request->input('abbrevation')
         ]);
 
         return redirect()->back();
@@ -30,7 +31,8 @@ class ProgrammeController extends Controller
         $programme = Programme::find($id);
 
         $programme->update([
-            'name'=>$request->input('name')
+            'name'=>$request->input('name'),
+            'abbrevation'=>$request->input('abbrevation')
         ]);
 
         return redirect()->back();
