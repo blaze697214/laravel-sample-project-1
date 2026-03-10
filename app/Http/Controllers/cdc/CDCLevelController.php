@@ -126,4 +126,24 @@ class CDCLevelController extends Controller
         return back()->with('success', 'Level deleted');
 
     }
+
+    public function next($schemeId)
+    {
+
+        $levelCount = Levels::where('curriculum_year_id', $schemeId)->count();
+
+        if ($levelCount == 0) {
+
+            return back()->withErrors([
+                'levels' => 'Please add at least one level before continuing.',
+            ]);
+
+        }
+
+        return redirect()->route(
+            'cdc.schemes.courses.create',
+            $schemeId
+        );
+
+    }
 }

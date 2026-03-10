@@ -16,6 +16,14 @@
         </div>
     @endif
 
+    @if ($errors->has('levels'))
+        <div class="mb-4 p-4 bg-red-100 border border-red-300 text-red-800 rounded">
+
+            {{ $errors->first('levels') }}
+
+        </div>
+    @endif
+
 
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -98,7 +106,8 @@
                                     @method('PUT')
 
                                     <td class="px-4 py-3">
-                                        <input type="text" name="name" value="{{ $level->name }}" class="border border-gray-300 rounded px-2 py-1 w-60">
+                                        <input type="text" name="name" value="{{ $level->name }}"
+                                            class="border border-gray-300 rounded px-2 py-1 w-60">
                                     </td>
 
 
@@ -115,21 +124,20 @@
                                             class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
                                             Update
                                         </button>
-                                    </form>
+                                </form>
 
-                                        <form method="POST" action="{{ route('cdc.levels.destroy', $level->id) }}">
+                                <form method="POST" action="{{ route('cdc.levels.destroy', $level->id) }}">
 
-                                            @csrf
-                                            @method('DELETE')
+                                    @csrf
+                                    @method('DELETE')
 
-                                            <button
-                                                class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">
-                                                Delete
-                                            </button>
+                                    <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">
+                                        Delete
+                                    </button>
 
-                                        </form>
+                                </form>
 
-                                    </td>
+                                </td>
 
                             </tr>
                         @endforeach
@@ -143,7 +151,14 @@
 
             <div class="mt-6">
 
-                <a href="{{ route('cdc.schemes.courses.create', $scheme->id) }}">
+                {{-- <a href="{{ route('cdc.schemes.courses.create', $scheme->id) }}">
+
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-medium transition">
+                        Next → Courses
+                    </button>
+
+                </a> --}}
+                <a href="{{ route('cdc.schemes.levels.next', $scheme->id) }}">
 
                     <button class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-medium transition">
                         Next → Courses

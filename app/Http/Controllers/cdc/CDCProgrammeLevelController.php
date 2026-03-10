@@ -101,7 +101,7 @@ class CDCProgrammeLevelController extends Controller
 
             }
 
-            $offered = $request->course_offered[$levelId] ?? 0;
+            $offered = $request->courses_offered[$levelId] ?? 0;
 
             $compulsory = $request->compulsory[$levelId] ?? 0;
             $elective = $request->elective[$levelId] ?? 0;
@@ -149,14 +149,14 @@ class CDCProgrammeLevelController extends Controller
                 ],
 
                 [
-                    'courses_offered' => $request->course_offered[$levelId],
+                    'courses_offered' => $request->courses_offered[$levelId],
                     'compulsory_to_complete' => $request->compulsory[$levelId],
                     'elective_to_complete' => $request->elective[$levelId],
                     'th_hrs' => $request->th[$levelId],
                     'tu_hrs' => $request->tu[$levelId],
                     'pr_hrs' => $request->pr[$levelId],
-                    'credits' => $request->credits[$levelId],
-                    'marks' => $request->marks[$levelId],
+                    'credits' => $request->credits[$levelId] ?? 0,
+                    'marks' => $request->marks[$levelId] ?? 0,
                     'is_configured' => 1,
                 ]
 
@@ -168,6 +168,99 @@ class CDCProgrammeLevelController extends Controller
             'cdc.schemes.programmeLevels.preview',
             [$schemeId, $programmeId]
         );
+
+    }
+
+    public function preview($schemeId, $programmeId)
+    {
+
+        $programme = Programme::findOrFail($programmeId);
+
+        $rows = ProgrammeLevelDetail::with('level')
+            ->where('programme_id', $programmeId)
+            ->whereHas('level', function ($q) use ($schemeId) {
+                $q->where('curriculum_year_id', $schemeId);
+            })
+            ->get()
+            ->sortBy('level.order_no');
+
+        $totals = [
+            'courses' => 0,
+            'completed' => 0,
+            'compulsory' => 0,
+            'elective' => 0,
+            'th' => 0,
+            'tu' => 0,
+            'pr' => 0,
+            'hours' => 0,
+            'credits' => 0,
+            'marks' => 0,
+        ];
+
+        $auditRow = null;
+
+        foreach ($rows as $row) {
+
+            $totalHours = $row->th_hrs + $row->tu_hrs + $row->pr_hrs;
+            $row->total_hours = $totalHours;
+
+            if ($row->level->is_audit) {
+
+                $auditRow = $row;
+
+                continue;
+
+            }
+
+            $totals['courses'] += $row->courses_offered;
+
+            $totals['compulsory'] += $row->compulsory_to_complete;
+            $totals['elective'] += $row->elective_to_complete;
+
+            $completed = $row->compulsory_to_complete + $row->elective_to_complete;
+            $totals['completed'] += $completed;
+
+            $totals['th'] += $row->th_hrs;
+            $totals['tu'] += $row->tu_hrs;
+            $totals['pr'] += $row->pr_hrs;
+
+            $totals['hours'] += $totalHours;
+
+            $totals['credits'] += $row->credits;
+            $totals['marks'] += $row->marks;
+
+        }
+
+        $grand = [
+            'courses' => $totals['courses'] + ($auditRow->courses_offered ?? 0),
+            'completed' => $totals['completed'] + ($auditRow->compulsory_to_complete ?? 0),
+            'th' => $totals['th'] + ($auditRow->th_hrs ?? 0),
+            'tu' => $totals['tu'] + ($auditRow->tu_hrs ?? 0),
+            'pr' => $totals['pr'] + ($auditRow->pr_hrs ?? 0),
+            'hours' => $totals['hours'] + ($auditRow->total_hours ?? 0),
+            'credits' => $totals['credits'],
+            'marks' => $totals['marks'],
+        ];
+
+        return view(
+            'cdc.schemes.programme_levels.preview',
+            compact('programme', 'rows', 'totals', 'auditRow', 'grand', 'schemeId')
+        );
+
+    }
+
+    public function finalize($schemeId, $programmeId)
+    {
+
+        ProgrammeLevelDetail::where('programme_id', $programmeId)
+            ->update([
+                'is_configured' => 1,
+            ]);
+
+        return redirect()->route(
+            'cdc.schemes.programmeLevels.index',
+            $schemeId
+        )->with('success', 'Programme configuration saved');
 
     }
 }

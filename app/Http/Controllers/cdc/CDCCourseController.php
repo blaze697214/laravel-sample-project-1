@@ -141,4 +141,24 @@ class CDCCourseController extends Controller
         return back()->with('success', 'Course deleted');
 
     }
+
+    public function next($schemeId)
+    {
+
+        $courseCount = Courses::where('curriculum_year_id', $schemeId)->count();
+
+        if ($courseCount == 0) {
+
+            return back()->withErrors([
+                'courses' => 'Please add at least one course before saving.',
+            ]);
+
+        }
+
+        return redirect()->route(
+            'cdc.schemes.programmeLevels.index',
+            $schemeId
+        );
+
+    }
 }

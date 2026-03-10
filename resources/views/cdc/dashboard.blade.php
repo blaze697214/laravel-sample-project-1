@@ -85,7 +85,7 @@
                 <tbody class="divide-y">
 
                     @foreach ($schemes as $scheme)
-                        <tr class="hover:bg-gray-50">
+                        <tr class="hover:bg-gray-50 border-gray-200">
 
                             <td class="px-4 py-3">
                                 {{ $scheme->year_start }} - {{ $scheme->year_end }}

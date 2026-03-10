@@ -9,13 +9,31 @@
         Programme: {{ $programme->name }}
     </p>
 
-
     @if ($errors->any())
-        <div class="bg-red-100 border border-red-300 text-red-700 px-4 py-2 rounded mb-6">
-            {{ $errors->first() }}
+        <div id="successMessage" class="mb-4 p-4 bg-red-100 border border-red-300 text-red-800 rounded">
+
+            <ul class="list-disc pl-5">
+
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+
+            </ul>
+
         </div>
     @endif
 
+     <script>
+        setTimeout(function() {
+
+            const msg = document.getElementById('successMessage');
+
+            if (msg) {
+                msg.style.display = 'none';
+            }
+
+        }, 2000);
+    </script>
 
 
     <div class="bg-white p-6 rounded-xl shadow">
@@ -69,15 +87,15 @@
 
                                     {{ $level->name }}
 
-                                    <input type="hidden" name="levels[]" value="{{ $level->id }}">
+                                    <input type="hidden" name="levels[]" value="{{ $level->id }}" required>
 
                                 </td>
 
 
                                 <td class="px-3 py-2">
 
-                                    <input type="number" name="course_offered[{{ $level->id }}]"
-                                        value="{{ $row->course_offered ?? '' }}"
+                                    <input type="number" name="courses_offered[{{ $level->id }}]"
+                                        value="{{ $row->courses_offered ?? '' }}" required
                                         class="w-20 border border-gray-300 rounded px-2 py-1">
 
                                 </td>
@@ -86,7 +104,7 @@
                                 <td class="px-3 py-2">
 
                                     <input type="number" name="compulsory[{{ $level->id }}]"
-                                        value="{{ $row->compulsory_to_complete ?? '' }}"
+                                        value="{{ $row->compulsory_to_complete ?? '' }}" required
                                         class="w-20 border border-gray-300 rounded px-2 py-1">
 
                                 </td>
@@ -128,10 +146,9 @@
                                 <td class="px-3 py-2">
 
                                     <input type="number" name="credits[{{ $level->id }}]"
-                                        value="{{ $row->credits ?? '' }}"
+                                        value="{{ $row->credits ?? '' }}" required
                                         class="w-16 border border-gray-300 disabled:bg-gray-200 rounded px-2 py-1"
-                                        @if($level->is_audit) disabled @endif
-                                        >
+                                        @if ($level->is_audit) disabled @endif>
 
                                 </td>
 
@@ -141,7 +158,7 @@
                                     <input type="number" name="marks[{{ $level->id }}]"
                                         value="{{ $row->marks ?? '' }}"
                                         class="w-16 border border-gray-300 rounded disabled:bg-gray-200 px-2 py-1"
-                                        @if($level->is_audit) disabled @endif>
+                                        @if ($level->is_audit) disabled @endif>
 
                                 </td>
 
@@ -157,15 +174,16 @@
 
             <div class="mt-6">
 
-                <a href="{{ route('cdc.schemes.programmeLevels.preview', [$schemeId, $programme->id]) }}">
+                {{-- <a href="{{ route('cdc.schemes.programmeLevels.preview', [$scheme->id, $programme->id]) }}"> --}}
 
-                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition">
+                <button type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition">
 
-                        Save & Preview
+                    Save & Preview
 
-                    </button>
-                    
-                </a>
+                </button>
+
+                {{-- </a> --}}
 
             </div>
 

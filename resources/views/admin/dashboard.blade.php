@@ -152,7 +152,7 @@
                         </td>
 
                         <td class="px-4 py-3 text-sm font-medium text-gray-600">
-                            {{ strtoupper($user->roles->first()->name) ?? '-' }}
+                            {{ strtoupper($user->roles->first()->name  ?? '-')  }}
                         </td>
 
                         <td class="px-4 py-3 text-gray-500">

@@ -5,6 +5,33 @@
         Create Scheme
     </h1>
 
+    @if ($errors->any())
+        <div class="bg-red-100 border border-red-300 text-red-700 px-4 py-2 rounded mb-6">
+            {{ $errors->first() }}
+        </div>
+    @endif
+
+    @if (session('success'))
+        <div class="mb-4 p-4 rounded bg-green-100 text-green-800 border border-green-300" id="success-box">
+
+            {{ session('success') }}
+
+        </div>
+
+        <script>
+            setTimeout(function() {
+
+                let box = document.getElementById('success-box');
+
+                if (box) {
+                    box.style.display = 'none';
+                }
+
+            }, 2000);
+        </script>
+    @endif
+        
+
     <form method="POST" class="flex justify-center" action="{{ route('cdc.schemes.store') }}">
         @csrf
 

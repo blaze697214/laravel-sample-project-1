@@ -45,7 +45,7 @@
                     Create Scheme
                 </a>
 
-                {{-- <a href="/cdc/schemes" class="block px-6 py-3 hover:bg-slate-800 transition">
+                <a href="/cdc/schemes/manage" class="block px-6 py-3 hover:bg-slate-800 transition">
                     Manage Schemes
                 </a>
 
@@ -53,7 +53,7 @@
                     Verify Scheme
                 </a>
 
-
+{{--
                 <h4 class="px-6 py-2 text-xs uppercase text-slate-400 mt-4">
                     Users
                 </h4>

@@ -16,6 +16,14 @@
         </div>
     @endif
 
+    @if ($errors->has('courses'))
+        <div class="mb-4 p-4 bg-red-100 border border-red-300 text-red-800 rounded">
+
+            {{ $errors->first('courses') }}
+
+        </div>
+    @endif
+
 
 
     <!-- Add Course -->
@@ -260,17 +268,26 @@
     @endforeach
 
 
+    <div class="mt-6 flex justify-between">
 
-    <div class="mt-6">
+        <!-- Back & Edit (go back to courses configuration page) -->
+        <a href="{{ route('cdc.schemes.levels.create', $scheme->id) }}">
 
-        <a href="{{ route('cdc.schemes.programmeLevels.index', $scheme->id) }}">
+            <button class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded">
+                Back & Edit Courses
+            </button>
+
+        </a>
+
+
+
+        <a href="{{ route('cdc.schemes.courses.next', $scheme->id) }}">
 
             <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition">
                 Next → Programme Level Configuration
             </button>
 
         </a>
-
     </div>
 
     <script>
