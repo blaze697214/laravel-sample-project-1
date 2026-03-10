@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\cdc\CDCCourseController;
 use App\Http\Controllers\cdc\CDCDashboardController;
 use App\Http\Controllers\cdc\CDCLevelController;
+use App\Http\Controllers\cdc\CDCProgrammeLevelController;
 use App\Http\Controllers\cdc\SchemeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -64,6 +65,15 @@ Route::middleware(['auth', 'role:cdc'])->prefix('cdc')->name('cdc.')->group(func
     Route::put('/schemes/courses/{course}', [CDCCourseController::class,'update'])->name('schemes.courses.update');
 
     Route::delete('/schemes/courses/{course}', [CDCCourseController::class,'destroy'])->name('schemes.courses.destroy');
+
+    Route::get('/schemes/{scheme}/programme-levels',[CDCProgrammeLevelController::class,'index'])->name('schemes.programmeLevels.index');
+
+    Route::get('/schemes/{scheme}/programme-levels/{programme}',[CDCProgrammeLevelController::class,'create'])->name('schemes.programmeLevels.create');
+
+
+    Route::post('/schemes/{scheme}/programme-levels/{programme}',[CDCProgrammeLevelController::class,'store'])->name('schemes.programmeLevels.store');
+
+    Route::get('/schemes/{scheme}/programme-levels/{programme}/preview',[CDCProgrammeLevelController::class,'preview'])->name('schemes.programmeLevels.preview');
 
 });
 Route::middleware(['auth', 'role:hod'])->prefix('hod')->name('hod.')->group(function () {

@@ -263,13 +263,13 @@
 
     <div class="mt-6">
 
-        {{-- <a href="{{ route('cdc.schemes.programmeLevels.create', $scheme->id) }}">
+        <a href="{{ route('cdc.schemes.programmeLevels.index', $scheme->id) }}">
 
             <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition">
                 Next → Programme Level Configuration
             </button>
 
-        </a> --}}
+        </a>
 
     </div>
 
