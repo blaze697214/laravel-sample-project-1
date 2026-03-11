@@ -195,7 +195,7 @@
 
                         @if (isset($courses[$level->id]))
                             @foreach ($courses[$level->id] as $course)
-                                <tr class="hover:bg-gray-50">
+                                <tr class="hover:bg-gray-50 border-gray-200">
 
                                     <form method="POST" action="{{ route('cdc.schemes.courses.update', $course->id) }}">
                                         @csrf

@@ -24,7 +24,7 @@
                 </h3>
 
                 <p class="text-sm text-slate-400 mt-1">
-                    {{ auth()->user()->roles->first()->name }}
+                    {{ strtoupper(auth()->user()->roles->first()->name) }}
                 </p>
 
             </div>
@@ -53,7 +53,7 @@
                     Verify Scheme
                 </a>
 
-{{--
+
                 <h4 class="px-6 py-2 text-xs uppercase text-slate-400 mt-4">
                     Users
                 </h4>
@@ -64,7 +64,7 @@
 
                 <a href="/cdc/users/faculty" class="block px-6 py-3 hover:bg-slate-800 transition">
                     Faculty Users
-                </a> --}}
+                </a>
 
             </nav>
 

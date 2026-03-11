@@ -11,9 +11,6 @@
     <style>
         /* BODY */
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
             margin: 0;
             font-family: Arial, Helvetica, sans-serif;
         }
@@ -51,7 +48,7 @@
             background: #f3f4f6;
             padding: 16px;
             border: 1px solid #9ca3af;
-            overflow-x: auto;
+
         }
 
         /* TABLE */
@@ -97,11 +94,6 @@
             font-weight: 600;
         }
 
-        /* FLEX CENTER */
-        .flex-center {
-            display: flex;
-            justify-content: center;
-        }
 
         .b-l{
             border: none;
@@ -173,7 +165,7 @@
 
                                     {{ $row->compulsory_to_complete + $row->elective_to_complete }}
 
-                                    <br>
+                                    <br/>
 
                                     <span class="text-xs">
 
@@ -210,10 +202,10 @@
 
                         <td>{{ $totals['courses'] }}</td>
 
-                        <td class="flex-center text-left b-l">
-                            {{ $totals['compulsory'] . ' Compulsory' }}<br>
-                            {{ ' + ' . $totals['elective'] . ' Electives' }}<br>
-                            --------<br>
+                        <td class="text-left b-l">
+                            {{ $totals['compulsory'] . ' Compulsory' }}<br/>
+                            {{ ' + ' . $totals['elective'] . ' Electives' }}<br/>
+                            --------<br/>
                             {{ $totals['completed'] }}
                         </td>
 

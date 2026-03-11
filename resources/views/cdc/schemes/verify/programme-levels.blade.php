@@ -227,13 +227,13 @@
                 </a>
 
 
-                <a href="{{ route('cdc.schemes.verify.programmeLevels.word', [$schemeId, $programme->id]) }}">
+                {{-- <a href="{{ route('cdc.schemes.verify.programmeLevels.word', [$schemeId, $programme->id]) }}">
 
                     <button class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded text-sm">
                         Download Word
                     </button>
 
-                </a>
+                </a> --}}
 
             </div>
 

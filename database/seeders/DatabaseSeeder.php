@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
         // $hod = User::factory()->create([
         //     'name' => 'blaze31',
         //     'email' => 'hod@gmail.com',
-        //     'password' => Hash::make('hod123')
+        //     'password' => Hash::make('hod123'),
         // ]);
 
         $adminRole = Role::create(['name' => 'admin']);

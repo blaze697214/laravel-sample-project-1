@@ -8,6 +8,7 @@ use App\Http\Controllers\cdc\CDCDashboardController;
 use App\Http\Controllers\cdc\CDCLevelController;
 use App\Http\Controllers\cdc\CDCProgrammeLevelController;
 use App\Http\Controllers\cdc\CDCSchemeController;
+use App\Http\Controllers\cdc\CDCUserController;
 use App\Http\Controllers\cdc\CDCVerifySchemeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -78,30 +79,50 @@ Route::middleware(['auth', 'role:cdc'])->prefix('cdc')->name('cdc.')->group(func
 
     Route::post('/schemes/{scheme}/programme-levels/{programme}/finalize', [CDCProgrammeLevelController::class, 'finalize'])->name('schemes.programmeLevels.finalize');
 
-    Route::post('/schemes/{scheme}/finalize',[CDCSchemeController::class, 'finalize'])->name('schemes.finalize');
+    Route::post('/schemes/{scheme}/finalize', [CDCSchemeController::class, 'finalize'])->name('schemes.finalize');
 
-    Route::get('/schemes/manage',[CDCSchemeController::class,'index'])->name('schemes.manage');
+    Route::get('/schemes/manage', [CDCSchemeController::class, 'index'])->name('schemes.manage');
 
-    Route::post('/schemes/{scheme}/toggle-active',[CDCSchemeController::class,'toggleActive'])->name('schemes.toggleActive');
+    Route::post('/schemes/{scheme}/toggle-active', [CDCSchemeController::class, 'toggleActive'])->name('schemes.toggleActive');
 
-    Route::post('/schemes/{scheme}/toggle-lock',[CDCSchemeController::class,'toggleLock'])->name('schemes.toggleLock');
+    Route::post('/schemes/{scheme}/toggle-lock', [CDCSchemeController::class, 'toggleLock'])->name('schemes.toggleLock');
 
-    Route::delete('/schemes/{scheme}',[CDCSchemeController::class,'destroy'])->name('schemes.destroy');
+    Route::delete('/schemes/{scheme}', [CDCSchemeController::class, 'destroy'])->name('schemes.destroy');
 
-    Route::get('schemes/verify', [CDCVerifySchemeController::class,'index'])->name('schemes.verify');
+    Route::get('schemes/verify', [CDCVerifySchemeController::class, 'index'])->name('schemes.verify');
 
-    Route::get('/schemes/{scheme}/verify/programmes',[CDCVerifySchemeController::class,'programmes'])->name('schemes.verify.programmes');
+    Route::get('/schemes/{scheme}/verify/programmes', [CDCVerifySchemeController::class, 'programmes'])->name('schemes.verify.programmes');
 
-    Route::get('/schemes/{scheme}/{programme}/verify',[CDCVerifySchemeController::class,'summary'])->name('schemes.verify.summary');
+    Route::get('/schemes/{scheme}/{programme}/verify', [CDCVerifySchemeController::class, 'summary'])->name('schemes.verify.summary');
 
-    Route::get('/schemes/{scheme}/{programme}/verify/programme-levels',[CDCVerifySchemeController::class,'programmeLevelsView'])->name('schemes.verify.programmeLevels');
+    Route::get('/schemes/{scheme}/{programme}/verify/programme-levels', [CDCVerifySchemeController::class, 'programmeLevelsView'])->name('schemes.verify.programmeLevels');
 
+    Route::get('/schemes/{scheme}/{programme}/verify/programme-levels/pdf', [CDCVerifySchemeController::class, 'downloadProgrammeLevelsPdf'])->name('schemes.verify.programmeLevels.pdf');
 
-    Route::get('/schemes/{scheme}/{programme}/verify/programme-levels/pdf',[CDCVerifySchemeController::class,'downloadProgrammeLevelsPdf'])->name('schemes.verify.programmeLevels.pdf');
+    Route::get('/schemes/{scheme}/{programme}/verify/programme-levels/word', [CDCVerifySchemeController::class, 'downloadProgrammeLevelsWord'])->name('schemes.verify.programmeLevels.word');
 
+    Route::get('/users/hod', [CDCUserController::class, 'hodIndex'])->name('users.hod');
 
-    Route::get('/schemes/{scheme}/{programme}/verify/programme-levels/word',[CDCVerifySchemeController::class,'downloadProgrammeLevelsWord'])->name('schemes.verify.programmeLevels.word');
+    Route::post('/users/hod', [CDCUserController::class, 'storeHod'])->name('users.hod.store');
 
+    Route::put('/users/hod/{user}', [CDCUserController::class, 'updateHod'])->name('users.hod.update');
+
+    Route::delete('/users/hod/{user}', [CDCUserController::class, 'destroyHod'])->name('users.hod.destroy');
+
+    Route::get('/users/faculty', [CDCUserController::class, 'facultyIndex'])
+        ->name('users.faculty');
+
+    Route::post('/users/faculty', [CDCUserController::class, 'storeFaculty'])
+        ->name('users.faculty.store');
+
+    Route::get('/users/faculty/{user}/edit', [CDCUserController::class, 'editFaculty'])
+        ->name('users.faculty.edit');
+
+    Route::put('/users/faculty/{user}', [CDCUserController::class, 'updateFaculty'])
+        ->name('users.faculty.update');
+
+    Route::delete('/users/faculty/{user}', [CDCUserController::class, 'destroyFaculty'])
+        ->name('users.faculty.destroy');
 
 });
 Route::middleware(['auth', 'role:hod'])->prefix('hod')->name('hod.')->group(function () {
@@ -109,7 +130,5 @@ Route::middleware(['auth', 'role:hod'])->prefix('hod')->name('hod.')->group(func
     Route::get('/dashboard', function () {
         return view('hod.dashboard');
     });
-
-
 
 });

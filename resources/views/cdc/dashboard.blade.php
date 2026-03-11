@@ -14,7 +14,7 @@
         </h2>
 
         <p class="text-gray-600 mt-1">
-            Role: {{ auth()->user()->roles->first()->name }}
+            Role: {{ strtoupper(auth()->user()->roles->first()->name) }}
         </p>
 
     </div>
@@ -141,7 +141,7 @@
                 <tbody class="divide-y">
 
                     @foreach ($recentHods as $hod)
-                        <tr class="hover:bg-gray-50">
+                        <tr class="hover:bg-gray-50 border-gray-200">
 
                             <td class="px-4 py-3">
                                 {{ $hod->name }}

@@ -36,7 +36,7 @@
                 <tbody class="divide-y">
 
                     @foreach ($programmes as $programme)
-                        <tr class="hover:bg-gray-50">
+                        <tr class="hover:bg-gray-50 border-gray-200">
 
                             <td class="px-4 py-3">
 
