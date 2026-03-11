@@ -94,6 +94,15 @@ Route::middleware(['auth', 'role:cdc'])->prefix('cdc')->name('cdc.')->group(func
 
     Route::get('/schemes/{scheme}/{programme}/verify',[CDCVerifySchemeController::class,'summary'])->name('schemes.verify.summary');
 
+    Route::get('/schemes/{scheme}/{programme}/verify/programme-levels',[CDCVerifySchemeController::class,'programmeLevelsView'])->name('schemes.verify.programmeLevels');
+
+
+    Route::get('/schemes/{scheme}/{programme}/verify/programme-levels/pdf',[CDCVerifySchemeController::class,'downloadProgrammeLevelsPdf'])->name('schemes.verify.programmeLevels.pdf');
+
+
+    Route::get('/schemes/{scheme}/{programme}/verify/programme-levels/word',[CDCVerifySchemeController::class,'downloadProgrammeLevelsWord'])->name('schemes.verify.programmeLevels.word');
+
+
 });
 Route::middleware(['auth', 'role:hod'])->prefix('hod')->name('hod.')->group(function () {
 
@@ -101,6 +110,6 @@ Route::middleware(['auth', 'role:hod'])->prefix('hod')->name('hod.')->group(func
         return view('hod.dashboard');
     });
 
-    
+
 
 });

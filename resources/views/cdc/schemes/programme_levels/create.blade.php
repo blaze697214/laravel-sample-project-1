@@ -41,7 +41,7 @@
         <form method="POST" action="{{ route('cdc.schemes.programmeLevels.store', [$scheme->id, $programme->id]) }}">
 
             @csrf
-
+            {{-- {{ dd(old()) }} --}}
 
             <div class="overflow-x-auto">
 
@@ -95,7 +95,7 @@
                                 <td class="px-3 py-2">
 
                                     <input type="number" name="courses_offered[{{ $level->id }}]"
-                                        value="{{ $row->courses_offered ?? '' }}" required
+                                        value="{{ old('courses_offered.'.$level->id,$row->courses_offered ?? '') }}" required
                                         class="w-20 border border-gray-300 rounded px-2 py-1">
 
                                 </td>
@@ -104,7 +104,7 @@
                                 <td class="px-3 py-2">
 
                                     <input type="number" name="compulsory[{{ $level->id }}]"
-                                        value="{{ $row->compulsory_to_complete ?? '' }}" required
+                                        value="{{ old('compulsory.'.$level->id,$row->compulsory_to_complete ?? '') }}" required
                                         class="w-20 border border-gray-300 rounded px-2 py-1">
 
                                 </td>
@@ -113,7 +113,7 @@
                                 <td class="px-3 py-2">
 
                                     <input type="number" name="elective[{{ $level->id }}]"
-                                        value="{{ $row->elective_to_complete ?? '' }}"
+                                        value="{{ old('elective.'.$level->id,$row->elective_to_complete ?? '') }}"
                                         class="w-20 border border-gray-300 rounded px-2 py-1">
 
                                 </td>
@@ -121,7 +121,7 @@
 
                                 <td class="px-3 py-2">
 
-                                    <input type="number" name="th[{{ $level->id }}]" value="{{ $row->th_hrs ?? '' }}"
+                                    <input type="number" name="th[{{ $level->id }}]" value="{{ old('th.'.$level->id,$row->th_hrs ?? '') }}"
                                         class="w-16 border border-gray-300 rounded px-2 py-1">
 
                                 </td>
@@ -129,7 +129,7 @@
 
                                 <td class="px-3 py-2">
 
-                                    <input type="number" name="tu[{{ $level->id }}]" value="{{ $row->tu_hrs ?? '' }}"
+                                    <input type="number" name="tu[{{ $level->id }}]" value="{{ old('tu.'.$level->id,$row->tu_hrs ?? '') }}"
                                         class="w-16 border border-gray-300 rounded px-2 py-1">
 
                                 </td>
@@ -137,7 +137,7 @@
 
                                 <td class="px-3 py-2">
 
-                                    <input type="number" name="pr[{{ $level->id }}]" value="{{ $row->pr_hrs ?? '' }}"
+                                    <input type="number" name="pr[{{ $level->id }}]" value="{{ old('pr.'.$level->id,$row->pr_hrs ?? '') }}"
                                         class="w-16 border border-gray-300 rounded px-2 py-1">
 
                                 </td>
@@ -146,7 +146,7 @@
                                 <td class="px-3 py-2">
 
                                     <input type="number" name="credits[{{ $level->id }}]"
-                                        value="{{ $row->credits ?? '' }}" required
+                                        value="{{ old('credits.'.$level->id,$row->credits ?? '') }}" required
                                         class="w-16 border border-gray-300 disabled:bg-gray-200 rounded px-2 py-1"
                                         @if ($level->is_audit) disabled @endif>
 
@@ -156,7 +156,7 @@
                                 <td class="px-3 py-2">
 
                                     <input type="number" name="marks[{{ $level->id }}]"
-                                        value="{{ $row->marks ?? '' }}"
+                                        value="{{ old('marks.'.$level->id,$row->marks ?? '') }}"
                                         class="w-16 border border-gray-300 rounded disabled:bg-gray-200 px-2 py-1"
                                         @if ($level->is_audit) disabled @endif>
 

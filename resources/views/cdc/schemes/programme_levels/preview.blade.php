@@ -104,7 +104,7 @@
 
                     <td class="border border-gray-600 p-2">{{ $totals['courses'] }}</td>
 
-                    <td class="border border-gray-600 p-2 ">{{ $totals['compulsory'].' Compulsory'}}<br>{{ ' + '. $totals['elective'].' Electives'}}<br>{{ '----'}}<br>{{ $totals['completed'] }}</td>
+                    <td class="border-0 border-gray-600 p-2 text-left flex justify-center">{{ $totals['compulsory'].' Compulsory'}}<br>{{ ' + '. $totals['elective'].' Electives'}}<br>{{ '--------'}}<br>{{ $totals['completed'] }}</td>
 
                     <td class="border border-gray-600 p-2">{{ $totals['th'] }}</td>
 
@@ -135,7 +135,7 @@
 
                         <td class="border border-gray-600 p-2">{{ $auditRow->th_hrs }}</td>
 
-                        <td class="border border-gray-600 p-2">--</td>
+                        <td class="border border-gray-600 p-2">{{ $auditRow->tu_hrs }}</td>
 
                         <td class="border border-gray-600 p-2">{{ $auditRow->pr_hrs }}</td>
 

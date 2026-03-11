@@ -57,6 +57,10 @@
                         </th>
 
                         <th class="px-4 py-3 text-sm font-semibold text-gray-600">
+                            Created At
+                        </th>
+
+                        <th class="px-4 py-3 text-sm font-semibold text-gray-600">
                             Actions
                         </th>
 
@@ -115,6 +119,10 @@
 
                                 </form>
 
+                            </td>
+
+                            <td class="px-4 py-3 text-gray-500">
+                                {{ $scheme->created_at->format('d M Y') }}
                             </td>
 
 

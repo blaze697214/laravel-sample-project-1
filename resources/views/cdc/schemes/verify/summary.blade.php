@@ -97,11 +97,11 @@
                     <td class="px-4 py-3">
 
                         @if ($verification['programmeLevel'])
-                            {{-- <a href="{{ route('cdc.verify.programmeLevels', [$schemeId, $programme->id]) }}"> --}}
-                                <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded text-sm">
-                                    View
-                                </button>
-                            {{-- </a> --}}
+                            <a href="{{ route('cdc.schemes.verify.programmeLevels', [$schemeId, $programme->id]) }}">
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded text-sm">
+                                View
+                            </button>
+                            </a>
                         @else
                             <button class="bg-gray-300 text-gray-600 px-4 py-1 rounded text-sm cursor-not-allowed">
                                 Unavailable
@@ -136,13 +136,18 @@
 
                     <td class="px-4 py-3">
 
-                        {{-- <a href="{{ route('cdc.verify.courseDetails', [$schemeId, $programme->id]) }}"> --}}
+                        @if ($verification['courseDetails'])
+                            {{-- <a href="{{ route('cdc.verify.courseDetails', [$schemeId, $programme->id]) }}"> --}}
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded text-sm">
+                                View
+                            </button>
+                            {{-- </a> --}}
+                        @else
+                            <button class="bg-gray-300 text-gray-600 px-4 py-1 rounded text-sm cursor-not-allowed">
+                                Unavailable
+                            </button>
+                        @endif
 
-                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded text-sm">
-                            View
-                        </button>
-
-                        {{-- </a> --}}
 
                     </td>
 
@@ -171,14 +176,19 @@
                     </td>
 
                     <td class="px-4 py-3">
+                        @if ($verification['classAward'])
+                            {{-- <a href="{{ route('cdc.verify.classAward', [$schemeId, $programme->id]) }}"> --}}
 
-                        {{-- <a href="{{ route('cdc.verify.classAward', [$schemeId, $programme->id]) }}"> --}}
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded text-sm">
+                                View
+                            </button>
 
-                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded text-sm">
-                            View
-                        </button>
-
-                        {{-- </a> --}}
+                            {{-- </a> --}}
+                        @else
+                            <button class="bg-gray-300 text-gray-600 px-4 py-1 rounded text-sm cursor-not-allowed">
+                                Unavailable
+                            </button>
+                        @endif
 
                     </td>
 
@@ -207,14 +217,19 @@
                     </td>
 
                     <td class="px-4 py-3">
+                        @if ($verification['semesterPlacement'])
+                            {{-- <a href="{{ route('cdc.verify.semesterPlacement', [$schemeId, $programme->id]) }}"> --}}
 
-                        {{-- <a href="{{ route('cdc.verify.semesterPlacement', [$schemeId, $programme->id]) }}"> --}}
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded text-sm">
+                                View
+                            </button>
 
-                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded text-sm">
-                            View
-                        </button>
-
-                        {{-- </a> --}}
+                            {{-- </a> --}}
+                        @else
+                            <button class="bg-gray-300 text-gray-600 px-4 py-1 rounded text-sm cursor-not-allowed">
+                                Unavailable
+                            </button>
+                        @endif
 
                     </td>
 

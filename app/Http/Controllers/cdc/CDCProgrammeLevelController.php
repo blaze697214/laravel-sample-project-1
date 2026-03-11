@@ -75,8 +75,6 @@ class CDCProgrammeLevelController extends Controller
 
         $totalCredits = 0;
         $totalMarks = 0;
-        $totalOffered = 0;
-        $totalToBeCompleted = 0;
 
         foreach ($request->input('levels') as $levelId) {
 
@@ -113,7 +111,7 @@ class CDCProgrammeLevelController extends Controller
                 return back()->withErrors([
                     'offered' => $level->name.
                     ': Course offered must be > Course to be completed(compulsory+elective)',
-                ]);
+                ])->withInput();
 
             }
 
@@ -125,7 +123,7 @@ class CDCProgrammeLevelController extends Controller
 
             return back()->withErrors([
                 'credits' => 'Total credits must equal '.$scheme->total_credits,
-            ]);
+            ])->withInput();
 
         }
 
@@ -133,7 +131,7 @@ class CDCProgrammeLevelController extends Controller
 
             return back()->withErrors([
                 'marks' => 'Total marks must equal '.$scheme->total_marks,
-            ]);
+            ])->withInput();
 
         }
 
@@ -151,10 +149,10 @@ class CDCProgrammeLevelController extends Controller
                 [
                     'courses_offered' => $request->courses_offered[$levelId],
                     'compulsory_to_complete' => $request->compulsory[$levelId],
-                    'elective_to_complete' => $request->elective[$levelId],
-                    'th_hrs' => $request->th[$levelId],
-                    'tu_hrs' => $request->tu[$levelId],
-                    'pr_hrs' => $request->pr[$levelId],
+                    'elective_to_complete' => $request->elective[$levelId] ?? 0,
+                    'th_hrs' => $request->th[$levelId] ?? 0,
+                    'tu_hrs' => $request->tu[$levelId] ?? 0,
+                    'pr_hrs' => $request->pr[$levelId] ?? 0,    
                     'credits' => $request->credits[$levelId] ?? 0,
                     'marks' => $request->marks[$levelId] ?? 0,
                     'is_configured' => 1,
