@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('abbrevation');
+            $table->enum('type',['programme','service'])->default('programme');
             $table->timestamps();
         });
     }

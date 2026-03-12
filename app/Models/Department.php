@@ -13,6 +13,7 @@ class Department extends Model
     protected $fillable = [
         'name',
         'abbrevation',
+        'type'
     ];
 
     public function users()
