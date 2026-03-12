@@ -21,7 +21,8 @@ class CourseDetail extends Model
         'pr_marks',
         'or_marks',
         'tw_marks',
-        'created_by'
+        'created_by',
+        'is_configured'
     ];
 
     public function programmeCourse()

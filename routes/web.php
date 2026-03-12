@@ -10,6 +10,7 @@ use App\Http\Controllers\cdc\CDCProgrammeLevelController;
 use App\Http\Controllers\cdc\CDCSchemeController;
 use App\Http\Controllers\cdc\CDCUserController;
 use App\Http\Controllers\cdc\CDCVerifySchemeController;
+use App\Http\Controllers\hod\HODDashboardController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -49,7 +50,7 @@ Route::middleware(['auth', 'role:cdc'])->prefix('cdc')->name('cdc.')->group(func
     Route::get('/dashboard', [CDCDashboardController::class, 'dashboard']);
 
     Route::get('/schemes/create', [CDCSchemeController::class, 'create'])->name('schemes.create');
-
+    
     Route::post('/schemes', [CDCSchemeController::class, 'store'])->name('schemes.store');
 
     Route::get('/schemes/{scheme}/levels', [CDCLevelController::class, 'create'])->name('schemes.levels.create');
@@ -109,26 +110,19 @@ Route::middleware(['auth', 'role:cdc'])->prefix('cdc')->name('cdc.')->group(func
 
     Route::delete('/users/hod/{user}', [CDCUserController::class, 'destroyHod'])->name('users.hod.destroy');
 
-    Route::get('/users/faculty', [CDCUserController::class, 'facultyIndex'])
-        ->name('users.faculty');
+    Route::get('/users/faculty', [CDCUserController::class, 'facultyIndex'])->name('users.faculty');
 
-    Route::post('/users/faculty', [CDCUserController::class, 'storeFaculty'])
-        ->name('users.faculty.store');
+    Route::post('/users/faculty', [CDCUserController::class, 'storeFaculty'])->name('users.faculty.store');
 
-    Route::get('/users/faculty/{user}/edit', [CDCUserController::class, 'editFaculty'])
-        ->name('users.faculty.edit');
+    Route::get('/users/faculty/{user}/edit', [CDCUserController::class, 'editFaculty'])->name('users.faculty.edit');
 
-    Route::put('/users/faculty/{user}', [CDCUserController::class, 'updateFaculty'])
-        ->name('users.faculty.update');
+    Route::put('/users/faculty/{user}', [CDCUserController::class, 'updateFaculty'])->name('users.faculty.update');
 
-    Route::delete('/users/faculty/{user}', [CDCUserController::class, 'destroyFaculty'])
-        ->name('users.faculty.destroy');
+    Route::delete('/users/faculty/{user}', [CDCUserController::class, 'destroyFaculty'])->name('users.faculty.destroy');
 
 });
 Route::middleware(['auth', 'role:hod'])->prefix('hod')->name('hod.')->group(function () {
 
-    Route::get('/dashboard', function () {
-        return view('hod.dashboard');
-    });
+    Route::get('/dashboard',[HODDashboardController::class,'index'])->name('dashboard');
 
 });

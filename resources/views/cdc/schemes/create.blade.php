@@ -27,10 +27,10 @@
                     box.style.display = 'none';
                 }
 
-            }, 2000);
+            },2000);
         </script>
     @endif
-        
+
 
     <form method="POST" class="flex justify-center" action="{{ route('cdc.schemes.store') }}">
         @csrf

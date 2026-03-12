@@ -25,6 +25,7 @@ return new class extends Migration
             $table->tinyInteger('or_marks');
             $table->tinyInteger('tw_marks');
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->boolean('is_configured')->default(false);
             $table->timestamps();
         });
     }

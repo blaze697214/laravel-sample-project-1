@@ -5,6 +5,25 @@
         Programme Level Configuration
     </h1>
 
+        @if ($errors->has('scheme'))
+        <div id="errorMessage" class="mb-4 p-4 bg-red-100 border border-red-300 text-red-800 rounded">
+
+            {{ $errors->first('scheme') }}
+
+        </div>
+    @endif
+
+    <script>
+        setTimeout(function(){
+            let box = document.getElementById('errorMessage');
+
+            if(box){
+                box.style.display = 'none';
+            }
+        },2000);
+    </script>
+
+
 
     <div class="bg-white p-6 rounded-xl shadow">
 
