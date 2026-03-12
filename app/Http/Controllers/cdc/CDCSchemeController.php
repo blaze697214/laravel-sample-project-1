@@ -71,12 +71,21 @@ class CDCSchemeController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function editIndex()
     {
-        
+
+        $schemes = CurriculumYears::orderBy('year_start', 'desc')->get();
+
+        return view('cdc.schemes.edit', compact('schemes'));
+
+    }
+
+    public function edit($schemeId)
+    {
+
+        return redirect()
+            ->route('cdc.schemes.levels.create', $schemeId);
+
     }
 
     /**

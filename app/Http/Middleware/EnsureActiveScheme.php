@@ -16,17 +16,21 @@ class EnsureActiveScheme
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! $request->scheme_id) {
-            abort(400, 'Scheme context missing.');
-        }
+        if (! $request->isMethod('get')) {
 
-        $activeScheme = CurriculumYears::where('is_active', 1)->value('id');
+            if (! $request->scheme_id) {
+                abort(400, 'Scheme context missing.');
+            }
 
-        if ($request->scheme_id && $request->scheme_id != $activeScheme) {
+            $activeScheme = CurriculumYears::where('is_active', 1)->value('id');
 
-            return redirect()->back()->withErrors([
-                'scheme' => 'The active scheme has changed. Please refresh the page.',
-            ]);
+            if ($request->scheme_id != $activeScheme) {
+
+                return redirect()->back()->withErrors([
+                    'scheme' => 'The active scheme has changed. Please refresh the page.',
+                ]);
+
+            }
 
         }
 

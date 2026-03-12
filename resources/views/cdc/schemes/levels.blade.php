@@ -100,7 +100,7 @@
                         @foreach ($levels as $level)
                             <tr class="hover:bg-gray-50 border-gray-200">
 
-                                <form method="POST" action="{{ route('cdc.levels.update', $level->id) }}">
+                                <form method="POST" action="{{ route('cdc.schemes.levels.update', $level->id) }}">
 
                                     @csrf
                                     @method('PUT')
@@ -126,7 +126,7 @@
                                         </button>
                                 </form>
 
-                                <form method="POST" action="{{ route('cdc.levels.destroy', $level->id) }}">
+                                <form method="POST" action="{{ route('cdc.schemes.levels.destroy', $level->id) }}">
 
                                     @csrf
                                     @method('DELETE')

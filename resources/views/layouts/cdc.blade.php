@@ -45,6 +45,10 @@
                     Create Scheme
                 </a>
 
+                <a href="/cdc/schemes/edit" class="block px-6 py-3 hover:bg-slate-800 transition">
+                    Edit Scheme
+                </a>
+
                 <a href="/cdc/schemes/manage" class="block px-6 py-3 hover:bg-slate-800 transition">
                     Manage Schemes
                 </a>

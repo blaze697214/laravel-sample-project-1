@@ -1,0 +1,125 @@
+@extends('layouts.cdc')
+
+@section('content')
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">
+        Edit Scheme
+    </h1>
+
+
+    <div class="bg-white p-6 rounded-xl shadow">
+
+        <div class="overflow-x-auto">
+
+            <table class="w-full text-left border border-gray-200">
+
+                <thead class="bg-gray-100">
+
+                    <tr>
+
+                        <th class="px-4 py-3 text-sm font-semibold text-gray-600">
+                            Scheme
+                        </th>
+
+                        <th class="px-4 py-3 text-sm font-semibold text-gray-600">
+                            Active
+                        </th>
+
+                        <th class="px-4 py-3 text-sm font-semibold text-gray-600">
+                            Locked
+                        </th>
+
+                        <th class="px-4 py-3 text-sm font-semibold text-gray-600">
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody class="divide-y">
+
+                    @forelse($schemes as $scheme)
+                        <tr class="hover:bg-gray-50">
+
+                            <td class="px-4 py-3">
+                                {{ $scheme->year_start }} - {{ $scheme->year_end }}
+                            </td>
+
+
+                            {{-- Active Status --}}
+                            <td class="px-4 py-3">
+
+                                @if ($scheme->is_active)
+                                    <span class="px-2 py-1 text-xs font-semibold bg-green-100 text-green-700 rounded">
+                                        Active
+                                    </span>
+                                @else
+                                    <span class="px-2 py-1 text-xs font-semibold bg-gray-200 text-gray-600 rounded">
+                                        Inactive
+                                    </span>
+                                @endif
+
+                            </td>
+
+
+                            {{-- Locked Status --}}
+                            <td class="px-4 py-3">
+
+                                @if ($scheme->is_locked)
+                                    <span class="px-2 py-1 text-xs font-semibold bg-red-100 text-red-700 rounded">
+                                        Locked
+                                    </span>
+                                @else
+                                    <span class="px-2 py-1 text-xs font-semibold bg-gray-200 text-gray-600 rounded">
+                                        Unlocked
+                                    </span>
+                                @endif
+
+                            </td>
+
+
+                            {{-- Edit Action --}}
+                            <td class="px-4 py-3">
+
+                                @if (!$scheme->is_locked)
+                                    <a href="{{ route('cdc.schemes.edit.start', $scheme->id) }}">
+
+                                        <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-1 rounded">
+
+                                            Edit
+
+                                        </button>
+
+                                    </a>
+                                @else
+                                    <span class="text-gray-400">
+                                        Locked
+                                    </span>
+                                @endif
+
+                            </td>
+
+                        </tr>
+
+                    @empty
+
+                        <tr>
+
+                            <td colspan="4" class="text-center py-4 text-gray-500">
+
+                                No schemes found
+
+                            </td>
+
+                        </tr>
+                    @endforelse
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+@endsection

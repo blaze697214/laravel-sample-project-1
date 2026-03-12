@@ -16,11 +16,15 @@
         </div>
     @endif
 
-    @if ($errors->has('courses'))
-        <div class="mb-4 p-4 bg-red-100 border border-red-300 text-red-800 rounded">
+    @if ($errors->any())
+        <div id="successMessage" class="mb-4 p-4 bg-red-100 border border-red-300 text-red-800 rounded">
+            <ul class="list-disc pl-5">
 
-            {{ $errors->first('courses') }}
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
 
+            </ul>
         </div>
     @endif
 

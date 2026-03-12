@@ -11,6 +11,7 @@ use App\Http\Controllers\cdc\CDCSchemeController;
 use App\Http\Controllers\cdc\CDCUserController;
 use App\Http\Controllers\cdc\CDCVerifySchemeController;
 use App\Http\Controllers\hod\HODDashboardController;
+use App\Http\Controllers\hod\HODSchemeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -55,11 +56,11 @@ Route::middleware(['auth', 'role:cdc'])->prefix('cdc')->name('cdc.')->group(func
 
     Route::get('/schemes/{scheme}/levels', [CDCLevelController::class, 'create'])->name('schemes.levels.create');
     Route::get('/schemes/{scheme}/levels/next', [CDCLevelController::class, 'next'])->name('schemes.levels.next');
-    Route::put('/levels/{level}', [CDCLevelController::class, 'update'])->name('levels.update');
+    Route::put('/schemes/levels/{level}', [CDCLevelController::class, 'update'])->name('schemes.levels.update');
 
     Route::post('/schemes/{scheme}/levels', [CDCLevelController::class, 'store'])->name('schemes.levels.store');
 
-    Route::delete('/levels/{level}', [CDCLevelController::class, 'destroy'])->name('levels.destroy');
+    Route::delete('/schemes/levels/{level}', [CDCLevelController::class, 'destroy'])->name('schemes.levels.destroy');
 
     Route::get('/schemes/{scheme}/courses', [CDCCourseController::class, 'create'])->name('schemes.courses.create');
     Route::get('/schemes/{scheme}/courses/next', [CDCCourseController::class, 'next'])->name('schemes.courses.next');
@@ -81,6 +82,10 @@ Route::middleware(['auth', 'role:cdc'])->prefix('cdc')->name('cdc.')->group(func
     Route::post('/schemes/{scheme}/programme-levels/{programme}/finalize', [CDCProgrammeLevelController::class, 'finalize'])->name('schemes.programmeLevels.finalize');
 
     Route::post('/schemes/{scheme}/finalize', [CDCSchemeController::class, 'finalize'])->name('schemes.finalize');
+
+    Route::get('/schemes/edit', [CDCSchemeController::class,'editIndex'])->name('schemes.edit');
+
+    Route::get('/schemes/{scheme}/edit', [CDCSchemeController::class,'edit'])->name('schemes.edit.start');
 
     Route::get('/schemes/manage', [CDCSchemeController::class, 'index'])->name('schemes.manage');
 
@@ -121,8 +126,11 @@ Route::middleware(['auth', 'role:cdc'])->prefix('cdc')->name('cdc.')->group(func
     Route::delete('/users/faculty/{user}', [CDCUserController::class, 'destroyFaculty'])->name('users.faculty.destroy');
 
 });
-Route::middleware(['auth', 'role:hod'])->prefix('hod')->name('hod.')->group(function () {
+Route::middleware(['auth', 'role:hod','active.scheme'])->prefix('hod')->name('hod.')->group(function () {
 
     Route::get('/dashboard',[HODDashboardController::class,'index'])->name('dashboard');
 
+    Route::get('/scheme', [HODSchemeController::class,'index'])->name('scheme');
+
 });
+    
