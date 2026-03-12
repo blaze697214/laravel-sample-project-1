@@ -6,7 +6,7 @@
     </h1>
 
     <p class="text-gray-600 mb-6">
-        Select Programme to Verify
+        Select Department to Verify
     </p>
 
     <div class="mb-4 mt-10 ml-5">
@@ -34,7 +34,7 @@
                     <tr>
 
                         <th class="px-4 py-3 text-sm font-semibold text-gray-600">
-                            Programme
+                            Department
                         </th>
 
                         <th class="px-4 py-3 text-sm font-semibold text-gray-600">
@@ -52,16 +52,16 @@
 
                 <tbody class="divide-y">
 
-                    @foreach ($programmes as $programme)
+                    @foreach ($departments as $department)
                         <tr class="hover:bg-gray-50 border-gray-200">
 
                             <td class="px-4 py-3 font-medium text-gray-800">
 
-                                {{ $programme->name }}
+                                {{ $department->name }}
 
-                                @if ($programme->abbreviation)
+                                @if ($department->abbreviation)
                                     <span class="text-gray-500 text-sm ml-1">
-                                        ({{ $programme->abbreviation }})
+                                        ({{ $department->abbreviation }})
                                     </span>
                                 @endif
 
@@ -71,7 +71,7 @@
 
                             <td class="px-4 py-3">
 
-                                @if ($status[$programme->id])
+                                @if ($status[$department->id])
                                     <span class="px-2 py-1 text-xs font-semibold bg-green-100 text-green-700 rounded">
                                         Ready
                                     </span>
@@ -87,7 +87,7 @@
 
                             <td class="px-4 py-3">
 
-                                <a href="{{ route('cdc.schemes.verify.summary', [$schemeId, $programme->id]) }}">
+                                <a href="{{ route('cdc.schemes.verify.summary', [$schemeId, $department->id]) }}">
 
                                 <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded text-sm">
                                     View

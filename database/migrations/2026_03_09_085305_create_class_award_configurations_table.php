@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('class_award_configurations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('programme_id')->constrained('programmes')->cascadeOnDelete();
+            $table->foreignId('department_id')->constrained('departments')->cascadeOnDelete();
             $table->foreignId('curriculum_year_id')->constrained('curriculum_years')->cascadeOnDelete();
             $table->tinyInteger('total_class_award_courses');
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();

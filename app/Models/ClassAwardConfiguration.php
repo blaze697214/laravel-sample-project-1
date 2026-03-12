@@ -12,15 +12,15 @@ class ClassAwardConfiguration extends Model
     use HasFactory;
 
     protected $fillable = [
-        'programme_id',
+        'department_id',
         'curriculum_year_id',
         'total_class_award_courses',
         'created_by'
     ];
 
-    public function programme()
+    public function department()
     {
-        return $this->belongsTo(Programme::class);
+        return $this->belongsTo(Department::class);
     }
 
     public function curriculumYear()

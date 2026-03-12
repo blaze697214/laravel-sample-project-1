@@ -21,7 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'programme_id',
+        'department_id',
     ];
 
     /**
@@ -49,9 +49,9 @@ class User extends Authenticatable
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function programme()
+    public function department()
     {
-        return $this->belongsTo(Programme::class);
+        return $this->belongsTo(Department::class);
     }
 
     public function curriculumYears()

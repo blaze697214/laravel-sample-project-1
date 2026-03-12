@@ -132,7 +132,7 @@
 
                     <tr>
                         <th class="px-4 py-3 text-sm font-semibold text-gray-600">Name</th>
-                        <th class="px-4 py-3 text-sm font-semibold text-gray-600">Programme</th>
+                        <th class="px-4 py-3 text-sm font-semibold text-gray-600">Department</th>
                         <th class="px-4 py-3 text-sm font-semibold text-gray-600">Created</th>
                     </tr>
 
@@ -148,7 +148,7 @@
                             </td>
 
                             <td class="px-4 py-3">
-                                {{ $hod->programme->name ?? '-' }}
+                                {{ $hod->department->name ?? '-' }}
                             </td>
 
                             <td class="px-4 py-3 text-gray-500">

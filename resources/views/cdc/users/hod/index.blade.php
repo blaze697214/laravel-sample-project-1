@@ -53,15 +53,15 @@
 
 
                 <div>
-                    <label class="block text-sm text-gray-600 mb-1">Programme</label>
+                    <label class="block text-sm text-gray-600 mb-1">Department</label>
 
-                    <select name="programme_id" required class="w-full border border-gray-300 rounded px-3 py-2" >
+                    <select name="department_id" required class="w-full border border-gray-300 rounded px-3 py-2" >
 
-                        <option value="">Select Programme</option>
+                        <option value="">Select Department</option>
 
-                        @foreach ($programmes as $programme)
-                            <option value="{{ $programme->id }}">
-                                {{ $programme->name }}
+                        @foreach ($departments as $department)
+                            <option value="{{ $department->id }}">
+                                {{ $department->name }}
                             </option>
                         @endforeach
 
@@ -113,7 +113,7 @@
 
                         <th class="px-4 py-2 text-sm font-semibold text-gray-600">Name</th>
                         <th class="px-4 py-2 text-sm font-semibold text-gray-600">Email</th>
-                        <th class="px-4 py-2 text-sm font-semibold text-gray-600">Programme</th>
+                        <th class="px-4 py-2 text-sm font-semibold text-gray-600">Department</th>
                         <th class="px-4 py-2 text-sm font-semibold text-gray-600">Actions</th>
 
                     </tr>
@@ -141,7 +141,7 @@
                             </td>
 
                             <td class="px-4 py-2">
-                                {{ $user->programme->name ?? '-' }}
+                                {{ $user->department->name ?? '-' }}
                             </td>
 
 

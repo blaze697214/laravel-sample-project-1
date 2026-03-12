@@ -27,9 +27,9 @@ class Levels extends Model
         return $this->hasMany(Courses::class);
     }
 
-    public function programmeLevelDetails()
+    public function departmentLevelDetails()
     {
-        return $this->hasMany(ProgrammeLevelDetail::class);
+        return $this->hasMany(DepartmentLevelDetail::class);
     }
 
     public function electiveGroups()

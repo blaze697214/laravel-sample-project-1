@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Courses;
 use App\Models\CurriculumYears;
 use App\Models\Levels;
-use App\Models\Programme;
+use App\Models\Department;
 use Illuminate\Http\Request;
 
 class CDCCourseController extends Controller
@@ -32,16 +32,16 @@ class CDCCourseController extends Controller
             ->orderBy('order_no')
             ->get();
 
-        $programmes = Programme::all();
+        $departments = Department::all();
 
         $courses = Courses::where('curriculum_year_id', $schemeId)
-            ->with('programmes')
+            ->with('departments')
             ->get()
             ->groupBy('level_id');
 
         return view(
             'cdc.schemes.courses',
-            compact('scheme', 'levels', 'programmes', 'courses')
+            compact('scheme', 'levels', 'departments', 'courses')
         );
 
     }
@@ -72,15 +72,15 @@ class CDCCourseController extends Controller
 
         if ($request->input('offered')) {
 
-            foreach ($request->input('offered') as $programmeId) {
+            foreach ($request->input('offered') as $departmentId) {
 
-                $data[$programmeId] = [
-                    'is_elective' => isset($request->input('elective')[$programmeId]),
+                $data[$departmentId] = [
+                    'is_elective' => isset($request->input('elective')[$departmentId]),
                 ];
 
             }
 
-            $course->programmes()->attach($data);
+            $course->departments()->attach($data);
 
         }
 
@@ -135,7 +135,7 @@ class CDCCourseController extends Controller
         $course = Courses::findOrFail($courseId);
 
         /* remove pivot records first */
-        $course->programmes()->detach();
+        $course->departments()->detach();
 
         $course->delete();
 
@@ -157,7 +157,7 @@ class CDCCourseController extends Controller
         }
 
         return redirect()->route(
-            'cdc.schemes.programmeLevels.index',
+            'cdc.schemes.departmentLevels.index',
             $schemeId
         );
 

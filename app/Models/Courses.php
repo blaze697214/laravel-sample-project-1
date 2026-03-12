@@ -27,9 +27,9 @@ class Courses extends Model
         return $this->belongsTo(Levels::class);
     }
 
-    public function programmes()
+    public function departments()
     {
-        return $this->belongsToMany(Programme::class,'programme_course','course_id','programme_id')->withPivot('is_elective');
+        return $this->belongsToMany(Department::class,'department_course','course_id','department_id')->withPivot('is_elective');
     }
 
     public function electiveGroup()

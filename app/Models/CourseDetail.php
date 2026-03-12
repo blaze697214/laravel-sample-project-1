@@ -10,7 +10,7 @@ class CourseDetail extends Model
     /** @use HasFactory<\Database\Factories\CourseDetailFactory> */
     use HasFactory;
     protected $fillable = [
-        'programme_course_id',
+        'department_course_id',
         'course_code',
         'th_hrs',
         'tu_hrs',
@@ -25,9 +25,9 @@ class CourseDetail extends Model
         'is_configured'
     ];
 
-    public function programmeCourse()
+    public function departmentCourse()
     {
-        return $this->belongsTo(ProgrammeCourse::class);
+        return $this->belongsTo(DepartmentCourse::class);
     }
 
     public function creator()

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('syllabi', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('programme_course_id')->constrained('programme_course')->cascadeOnDelete();
+            $table->foreignId('department_course_id')->constrained('department_course')->cascadeOnDelete();
             $table->text('rationale'); 
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->boolean('is_submitted');

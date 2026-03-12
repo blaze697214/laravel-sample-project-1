@@ -1,12 +1,12 @@
 <?php
 
 use App\Http\Controllers\admin\AdminDashboardController;
-use App\Http\Controllers\admin\ProgrammeController;
+use App\Http\Controllers\admin\DepartmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\cdc\CDCCourseController;
 use App\Http\Controllers\cdc\CDCDashboardController;
 use App\Http\Controllers\cdc\CDCLevelController;
-use App\Http\Controllers\cdc\CDCProgrammeLevelController;
+use App\Http\Controllers\cdc\CDCDepartmentLevelController;
 use App\Http\Controllers\cdc\CDCSchemeController;
 use App\Http\Controllers\cdc\CDCUserController;
 use App\Http\Controllers\cdc\CDCVerifySchemeController;
@@ -29,13 +29,13 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     Route::get('/dashboard', [AdminDashboardController::class, 'dashboard']);
 
-    Route::get('/programmes', [ProgrammeController::class, 'index'])->name('programmes.index');
+    Route::get('/departments', [DepartmentController::class, 'index'])->name('departments.index');
 
-    Route::post('/programmes', [ProgrammeController::class, 'store'])->name('programmes.store');
+    Route::post('/departments', [DepartmentController::class, 'store'])->name('departments.store');
 
-    Route::put('/programmes/{id}', [ProgrammeController::class, 'update'])->name('programmes.update');
+    Route::put('/departments/{id}', [DepartmentController::class, 'update'])->name('departments.update');
 
-    Route::delete('/programmes/{id}', [ProgrammeController::class, 'destroy'])->name('programmes.destroy');
+    Route::delete('/departments/{id}', [DepartmentController::class, 'destroy'])->name('departments.destroy');
 
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
 
@@ -71,15 +71,15 @@ Route::middleware(['auth', 'role:cdc'])->prefix('cdc')->name('cdc.')->group(func
 
     Route::delete('/schemes/courses/{course}', [CDCCourseController::class, 'destroy'])->name('schemes.courses.destroy');
 
-    Route::get('/schemes/{scheme}/programme-levels', [CDCProgrammeLevelController::class, 'index'])->name('schemes.programmeLevels.index');
+    Route::get('/schemes/{scheme}/department-levels', [CDCDepartmentLevelController::class, 'index'])->name('schemes.departmentLevels.index');
 
-    Route::get('/schemes/{scheme}/programme-levels/{programme}', [CDCProgrammeLevelController::class, 'create'])->name('schemes.programmeLevels.create');
+    Route::get('/schemes/{scheme}/department-levels/{department}', [CDCDepartmentLevelController::class, 'create'])->name('schemes.departmentLevels.create');
 
-    Route::post('/schemes/{scheme}/programme-levels/{programme}', [CDCProgrammeLevelController::class, 'store'])->name('schemes.programmeLevels.store');
+    Route::post('/schemes/{scheme}/department-levels/{department}', [CDCDepartmentLevelController::class, 'store'])->name('schemes.departmentLevels.store');
 
-    Route::get('/schemes/{scheme}/programme-levels/{programme}/preview', [CDCProgrammeLevelController::class, 'preview'])->name('schemes.programmeLevels.preview');
+    Route::get('/schemes/{scheme}/department-levels/{department}/preview', [CDCDepartmentLevelController::class, 'preview'])->name('schemes.departmentLevels.preview');
 
-    Route::post('/schemes/{scheme}/programme-levels/{programme}/finalize', [CDCProgrammeLevelController::class, 'finalize'])->name('schemes.programmeLevels.finalize');
+    Route::post('/schemes/{scheme}/department-levels/{department}/finalize', [CDCDepartmentLevelController::class, 'finalize'])->name('schemes.departmentLevels.finalize');
 
     Route::post('/schemes/{scheme}/finalize', [CDCSchemeController::class, 'finalize'])->name('schemes.finalize');
 
@@ -97,15 +97,15 @@ Route::middleware(['auth', 'role:cdc'])->prefix('cdc')->name('cdc.')->group(func
 
     Route::get('schemes/verify', [CDCVerifySchemeController::class, 'index'])->name('schemes.verify');
 
-    Route::get('/schemes/{scheme}/verify/programmes', [CDCVerifySchemeController::class, 'programmes'])->name('schemes.verify.programmes');
+    Route::get('/schemes/{scheme}/verify/departments', [CDCVerifySchemeController::class, 'departments'])->name('schemes.verify.departments');
 
-    Route::get('/schemes/{scheme}/{programme}/verify', [CDCVerifySchemeController::class, 'summary'])->name('schemes.verify.summary');
+    Route::get('/schemes/{scheme}/{department}/verify', [CDCVerifySchemeController::class, 'summary'])->name('schemes.verify.summary');
 
-    Route::get('/schemes/{scheme}/{programme}/verify/programme-levels', [CDCVerifySchemeController::class, 'programmeLevelsView'])->name('schemes.verify.programmeLevels');
+    Route::get('/schemes/{scheme}/{department}/verify/department-levels', [CDCVerifySchemeController::class, 'departmentLevelsView'])->name('schemes.verify.departmentLevels');
 
-    Route::get('/schemes/{scheme}/{programme}/verify/programme-levels/pdf', [CDCVerifySchemeController::class, 'downloadProgrammeLevelsPdf'])->name('schemes.verify.programmeLevels.pdf');
+    Route::get('/schemes/{scheme}/{department}/verify/department-levels/pdf', [CDCVerifySchemeController::class, 'downloadDepartmentLevelsPdf'])->name('schemes.verify.departmentLevels.pdf');
 
-    Route::get('/schemes/{scheme}/{programme}/verify/programme-levels/word', [CDCVerifySchemeController::class, 'downloadProgrammeLevelsWord'])->name('schemes.verify.programmeLevels.word');
+    Route::get('/schemes/{scheme}/{department}/verify/department-levels/word', [CDCVerifySchemeController::class, 'downloadDepartmentLevelsWord'])->name('schemes.verify.departmentLevels.word');
 
     Route::get('/users/hod', [CDCUserController::class, 'hodIndex'])->name('users.hod');
 
@@ -133,4 +133,3 @@ Route::middleware(['auth', 'role:hod','active.scheme'])->prefix('hod')->name('ho
     Route::get('/scheme', [HODSchemeController::class,'index'])->name('scheme');
 
 });
-    

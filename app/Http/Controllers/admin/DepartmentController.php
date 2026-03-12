@@ -3,22 +3,22 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Programme;
+use App\Models\Department;
 use Illuminate\Http\Request;
 
-class ProgrammeController extends Controller
+class DepartmentController extends Controller
 {
     //
     public function index()
     {
-        $programmes = Programme::all();
+        $departments = Department::all();
 
-        return view('admin.programme',compact('programmes'));
+        return view('admin.department',compact('departments'));
     }
 
     public function store(Request $request)
     {
-        Programme::create([
+        Department::create([
             'name'=>$request->input('name'),
             'abbrevation'=>$request->input('abbrevation')
         ]);
@@ -28,9 +28,9 @@ class ProgrammeController extends Controller
 
     public function update(Request $request,$id)
     {
-        $programme = Programme::find($id);
+        $department = Department::find($id);
 
-        $programme->update([
+        $department->update([
             'name'=>$request->input('name'),
             'abbrevation'=>$request->input('abbrevation')
         ]);
@@ -40,15 +40,15 @@ class ProgrammeController extends Controller
 
     public function destroy($id)
     {
-        $programme = Programme::findOrFail($id);
+        $department = Department::findOrFail($id);
 
         // prevent deletion if users exist
-        if ($programme->users()->exists()) {
-            return back()->with('error','Programme has assigned users');
+        if ($department->users()->exists()) {
+            return back()->with('error','Department has assigned users');
         }
 
-        $programme->delete();
+        $department->delete();
 
-        return back()->with('success','Programme deleted successfully');
+        return back()->with('success','Department deleted successfully');
     }
 }

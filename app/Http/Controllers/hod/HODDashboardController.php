@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\CourseDetail;
 use App\Models\Courses;
 use App\Models\CurriculumYears;
-use App\Models\Programme;
-use App\Models\ProgrammeCourse;
-use App\Models\ProgrammeLevelDetail;
+use App\Models\Department;
+use App\Models\DepartmentCourse;
+use App\Models\DepartmentLevelDetail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,9 +19,9 @@ class HODDashboardController extends Controller
     public function index()
     {
 
-        $programmeId = Auth::user()->programme_id;
+        $departmentId = Auth::user()->department_id;
 
-        $programme = Programme::findOrFail($programmeId);
+        $department = Department::findOrFail($departmentId);
 
         $activeScheme = CurriculumYears::where('is_active',1)->firstOrFail();
 
@@ -32,7 +32,7 @@ class HODDashboardController extends Controller
         ------------------------------------------------
         */
 
-        $coursesInScheme = ProgrammeCourse::where('programme_id',$programmeId)
+        $coursesInScheme = DepartmentCourse::where('department_id',$departmentId)
             ->whereHas('course', function($q) use ($activeScheme){
                 $q->where('curriculum_year_id',$activeScheme->id);
             })
@@ -46,9 +46,9 @@ class HODDashboardController extends Controller
         */
 
         $configuredCourses = CourseDetail::where('is_configured',true)
-            ->whereHas('programmeCourse', function($q) use ($programmeId,$activeScheme){
+            ->whereHas('departmentCourse', function($q) use ($departmentId,$activeScheme){
 
-                $q->where('programme_id',$programmeId)
+                $q->where('department_id',$departmentId)
                 ->whereHas('course',function($c) use ($activeScheme){
                     $c->where('curriculum_year_id',$activeScheme->id);
                 });
@@ -66,7 +66,7 @@ class HODDashboardController extends Controller
         ------------------------------------------------
         */
 
-        $facultyCount = User::where('programme_id',$programmeId)
+        $facultyCount = User::where('department_id',$departmentId)
             ->whereHas('roles', fn($q)=>$q->where('name','faculty'))
             ->count();
 
@@ -77,7 +77,7 @@ class HODDashboardController extends Controller
         ------------------------------------------------
         */
 
-        $recentFaculty = User::where('programme_id',$programmeId)
+        $recentFaculty = User::where('department_id',$departmentId)
             ->whereHas('roles', fn($q)=>$q->where('name','faculty'))
             ->latest()
             ->take(5)
@@ -90,8 +90,8 @@ class HODDashboardController extends Controller
         ------------------------------------------------
         */
 
-        $levels = ProgrammeLevelDetail::with('level')
-            ->where('programme_id',$programmeId)
+        $levels = DepartmentLevelDetail::with('level')
+            ->where('department_id',$departmentId)
             ->get();
 
 
@@ -105,9 +105,9 @@ class HODDashboardController extends Controller
 
 
             $configuredInLevel = CourseDetail::where('is_configured',true)
-                ->whereHas('programmeCourse', function($q) use ($programmeId,$levelId,$activeScheme){
+                ->whereHas('departmentCourse', function($q) use ($departmentId,$levelId,$activeScheme){
 
-                    $q->where('programme_id',$programmeId)
+                    $q->where('department_id',$departmentId)
                     ->whereHas('course',function($c) use ($levelId,$activeScheme){
 
                         $c->where('level_id',$levelId)
@@ -136,7 +136,7 @@ class HODDashboardController extends Controller
 
 
         return view('hod.dashboard',[
-            'programme'=>$programme,
+            'department'=>$department,
             'activeScheme'=>$activeScheme,
             'coursesInScheme'=>$coursesInScheme,
             'configuredCourses'=>$configuredCourses,

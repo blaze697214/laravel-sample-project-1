@@ -13,7 +13,7 @@ class ElectiveGroup extends Model
     protected $fillable = [
         'name',
         'level_id',
-        'programme_id',
+        'department_id',
         'min_select_count',
         'max_select_count',
     ];
@@ -23,9 +23,9 @@ class ElectiveGroup extends Model
         return $this->belongsTo(Levels::class);
     }
 
-    public function programme()
+    public function department()
     {
-        return $this->belongsTo(Programme::class);
+        return $this->belongsTo(Department::class);
     }
 
     public function courses()

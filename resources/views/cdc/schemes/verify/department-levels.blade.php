@@ -3,7 +3,7 @@
 @section('content')
 
     <h1 class="text-2xl font-bold text-gray-800 mb-6">
-        Programme Level Details
+        Department Level Details
     </h1>
 
 
@@ -18,7 +18,7 @@
     <div class="bg-white p-6 rounded-xl shadow">
 
 
-        @include('partials.programme-structure-table')
+        @include('partials.department-structure-table')
 
 
         {{-- buttons --}}
@@ -26,7 +26,7 @@
 
             <div>
 
-                <a href="{{ route('cdc.schemes.verify.summary', [$schemeId, $programme->id]) }}">
+                <a href="{{ route('cdc.schemes.verify.summary', [$schemeId, $department->id]) }}">
 
                     <button class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded text-sm">
                         ← Back
@@ -39,7 +39,7 @@
 
             <div class="flex gap-4">
 
-                <a href="{{ route('cdc.schemes.verify.programmeLevels.pdf', [$schemeId, $programme->id]) }}">
+                <a href="{{ route('cdc.schemes.verify.departmentLevels.pdf', [$schemeId, $department->id]) }}">
 
                     <button class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded text-sm">
                         Download PDF
@@ -48,7 +48,7 @@
                 </a>
 
 
-                {{-- <a href="{{ route('cdc.schemes.verify.programmeLevels.word', [$schemeId, $programme->id]) }}">
+                {{-- <a href="{{ route('cdc.schemes.verify.departmentLevels.word', [$schemeId, $department->id]) }}">
 
                     <button class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded text-sm">
                         Download Word

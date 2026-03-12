@@ -109,11 +109,11 @@
         <div class="header">
 
             <h2 class="title">
-                PROGRAMME - {{ strtoupper($programme->name) }}
+                DEPARTMENT - {{ strtoupper($department->name) }}
             </h2>
 
             <h3 class="subtitle">
-                PROGRAMME STRUCTURE
+                DEPARTMENT STRUCTURE
             </h3>
 
             <h4 class="subtitle2">

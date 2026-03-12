@@ -30,7 +30,7 @@ class CDCDashboardController extends Controller
 
         $schemes = CurriculumYears::latest()->get();
 
-        $recentHods = User::with('programme')
+        $recentHods = User::with('department')
             ->whereHas('roles', function ($q) {
                 $q->where('name', 'hod');
             })

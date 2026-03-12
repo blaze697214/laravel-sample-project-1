@@ -4,20 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ProgrammeCourse extends Model
+class DepartmentCourse extends Model
 {
     //
-    protected $table = 'programme_course';
+    protected $table = 'department_course';
 
     protected $fillable = [
-        'programme_id',
+        'department_id',
         'course_id',
         'is_elective',
     ];
 
-    public function programme()
+    public function department()
     {
-        return $this->belongsTo(Programme::class);
+        return $this->belongsTo(Department::class);
     }
 
     public function course()

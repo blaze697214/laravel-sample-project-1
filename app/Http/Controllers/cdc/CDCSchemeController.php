@@ -4,8 +4,8 @@ namespace App\Http\Controllers\cdc;
 
 use App\Http\Controllers\Controller;
 use App\Models\CurriculumYears;
-use App\Models\Programme;
-use App\Models\ProgrammeLevelDetail;
+use App\Models\Department;
+use App\Models\DepartmentLevelDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -180,21 +180,21 @@ class CDCSchemeController extends Controller
 
         /*
         Optional safety check:
-        Ensure all programmes configured
+        Ensure all departments configured
         */
 
-        $programmes = Programme::count();
+        $departments = Department::count();
 
-        $configured = ProgrammeLevelDetail::whereHas('level', function ($q) use ($schemeId) {
+        $configured = DepartmentLevelDetail::whereHas('level', function ($q) use ($schemeId) {
             $q->where('curriculum_year_id', $schemeId);
         })
-            ->distinct('programme_id')
-            ->count('programme_id');
+            ->distinct('department_id')
+            ->count('department_id');
 
-        if ($configured < $programmes) {
+        if ($configured < $departments) {
 
             return back()->withErrors([
-                'scheme' => 'All programmes must be configured before saving the scheme.',
+                'scheme' => 'All departments must be configured before saving the scheme.',
             ]);
 
         }
@@ -202,7 +202,7 @@ class CDCSchemeController extends Controller
         /* mark scheme finalized */
 
         $scheme->update([
-            'is_locked' => 1,
+            'is_locked' => 0,
         ]);
 
         return redirect()

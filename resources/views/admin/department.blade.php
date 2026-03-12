@@ -2,24 +2,24 @@
 
 @section('content')
     <h1 class="text-2xl font-bold text-gray-800 mb-6">
-        Programme Management
+        Department Management
     </h1>
 
 
-    <!-- Create Programme -->
+    <!-- Create Department -->
     <div class="bg-white p-6 rounded-xl shadow mb-10">
 
         <h2 class="text-lg font-semibold mb-4 text-gray-700">
-            Add Programme
+            Add Department
         </h2>
 
-        <form method="POST" action="{{ route('admin.programmes.store') }}" class="space-y-4">
+        <form method="POST" action="{{ route('admin.departments.store') }}" class="space-y-4">
             @csrf
 
             <div class="flex gap-10">
                 <div class="basis-2/3">
                     <label class="block text-sm font-medium text-gray-600 mb-1">
-                        Programme Name
+                        Department Name
                     </label>
 
                     <input type="text" name="name" required
@@ -28,7 +28,7 @@
 
                 <div class="basis-1/3">
                     <label class="block text-sm font-medium text-gray-600 mb-1">
-                        Programme Abbrevation
+                        Department Abbrevation
                     </label>
 
                     <input type="text" name="abbrevation" required
@@ -38,7 +38,7 @@
 
             <button type="submit"
                 class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-medium transition">
-                Create Programme
+                Create Department
             </button>
 
         </form>
@@ -47,11 +47,11 @@
 
 
 
-    <!-- Programme List -->
+    <!-- Department List -->
     <div class="bg-white p-6 rounded-xl shadow">
 
         <h2 class="text-lg font-semibold text-gray-700 mb-4">
-            Existing Programmes
+            Existing Departments
         </h2>
 
         <div class="overflow-x-auto">
@@ -67,11 +67,11 @@
                         </th>
 
                         <th class="px-4 py-3 text-sm font-semibold text-gray-600">
-                            Programme Name
+                            Department Name
                         </th>
 
                         <th class="px-4 py-3 text-sm font-semibold text-gray-600">
-                            Programme Abbrevation
+                            Department Abbrevation
                         </th>
 
                         <th class="px-4 py-3 text-sm font-semibold text-gray-600">
@@ -85,27 +85,27 @@
 
                 <tbody class="divide-y">
 
-                    @foreach ($programmes as $programme)
+                    @foreach ($departments as $department)
                         <tr class="hover:bg-gray-50 border-gray-200">
 
                             <td class="px-4 py-3">
-                                {{ $programme->id }}
+                                {{ $department->id }}
                             </td>
 
                             <td class="px-4 py-3">
 
-                                <form method="POST" action="{{ route('admin.programmes.update', $programme->id) }}"
+                                <form method="POST" action="{{ route('admin.departments.update', $department->id) }}"
                                     class="flex items-center gap-3">
 
                                     @csrf
                                     @method('PUT')
 
-                                    <input type="text" name="name" value="{{ $programme->name }}"
+                                    <input type="text" name="name" value="{{ $department->name }}"
                                         class="border border-gray-300 rounded px-2 py-1 w-60">
                             </td>
 
                             <td class="px-4 py-3">
-                                <input type="text" name="abbrevation" value="{{ $programme->abbrevation }}"
+                                <input type="text" name="abbrevation" value="{{ $department->abbrevation }}"
                                     class="border border-gray-300 rounded px-2 py-1 w-48">
                             </td>
 
@@ -120,7 +120,7 @@
                                 </form>
 
 
-                                <form method="POST" action="{{ route('admin.programmes.destroy', $programme->id) }}">
+                                <form method="POST" action="{{ route('admin.departments.destroy', $department->id) }}">
                                     @csrf
                                     @method('DELETE')
 

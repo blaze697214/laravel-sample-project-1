@@ -4,8 +4,8 @@ namespace App\Http\Controllers\cdc;
 
 use App\Http\Controllers\Controller;
 use App\Models\CurriculumYears;
-use App\Models\Programme;
-use App\Models\ProgrammeLevelDetail;
+use App\Models\Department;
+use App\Models\DepartmentLevelDetail;
 use App\Services\SchemeVerificationService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use PhpOffice\PhpWord\PhpWord;
@@ -20,59 +20,59 @@ class CDCVerifySchemeController extends Controller
         return view('cdc.schemes.verify.index', compact('schemes'));
     }
 
-    public function programmes($schemeId, SchemeVerificationService $service)
+    public function departments($schemeId, SchemeVerificationService $service)
     {
 
-        $programmes = Programme::all();
+        $departments = Department::all();
 
         $status = [];
 
-        foreach ($programmes as $programme) {
+        foreach ($departments as $department) {
 
-            $verification = $service->verifyProgramme($schemeId, $programme->id);
+            $verification = $service->verifyDepartment($schemeId, $department->id);
 
-            $status[$programme->id] = $verification['complete'];
+            $status[$department->id] = $verification['complete'];
         }
 
         return view(
-            'cdc.schemes.verify.programmes',
-            compact('programmes', 'schemeId', 'status')
+            'cdc.schemes.verify.departments',
+            compact('departments', 'schemeId', 'status')
         );
 
     }
 
-    public function summary($schemeId, $programmeId, SchemeVerificationService $service)
+    public function summary($schemeId, $departmentId, SchemeVerificationService $service)
     {
 
-        $programme = Programme::findOrFail($programmeId);
+        $department = Department::findOrFail($departmentId);
 
-        $verification = $service->verifyProgramme($schemeId, $programmeId);
+        $verification = $service->verifyDepartment($schemeId, $departmentId);
 
         return view(
             'cdc.schemes.verify.summary',
-            compact('programme', 'schemeId', 'verification')
+            compact('department', 'schemeId', 'verification')
         );
 
     }
 
-    public function programmeLevelsView($schemeId, $programmeId, SchemeVerificationService $service)
+    public function departmentLevelsView($schemeId, $departmentId, SchemeVerificationService $service)
     {
 
-        $verification = $service->verifyProgramme($schemeId, $programmeId);
+        $verification = $service->verifyDepartment($schemeId, $departmentId);
 
-        if (! $verification['programmeLevel']) {
+        if (! $verification['departmentLevel']) {
 
             return redirect()
-                ->route('cdc.schemes.verify.summary', [$schemeId, $programmeId])
-                ->with('error', 'Programme Level configuration has not been created yet.');
+                ->route('cdc.schemes.verify.summary', [$schemeId, $departmentId])
+                ->with('error', 'Department Level configuration has not been created yet.');
 
         }
 
         // load actual data
-        $programme = Programme::findOrFail($programmeId);
+        $department = Department::findOrFail($departmentId);
 
-        $rows = ProgrammeLevelDetail::with('level')
-            ->where('programme_id', $programmeId)
+        $rows = DepartmentLevelDetail::with('level')
+            ->where('department_id', $departmentId)
             ->whereHas('level', function ($q) use ($schemeId) {
                 $q->where('curriculum_year_id', $schemeId);
             })
@@ -139,9 +139,9 @@ class CDCVerifySchemeController extends Controller
         ];
 
         return view(
-            'cdc.schemes.verify.programme-levels',
+            'cdc.schemes.verify.department-levels',
             compact(
-                'programme',
+                'department',
                 'schemeId',
                 'rows',
                 'totals',
@@ -151,13 +151,13 @@ class CDCVerifySchemeController extends Controller
         );
     }
 
-    public function downloadProgrammeLevelsPdf($schemeId, $programmeId)
+    public function downloadDepartmentLevelsPdf($schemeId, $departmentId)
     {
 
-        $programme = Programme::findOrFail($programmeId);
+        $department = Department::findOrFail($departmentId);
 
-        $rows = ProgrammeLevelDetail::with('level')
-            ->where('programme_id', $programmeId)
+        $rows = DepartmentLevelDetail::with('level')
+            ->where('department_id', $departmentId)
             ->whereHas('level', function ($q) use ($schemeId) {
                 $q->where('curriculum_year_id', $schemeId);
             })
@@ -223,9 +223,9 @@ class CDCVerifySchemeController extends Controller
         ];
 
         $pdf = Pdf::loadView(
-            'cdc.schemes.verify.programme-levels-pdf',
+            'cdc.schemes.verify.department-levels-pdf',
             compact(
-                'programme',
+                'department',
                 'schemeId',
                 'rows',
                 'totals',
@@ -233,16 +233,16 @@ class CDCVerifySchemeController extends Controller
                 'auditRow'
             ));
 
-        return $pdf->download('programme_structure.pdf');
+        return $pdf->download('department_structure.pdf');
     }
 
-    public function downloadProgrammeLevelsWord($schemeId, $programmeId)
+    public function downloadDepartmentLevelsWord($schemeId, $departmentId)
     {
 
-        $programme = Programme::findOrFail($programmeId);
+        $department = Department::findOrFail($departmentId);
 
-        $rows = ProgrammeLevelDetail::with('level')
-            ->where('programme_id', $programmeId)
+        $rows = DepartmentLevelDetail::with('level')
+            ->where('department_id', $departmentId)
             ->whereHas('level', function ($q) use ($schemeId) {
                 $q->where('curriculum_year_id', $schemeId);
             })
@@ -308,9 +308,9 @@ class CDCVerifySchemeController extends Controller
         ];
 
         $html = view(
-            'cdc.schemes.verify.programme-levels-word',
+            'cdc.schemes.verify.department-levels-word',
             compact(
-                'programme',
+                'department',
                 'schemeId',
                 'rows',
                 'totals',
@@ -329,7 +329,7 @@ class CDCVerifySchemeController extends Controller
 
         Html::addHtml($section, $html, false, false);
 
-        $file = storage_path('programme_structure.docx');
+        $file = storage_path('department_structure.docx');
 
         $phpWord->save($file, 'Word2007');
 

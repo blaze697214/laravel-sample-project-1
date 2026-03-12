@@ -6,12 +6,12 @@
     </h1>
 
 
-    {{-- Programme Context --}}
+    {{-- Department Context --}}
     <div class="mb-8 bg-white p-6 rounded-xl shadow">
 
         <p class="text-gray-700">
-            Programme:
-            <span class="font-semibold">{{ $programme->name }}</span>
+            Department:
+            <span class="font-semibold">{{ $department->name }}</span>
         </p>
 
         <p class="text-gray-600 mt-1">

@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Programme extends Model
+class Department extends Model
 {
-    /** @use HasFactory<\Database\Factories\ProgrammeFactory> */
+    /** @use HasFactory<\Database\Factories\DepartmentFactory> */
     use HasFactory;
 
     protected $fillable = [
@@ -22,12 +22,12 @@ class Programme extends Model
 
     public function courses()
     {
-        return $this->belongsToMany(Courses::class, 'programme_course', 'programme_id', 'course_id')->withPivot('is_elective');
+        return $this->belongsToMany(Courses::class, 'department_course', 'department_id', 'course_id')->withPivot('is_elective');
     }
 
-    public function programmeLevelDetails()
+    public function departmentLevelDetails()
     {
-        return $this->hasMany(ProgrammeLevelDetail::class);
+        return $this->hasMany(DepartmentLevelDetail::class);
     }
 
     public function electiveGroups()

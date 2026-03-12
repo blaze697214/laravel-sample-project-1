@@ -4,35 +4,35 @@ namespace App\Services;
 
 use App\Models\ClassAwardConfiguration;
 use App\Models\CourseDetail;
-use App\Models\ProgrammeLevelDetail;
+use App\Models\DepartmentLevelDetail;
 use App\Models\SemesterPlacement;
 
 class SchemeVerificationService
 {
-    public function verifyProgramme($schemeId, $programmeId)
+    public function verifyDepartment($schemeId, $departmentId)
     {
 
-        $programmeLevel = ProgrammeLevelDetail::where('programme_id', $programmeId)
+        $departmentLevel = DepartmentLevelDetail::where('department_id', $departmentId)
             // ->where('curriculum_year_id',$schemeId)
             ->exists();
 
-        $courseDetails = CourseDetail::whereHas('programmeCourse', function ($q) use ($programmeId) {
+        $courseDetails = CourseDetail::whereHas('departmentCourse', function ($q) use ($departmentId) {
 
-            $q->where('programme_id', $programmeId);
+            $q->where('department_id', $departmentId);
 
         })->exists();
 
-        $classAward = ClassAwardConfiguration::where('programme_id', $programmeId)
+        $classAward = ClassAwardConfiguration::where('department_id', $departmentId)
             ->where('curriculum_year_id', $schemeId)
             ->exists();
 
-        $semesterPlacement = SemesterPlacement::where('programme_id', $programmeId)
+        $semesterPlacement = SemesterPlacement::where('department_id', $departmentId)
             ->where('curriculum_year_id', $schemeId)
             ->exists();
 
         return [
 
-            'programmeLevel' => $programmeLevel,
+            'departmentLevel' => $departmentLevel,
 
             'courseDetails' => $courseDetails,
 
@@ -40,7 +40,7 @@ class SchemeVerificationService
 
             'semesterPlacement' => $semesterPlacement,
 
-            'complete' => $programmeLevel &&
+            'complete' => $departmentLevel &&
         $courseDetails &&
         $classAward &&
         $semesterPlacement,

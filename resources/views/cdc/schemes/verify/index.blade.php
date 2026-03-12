@@ -89,7 +89,7 @@
 
                             <td class="px-4 py-3">
 
-                                <a href="{{ route('cdc.schemes.verify.programmes', $scheme->id) }}">
+                                <a href="{{ route('cdc.schemes.verify.departments', $scheme->id) }}">
 
                                     <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded text-sm">
                                         Verify

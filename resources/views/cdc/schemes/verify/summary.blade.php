@@ -7,7 +7,7 @@
 
     <p class="text-gray-600 mb-6">
 
-        Programme: {{ $programme->name }}
+        Department: {{ $department->name }}
 
     </p>
 
@@ -34,10 +34,10 @@
 
     <div class="mb-4 mt-10 ml-5">
 
-        <a href="{{ route('cdc.schemes.verify.programmes', $schemeId) }}">
+        <a href="{{ route('cdc.schemes.verify.departments', $schemeId) }}">
 
             <button class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded text-sm">
-                ← Back to Programmes
+                ← Back to Departments
             </button>
 
         </a>
@@ -77,12 +77,12 @@
                 <tr class="hover:bg-gray-50 border-gray-200">
 
                     <td class="px-4 py-3">
-                        Programme Level Details
+                        Department Level Details
                     </td>
 
                     <td class="px-4 py-3">
 
-                        @if ($verification['programmeLevel'])
+                        @if ($verification['departmentLevel'])
                             <span class="px-2 py-1 text-xs font-semibold bg-green-100 text-green-700 rounded">
                                 Configured
                             </span>
@@ -96,8 +96,8 @@
 
                     <td class="px-4 py-3">
 
-                        @if ($verification['programmeLevel'])
-                            <a href="{{ route('cdc.schemes.verify.programmeLevels', [$schemeId, $programme->id]) }}">
+                        @if ($verification['departmentLevel'])
+                            <a href="{{ route('cdc.schemes.verify.departmentLevels', [$schemeId, $department->id]) }}">
                             <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded text-sm">
                                 View
                             </button>
@@ -137,7 +137,7 @@
                     <td class="px-4 py-3">
 
                         @if ($verification['courseDetails'])
-                            {{-- <a href="{{ route('cdc.verify.courseDetails', [$schemeId, $programme->id]) }}"> --}}
+                            {{-- <a href="{{ route('cdc.verify.courseDetails', [$schemeId, $department->id]) }}"> --}}
                             <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded text-sm">
                                 View
                             </button>
@@ -177,7 +177,7 @@
 
                     <td class="px-4 py-3">
                         @if ($verification['classAward'])
-                            {{-- <a href="{{ route('cdc.verify.classAward', [$schemeId, $programme->id]) }}"> --}}
+                            {{-- <a href="{{ route('cdc.verify.classAward', [$schemeId, $department->id]) }}"> --}}
 
                             <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded text-sm">
                                 View
@@ -218,7 +218,7 @@
 
                     <td class="px-4 py-3">
                         @if ($verification['semesterPlacement'])
-                            {{-- <a href="{{ route('cdc.verify.semesterPlacement', [$schemeId, $programme->id]) }}"> --}}
+                            {{-- <a href="{{ route('cdc.verify.semesterPlacement', [$schemeId, $department->id]) }}"> --}}
 
                             <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded text-sm">
                                 View

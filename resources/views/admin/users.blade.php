@@ -85,20 +85,20 @@
 
 
 
-            <div class="md:col-span-2" id="programmeField">
+            <div class="md:col-span-2" id="departmentField">
 
                 <label class="block text-sm font-medium text-gray-600 mb-1">
-                    Programme (Only for HOD)
+                    Department (Only for HOD)
                 </label>
 
-                <select name="programme_id"
+                <select name="department_id"
                     class="w-full md:w-1/2 border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
 
                     <option value="">None</option>
 
-                    @foreach ($programmes as $programme)
-                        <option value="{{ $programme->id }}">
-                            {{ $programme->name }}
+                    @foreach ($departments as $department)
+                        <option value="{{ $department->id }}">
+                            {{ $department->name }}
                         </option>
                     @endforeach
 
@@ -139,7 +139,7 @@
                         <th class="px-4 py-3 text-sm font-semibold text-gray-600">Name</th>
                         <th class="px-4 py-3 text-sm font-semibold text-gray-600">Email</th>
                         <th class="px-4 py-3 text-sm font-semibold text-gray-600">Role</th>
-                        <th class="px-4 py-3 text-sm font-semibold text-gray-600">Programme</th>
+                        <th class="px-4 py-3 text-sm font-semibold text-gray-600">Department</th>
                         <th class="px-4 py-3 text-sm font-semibold text-gray-600">Actions</th>
                     </tr>
 
@@ -172,7 +172,7 @@
 
 
                                 <td class="px-4 py-3 text-gray-600">
-                                    {{ $user->programme->name ?? '-' }}
+                                    {{ $user->department->name ?? '-' }}
                                 </td>
 
 
@@ -205,16 +205,16 @@
     </div>
     <script>
         const roleSelect = document.getElementById('roleSelect');
-        const programmeField = document.getElementById('programmeField');
+        const departmentField = document.getElementById('departmentField');
 
         roleSelect.addEventListener('change', function() {
 
             const selectedRole = roleSelect.options[roleSelect.selectedIndex].text.toLowerCase();
 
             if (selectedRole === 'hod') {
-                programmeField.style.display = 'block';
+                departmentField.style.display = 'block';
             } else {
-                programmeField.style.display = 'none';
+                departmentField.style.display = 'none';
             }
 
         });

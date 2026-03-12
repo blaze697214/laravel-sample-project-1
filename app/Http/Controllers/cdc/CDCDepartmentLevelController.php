@@ -5,23 +5,23 @@ namespace App\Http\Controllers\cdc;
 use App\Http\Controllers\Controller;
 use App\Models\CurriculumYears;
 use App\Models\Levels;
-use App\Models\Programme;
-use App\Models\ProgrammeLevelDetail;
+use App\Models\Department;
+use App\Models\DepartmentLevelDetail;
 use Illuminate\Http\Request;
 
-class CDCProgrammeLevelController extends Controller
+class CDCDepartmentLevelController extends Controller
 {
     //
     public function index($schemeId)
     {
 
-        $programmes = Programme::all();
+        $departments = Department::all();
 
         /*
-        Check if programme configuration exists
+        Check if department configuration exists
         */
 
-        $configured = ProgrammeLevelDetail::whereHas(
+        $configured = DepartmentLevelDetail::whereHas(
             'level',
             function ($q) use ($schemeId) {
 
@@ -29,21 +29,21 @@ class CDCProgrammeLevelController extends Controller
 
             }
         )
-            ->pluck('programme_id')
+            ->pluck('department_id')
             ->unique()
             ->toArray();
 
         return view(
-            'cdc.schemes.programme_levels.index',
-            compact('programmes', 'configured', 'schemeId')
+            'cdc.schemes.department_levels.index',
+            compact('departments', 'configured', 'schemeId')
         );
 
     }
 
-    public function create($schemeId, $programmeId)
+    public function create($schemeId, $departmentId)
     {
 
-        $programme = Programme::findOrFail($programmeId);
+        $department = Department::findOrFail($departmentId);
 
         $scheme = CurriculumYears::findOrFail($schemeId);
 
@@ -52,15 +52,15 @@ class CDCProgrammeLevelController extends Controller
             ->orderBy('order_no')
             ->get();
 
-        $existing = ProgrammeLevelDetail::where('programme_id', $programmeId)
+        $existing = DepartmentLevelDetail::where('department_id', $departmentId)
             ->whereIn('level_id', $levels->pluck('id'))
             ->get()
             ->keyBy('level_id');
 
         return view(
-            'cdc.schemes.programme_levels.create',
+            'cdc.schemes.department_levels.create',
             compact(
-                'programme',
+                'department',
                 'scheme',
                 'levels',
                 'existing'
@@ -68,7 +68,7 @@ class CDCProgrammeLevelController extends Controller
 
     }
 
-    public function store(Request $request, $schemeId, $programmeId)
+    public function store(Request $request, $schemeId, $departmentId)
     {
 
         $scheme = CurriculumYears::findOrFail($schemeId);
@@ -139,10 +139,10 @@ class CDCProgrammeLevelController extends Controller
 
         foreach ($request->levels as $levelId) {
 
-            ProgrammeLevelDetail::updateOrCreate(
+            DepartmentLevelDetail::updateOrCreate(
 
                 [
-                    'programme_id' => $programmeId,
+                    'department_id' => $departmentId,
                     'level_id' => $levelId,
                 ],
 
@@ -163,19 +163,19 @@ class CDCProgrammeLevelController extends Controller
         }
 
         return redirect()->route(
-            'cdc.schemes.programmeLevels.preview',
-            [$schemeId, $programmeId]
+            'cdc.schemes.departmentLevels.preview',
+            [$schemeId, $departmentId]
         );
 
     }
 
-    public function preview($schemeId, $programmeId)
+    public function preview($schemeId, $departmentId)
     {
 
-        $programme = Programme::findOrFail($programmeId);
+        $department = Department::findOrFail($departmentId);
 
-        $rows = ProgrammeLevelDetail::with('level')
-            ->where('programme_id', $programmeId)
+        $rows = DepartmentLevelDetail::with('level')
+            ->where('department_id', $departmentId)
             ->whereHas('level', function ($q) use ($schemeId) {
                 $q->where('curriculum_year_id', $schemeId);
             })
@@ -241,24 +241,24 @@ class CDCProgrammeLevelController extends Controller
         ];
 
         return view(
-            'cdc.schemes.programme_levels.preview',
-            compact('programme', 'rows', 'totals', 'auditRow', 'grand', 'schemeId')
+            'cdc.schemes.department_levels.preview',
+            compact('department', 'rows', 'totals', 'auditRow', 'grand', 'schemeId')
         );
 
     }
 
-    public function finalize($schemeId, $programmeId)
+    public function finalize($schemeId, $departmentId)
     {
 
-        ProgrammeLevelDetail::where('programme_id', $programmeId)
+        DepartmentLevelDetail::where('department_id', $departmentId)
             ->update([
                 'is_configured' => 1,
             ]);
 
         return redirect()->route(
-            'cdc.schemes.programmeLevels.index',
+            'cdc.schemes.departmentLevels.index',
             $schemeId
-        )->with('success', 'Programme configuration saved');
+        )->with('success', 'Department configuration saved');
 
     }
 }

@@ -10,7 +10,7 @@ class SemesterPlacement extends Model
     /** @use HasFactory<\Database\Factories\SemesterPlacementFactory> */
     use HasFactory;
     protected $fillable = [
-        'programme_id',
+        'department_id',
         'curriculum_year_id',
         'academic_year_no',
         'semester_type',
@@ -18,9 +18,9 @@ class SemesterPlacement extends Model
         'placeable_type'
     ];
 
-    public function programme()
+    public function department()
     {
-        return $this->belongsTo(Programme::class);
+        return $this->belongsTo(Department::class);
     }
 
     public function curriculumYear()

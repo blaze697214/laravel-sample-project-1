@@ -60,16 +60,16 @@
 
                 <div>
                     <label class="block text-sm text-gray-600 mb-1">
-                        Programme
+                        Department
                     </label>
 
-                    <select name="programme_id" class="w-full border border-gray-300 rounded px-3 py-2">
+                    <select name="department_id" class="w-full border border-gray-300 rounded px-3 py-2">
 
-                        <option value="">Select Programme</option>
+                        <option value="">Select Department</option>
 
-                        @foreach ($programmes as $programme)
-                            <option value="{{ $programme->id }}">
-                                {{ $programme->name }}
+                        @foreach ($departments as $department)
+                            <option value="{{ $department->id }}">
+                                {{ $department->name }}
                             </option>
                         @endforeach
 
@@ -105,17 +105,17 @@
         <form method="GET" action="{{ route('cdc.users.faculty') }}">
 
             <label class="text-sm text-gray-600 mr-2">
-                Select Programme
+                Select Department
             </label>
 
-            <select name="programme" onchange="this.form.submit()" class="border border-gray-300 rounded px-3 py-2">
+            <select name="department" onchange="this.form.submit()" class="border border-gray-300 rounded px-3 py-2">
 
-                <option value="">Select Programme</option>
+                <option value="">Select Department</option>
 
-                @foreach ($programmes as $programme)
-                    <option value="{{ $programme->id }}" @if (request('programme') == $programme->id) selected @endif>
+                @foreach ($departments as $department)
+                    <option value="{{ $department->id }}" @if (request('department') == $department->id) selected @endif>
 
-                        {{ $programme->name }}
+                        {{ $department->name }}
 
                     </option>
                 @endforeach
@@ -128,11 +128,11 @@
 
 
 
-    @if ($selectedProgramme)
+    @if ($selectedDepartment)
         <div class="mb-4">
 
             <p class="font-semibold text-lg">
-                Programme: {{ $selectedProgramme->name }}
+                Department: {{ $selectedDepartment->name }}
             </p>
 
             <p class="text-md text-gray-600">
@@ -189,7 +189,7 @@
                                     @csrf
                                     @method('PUT')
                                 
-                                <input type="hidden" name="programme_id" value="{{ $user->programme_id }}">
+                                <input type="hidden" name="department_id" value="{{ $user->department_id }}">
 
                                 <td class="px-4 py-2">
                                     <input type="text" name="name" value="{{ $user->name }}"

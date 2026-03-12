@@ -33,9 +33,9 @@
         </div>
 
         <div class="bg-white p-6 rounded-xl shadow hover:shadow-md transition">
-            <p class="text-gray-500 text-sm">Programmes</p>
+            <p class="text-gray-500 text-sm">Departments</p>
             <h2 class="text-3xl font-bold text-indigo-600 mt-2">
-                {{ $totalProgrammes }}
+                {{ $totalDepartments }}
             </h2>
         </div>
 
@@ -57,11 +57,11 @@
 
 
 
-    <!-- Programme Distribution -->
+    <!-- Department Distribution -->
     <div class="bg-white p-6 rounded-xl shadow mb-10">
 
         <h2 class="text-lg font-semibold text-gray-800 mb-4">
-            Faculty per Programme
+            Faculty per Department
         </h2>
 
         <div class="overflow-x-auto">
@@ -72,7 +72,7 @@
 
                     <tr>
                         <th class="px-4 py-3 text-sm font-semibold text-gray-600">
-                            Programme
+                            Department
                         </th>
 
                         <th class="px-4 py-3 text-sm font-semibold text-gray-600">
@@ -84,16 +84,16 @@
 
                 <tbody class="divide-y">
 
-                @foreach($programmeFaculty as $programme)
+                @foreach($departmentFaculty as $department)
 
                     <tr class="hover:bg-gray-50 border-gray-200">
 
                         <td class="px-4 py-3">
-                            {{ $programme->name }}
+                            {{ $department->name }}
                         </td>
 
                         <td class="px-4 py-3 font-medium">
-                            {{ $programme->faculty_count }}
+                            {{ $department->faculty_count }}
                         </td>
 
                     </tr>

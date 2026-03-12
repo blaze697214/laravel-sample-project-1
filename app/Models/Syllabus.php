@@ -11,14 +11,14 @@ class Syllabus extends Model
     use HasFactory;
 
     protected $fillable = [
-        'programme_course_id',
+        'department_course_id',
         'rationale',
         'created_by',
         'is_submitted',
         'is_approved'
     ];
 
-    public function programmeCourse()
+    public function departmentCourse()
     {
         return $this->belongsTo(Syllabus::class);
     } 

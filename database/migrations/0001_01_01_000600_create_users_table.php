@@ -20,7 +20,7 @@ return new class extends Migration
 
             $table->unsignedBigInteger('created_by')->nullable();
 
-            $table->foreignId('programme_id')->nullable()->constrained('programmes')->nullOnDelete();
+            $table->foreignId('department_id')->nullable()->constrained('departments')->nullOnDelete();
             $table->rememberToken();
             $table->timestamps();
 

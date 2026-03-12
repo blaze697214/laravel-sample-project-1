@@ -4,8 +4,8 @@ namespace App\Http\Controllers\hod;
 
 use App\Http\Controllers\Controller;
 use App\Models\CurriculumYears;
-use App\Models\Programme;
-use App\Models\ProgrammeLevelDetail;
+use App\Models\Department;
+use App\Models\DepartmentLevelDetail;
 use Illuminate\Support\Facades\Auth;
 
 class HODSchemeController extends Controller
@@ -13,14 +13,14 @@ class HODSchemeController extends Controller
     public function index()
     {
 
-        $programmeId = Auth::user()->programme_id;
+        $departmentId = Auth::user()->department_id;
 
-        $programme = Programme::findOrFail($programmeId);
+        $department = Department::findOrFail($departmentId);
 
         $activeScheme = CurriculumYears::where('is_active', 1)->firstOrFail();
 
-        $rows = ProgrammeLevelDetail::with('level')
-            ->where('programme_id', $programmeId)
+        $rows = DepartmentLevelDetail::with('level')
+            ->where('department_id', $departmentId)
             ->get()
             ->sortBy('level.order_no');
 
@@ -88,7 +88,7 @@ class HODSchemeController extends Controller
 
         return view(
             'hod.scheme.index',
-            compact('programme', 'rows', 'totals', 'auditRow', 'grand')
+            compact('department', 'rows', 'totals', 'auditRow', 'grand')
         );
 
     }

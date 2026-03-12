@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Programme;
+use App\Models\Department;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -18,9 +18,9 @@ class UserController extends Controller
     {
         $roles = Role::all();
 
-        $programmes = Programme::all();
+        $departments = Department::all();
 
-        $users = User::with(['roles', 'programme'])
+        $users = User::with(['roles', 'department'])
             ->whereHas('roles', function ($q) {
                 $q->whereIn('name', ['cdc', 'hod']);
             })
@@ -28,7 +28,7 @@ class UserController extends Controller
 
         return view('admin.users', compact(
             'roles',
-            'programmes',
+            'departments',
             'users'
         ));
     }
@@ -51,7 +51,7 @@ class UserController extends Controller
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
-            'programme_id' => $request->input('programme_id'),
+            'department_id' => $request->input('department_id'),
             'created_by' => Auth::id(),
 
         ]);
@@ -88,7 +88,7 @@ class UserController extends Controller
 
             'name' => $request->input('name'),
             'email' => $request->input('email'),
-            'programme_id' => $request->input('programme_id'),
+            'department_id' => $request->input('department_id'),
 
         ]);
 

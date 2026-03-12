@@ -91,10 +91,10 @@
 
 
 
-            <!-- Programme Mapping -->
+            <!-- Department Mapping -->
 
             <h4 class="text-md font-semibold text-gray-700 mt-6">
-                Programme Mapping
+                Department Mapping
             </h4>
 
 
@@ -106,7 +106,7 @@
 
                         <tr>
                             <th class="px-4 py-2 text-sm font-semibold text-gray-600">
-                                Programme
+                                Department
                             </th>
 
                             <th class="px-4 py-2 text-sm font-semibold text-gray-600 text-center">
@@ -124,18 +124,18 @@
 
                     <tbody class="divide-y">
 
-                        @foreach ($programmes as $programme)
+                        @foreach ($departments as $department)
                             <tr class="hover:bg-gray-50 border-gray-200">
 
                                 <td class="px-4 py-2">
-                                    {{ $programme->name }}
+                                    {{ $department->name }}
                                 </td>
 
 
                                 <td class="px-4 py-2 text-center">
 
-                                    <input type="checkbox" name="offered[]" value="{{ $programme->id }}"
-                                        data-programme="{{ $programme->id }}"data-role="offered"
+                                    <input type="checkbox" name="offered[]" value="{{ $department->id }}"
+                                        data-department="{{ $department->id }}"data-role="offered"
                                         class="w-4 h-4 text-blue-600 border-gray-300 rounded">
 
                                 </td>
@@ -143,8 +143,8 @@
 
                                 <td class="px-4 py-2 text-center">
 
-                                    <input type="checkbox" name="elective[{{ $programme->id }}]"
-                                        data-programme="{{ $programme->id }}" data-role="elective" disabled
+                                    <input type="checkbox" name="elective[{{ $department->id }}]"
+                                        data-department="{{ $department->id }}" data-role="elective" disabled
                                         class="w-4 h-4 text-blue-600 border-gray-300 rounded">
 
                                 </td>
@@ -188,7 +188,7 @@
                         <tr>
                             <th class="px-4 py-3 text-sm font-semibold text-gray-600 w-100">Title</th>
                             <th class="px-4 py-3 text-sm font-semibold text-gray-600 w-60">Abbrev</th>
-                            <th class="px-4 py-3 text-sm font-semibold text-gray-600 w-60">Programmes</th>
+                            <th class="px-4 py-3 text-sm font-semibold text-gray-600 w-60">Departments</th>
                             <th class="px-4 py-3 text-sm font-semibold text-gray-600 text-center">Actions</th>
                         </tr>
 
@@ -219,13 +219,13 @@
 
                                         <td class="px-4 py-3 white-space:normal">
 
-                                            @foreach ($course->programmes as $prog)
+                                            @foreach ($course->departments as $dept)
                                                 <span
                                                     class="inline-flex items-center bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded mr-1 mb-1">
 
-                                                    {{ $prog->abbrevation }}
+                                                    {{ $dept->abbrevation }}
 
-                                                    @if ($prog->pivot->is_elective)
+                                                    @if ($dept->pivot->is_elective)
                                                         <span class="ml-1 text-purple-600 font-medium">
                                                             (Elective)
                                                         </span>
@@ -288,7 +288,7 @@
         <a href="{{ route('cdc.schemes.courses.next', $scheme->id) }}">
 
             <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition">
-                Next → Programme Level Configuration
+                Next → Department Level Configuration
             </button>
 
         </a>
@@ -299,10 +299,10 @@
 
             offered.addEventListener('change', function() {
 
-                let programmeId = this.dataset.programme;
+                let departmentId = this.dataset.department;
 
                 let elective = document.querySelector(
-                    'input[data-role="elective"][data-programme="' + programmeId + '"]'
+                    'input[data-role="elective"][data-department="' + departmentId + '"]'
                 );
 
                 if (this.checked) {

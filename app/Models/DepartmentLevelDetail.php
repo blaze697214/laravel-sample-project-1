@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProgrammeLevelDetail extends Model
+class DepartmentLevelDetail extends Model
 {
-    /** @use HasFactory<\Database\Factories\ProgrammeLevelDetailFactory> */
+    /** @use HasFactory<\Database\Factories\DepartmentLevelDetailFactory> */
     use HasFactory;
 
     protected $fillable = [
         'level_id',
-        'programme_id',
+        'department_id',
         'courses_offered',
         'compulsory_to_complete',
         'elective_to_complete',
@@ -29,8 +29,8 @@ class ProgrammeLevelDetail extends Model
         return $this->belongsTo(Levels::class);
     }
 
-    public function programme()
+    public function department()
     {
-        return $this->belongsTo(Programme::class);
+        return $this->belongsTo(Department::class);
     }
 }

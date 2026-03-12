@@ -28,7 +28,7 @@
                 </p>
 
                 <p class="text-xs font-medium text-slate-500">
-                    {{ auth()->user()->programme->name ?? '' }}
+                    {{ auth()->user()->department->name ?? '' }}
                 </p>
 
             </div>
@@ -90,7 +90,7 @@
                 {{-- <a href="{{ route('hod.reports') }}"
                     class="block px-6 py-3 hover:bg-slate-800 transition
                {{ request()->routeIs('hod.reports') ? 'bg-slate-800' : '' }}">
-                    Programme Summary
+                    Department Summary
                 </a> --}}
 
             </nav>

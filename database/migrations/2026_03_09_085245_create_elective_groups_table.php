@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('level_id')->constrained('levels')->cascadeOnDelete();
-            $table->foreignId('programme_id')->constrained('programmes')->cascadeOnDelete();
+            $table->foreignId('department_id')->constrained('departments')->cascadeOnDelete();
             $table->tinyInteger('min_select_count');
             $table->tinyInteger('max_select_count');
             $table->timestamps();

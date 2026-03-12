@@ -37,9 +37,9 @@
                 Dashboard
             </a>
 
-            <a href="/admin/programmes"
+            <a href="/admin/departments"
             class="block px-6 py-3 hover:bg-slate-800 transition">
-                Programmes
+                Departments
             </a>
 
             <a href="/admin/users"

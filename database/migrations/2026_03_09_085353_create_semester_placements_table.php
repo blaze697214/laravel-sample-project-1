@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('semester_placements', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('programme_id')->constrained('programmes')->cascadeOnDelete();
+            $table->foreignId('department_id')->constrained('departments')->cascadeOnDelete();
             $table->foreignId('curriculum_year_id')->constrained('curriculum_years')->cascadeOnDelete();
             $table->unsignedTinyInteger('academic_year_no');
             $table->enum('semester_type',['odd','even']);

@@ -2,11 +2,11 @@
 
 @section('content')
     <h1 class="text-2xl font-bold text-gray-800 mb-2">
-        Configure Programme Levels
+        Configure Department Levels
     </h1>
 
     <p class="mb-6 text-gray-600">
-        Programme: {{ $programme->name }}
+        Department: {{ $department->name }}
     </p>
 
     @if ($errors->any())
@@ -38,7 +38,7 @@
 
     <div class="bg-white p-6 rounded-xl shadow">
 
-        <form method="POST" action="{{ route('cdc.schemes.programmeLevels.store', [$scheme->id, $programme->id]) }}">
+        <form method="POST" action="{{ route('cdc.schemes.departmentLevels.store', [$scheme->id, $department->id]) }}">
 
             @csrf
             {{-- {{ dd(old()) }} --}}

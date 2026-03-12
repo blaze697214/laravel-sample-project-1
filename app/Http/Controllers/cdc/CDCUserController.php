@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\cdc;
 
 use App\Http\Controllers\Controller;
-use App\Models\Programme;
+use App\Models\Department;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -17,14 +17,14 @@ class CDCUserController extends Controller
         $hodUsers = User::whereHas('roles', function ($q) {
             $q->where('name', 'hod');
         })
-            ->with('programme')
+            ->with('department')
             ->get();
 
-        $programmes = Programme::all();
+        $departments = Department::all();
 
         return view('cdc.users.hod.index', [
             'hodUsers' => $hodUsers,
-            'programmes' => $programmes,
+            'departments' => $departments,
         ]);
 
     }
@@ -38,7 +38,7 @@ class CDCUserController extends Controller
 
             'email' => 'required|email|unique:users,email',
 
-            'programme_id' => 'required|exists:programmes,id',
+            'department_id' => 'required|exists:departments,id',
 
             'password' => 'required|min:5',
 
@@ -50,7 +50,7 @@ class CDCUserController extends Controller
 
             'email' => $request->input('email'),
 
-            'programme_id' => $request->input('programme_id'),
+            'department_id' => $request->input('department_id'),
 
             'password' => Hash::make($request->input('password')),
 
@@ -115,29 +115,29 @@ class CDCUserController extends Controller
     public function facultyIndex(Request $request)
     {
 
-        $programmes = Programme::all();
+        $departments = Department::all();
 
-        $selectedProgramme = null;
+        $selectedDepartment = null;
         $facultyUsers = collect();
         $hodUsers = collect();
 
-        if ($request->programme) {
+        if ($request->department) {
 
-            $selectedProgramme = Programme::find($request->programme);
+            $selectedDepartment = Department::find($request->department);
 
-            $facultyUsers = User::where('programme_id', $request->programme)
+            $facultyUsers = User::where('department_id', $request->department)
                 ->whereHas('roles', fn ($q) => $q->where('name', 'faculty'))
                 ->get();
 
-            $hodUsers = User::where('programme_id', $request->programme)
+            $hodUsers = User::where('department_id', $request->department)
                 ->whereHas('roles', fn ($q) => $q->where('name', 'hod'))
                 ->get();
 
         }
 
         return view('cdc.users.faculty.index', [
-            'programmes' => $programmes,
-            'selectedProgramme' => $selectedProgramme,
+            'departments' => $departments,
+            'selectedDepartment' => $selectedDepartment,
             'facultyUsers' => $facultyUsers,
             'hodUsers' => $hodUsers,
         ]);
@@ -153,7 +153,7 @@ class CDCUserController extends Controller
 
             'email' => 'required|email|unique:users,email',
 
-            'programme_id' => 'required|exists:programmes,id',
+            'department_id' => 'required|exists:departments,id',
 
             'password' => 'required|min:6',
 
@@ -165,7 +165,7 @@ class CDCUserController extends Controller
 
             'email' => $request->input('email'),
 
-            'programme_id' => $request->input('programme_id'),
+            'department_id' => $request->input('department_id'),
 
             'password' => Hash::make($request->input('password')),
 
@@ -176,7 +176,7 @@ class CDCUserController extends Controller
         $user->roles()->attach($role->id);
 
         return redirect()
-            ->route('cdc.users.faculty', ['programme' => $request->programme_id])
+            ->route('cdc.users.faculty', ['department' => $request->department_id])
             ->with('success', 'Faculty created successfully');
     }
 
@@ -199,7 +199,7 @@ class CDCUserController extends Controller
 
             'email' => $request->input('email'),
 
-            'programme_id' => $request->input('programme_id'),
+            'department_id' => $request->input('department_id'),
 
         ]);
 
@@ -212,7 +212,7 @@ class CDCUserController extends Controller
         }
 
         return redirect()
-            ->route('cdc.users.faculty', ['programme' => $request->programme_id])
+            ->route('cdc.users.faculty', ['department' => $request->department_id])
             ->with('success', 'Faculty updated successfully');
 
     }
@@ -227,7 +227,7 @@ class CDCUserController extends Controller
         $user->delete();
 
         return redirect()
-            ->route('cdc.users.faculty', ['programme' => $request->programme_id])
+            ->route('cdc.users.faculty', ['department' => $request->department_id])
             ->with('success', 'Faculty created successfully');
 
     }

@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('programme_level_details', function (Blueprint $table) {
+        Schema::create('department_level_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('level_id')->constrained('levels')->cascadeOnDelete();
-            $table->foreignId('programme_id')->constrained('programmes')->cascadeOnDelete();
+            $table->foreignId('department_id')->constrained('departments')->cascadeOnDelete();
             $table->tinyInteger('courses_offered');
             $table->tinyInteger('compulsory_to_complete');
             $table->tinyInteger('elective_to_complete');
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('programme_level_details');
+        Schema::dropIfExists('department_level_details');
     }
 };

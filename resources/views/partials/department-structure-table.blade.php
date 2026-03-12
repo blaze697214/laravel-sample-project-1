@@ -1,11 +1,11 @@
 <div class="text-center mb-6">
 
     <h2 class="font-bold text-lg">
-        PROGRAMME - {{ strtoupper($programme->name) }}
+        DEPARTMENT - {{ strtoupper($department->name) }}
     </h2>
 
     <h3 class="font-semibold">
-        PROGRAMME STRUCTURE
+        DEPARTMENT STRUCTURE
     </h3>
 
     <h4 class="font-semibold mt-2">
