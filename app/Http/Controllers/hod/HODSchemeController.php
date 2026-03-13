@@ -21,6 +21,9 @@ class HODSchemeController extends Controller
 
         $rows = DepartmentLevelDetail::with('level')
             ->where('department_id', $departmentId)
+             ->whereHas('level', function ($q) use ($activeScheme) {
+                $q->where('curriculum_year_id', $activeScheme->id);
+            })
             ->get()
             ->sortBy('level.order_no');
 
@@ -41,6 +44,7 @@ class HODSchemeController extends Controller
 
         foreach ($rows as $row) {
 
+            $totalHours = $row->th_hrs + $row->tu_hrs + $row->pr_hrs;
             $row->total_hours = $row->th_hrs + $row->tu_hrs + $row->pr_hrs;
 
             if ($row->level->is_audit) {

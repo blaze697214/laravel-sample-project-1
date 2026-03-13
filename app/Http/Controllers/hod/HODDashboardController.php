@@ -9,144 +9,139 @@ use App\Models\CurriculumYears;
 use App\Models\Department;
 use App\Models\DepartmentCourse;
 use App\Models\DepartmentLevelDetail;
+use App\Models\Levels;
+use App\Models\Syllabus;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class HODDashboardController extends Controller
 {
     //
     public function index()
-    {
+{
+    $user = Auth::user();
+    $department = $user->department;
 
-        $departmentId = Auth::user()->department_id;
+    $departmentType = $department->type;
 
-        $department = Department::findOrFail($departmentId);
+    /*
+    |--------------------------------------------------------------------------
+    | Programme Department Dashboard
+    |--------------------------------------------------------------------------
+    */
 
-        $activeScheme = CurriculumYears::where('is_active',1)->firstOrFail();
+    if ($departmentType === 'programme') {
 
+        $activeScheme = CurriculumYears::where('is_active', true)->first();
 
-        /*
-        ------------------------------------------------
-        Courses in Scheme
-        ------------------------------------------------
-        */
+        $departmentId = $department->id;
 
-        $coursesInScheme = DepartmentCourse::where('department_id',$departmentId)
-            ->whereHas('course', function($q) use ($activeScheme){
-                $q->where('curriculum_year_id',$activeScheme->id);
+        $coursesInScheme = DepartmentCourse::where('department_id', $departmentId)
+            ->whereHas('course', function ($q) use ($activeScheme) {
+                $q->where('curriculum_year_id', $activeScheme->id);
             })
             ->count();
 
+        $configuredCourses = CourseDetail::whereHas('departmentCourse', function ($q) use ($departmentId) {
+            $q->where('department_id', $departmentId);
+        })->where('is_configured', true)->count();
 
-        /*
-        ------------------------------------------------
-        Configured Courses
-        ------------------------------------------------
-        */
-
-        $configuredCourses = CourseDetail::where('is_configured',true)
-            ->whereHas('departmentCourse', function($q) use ($departmentId,$activeScheme){
-
-                $q->where('department_id',$departmentId)
-                ->whereHas('course',function($c) use ($activeScheme){
-                    $c->where('curriculum_year_id',$activeScheme->id);
-                });
-
-            })
+        $facultyCount = User::where('department_id', $departmentId)
+            ->whereHas('roles', fn($q) => $q->where('name', 'faculty'))
             ->count();
 
+        $cards = [
+            'coursesInScheme' => $coursesInScheme,
+            'configuredCourses' => $configuredCourses,
+            'remaining' => $coursesInScheme - $configuredCourses,
+            'facultyCount' => $facultyCount
+        ];
 
-        $remainingCourses = $coursesInScheme - $configuredCourses;
-
-
-        /*
-        ------------------------------------------------
-        Faculty Count
-        ------------------------------------------------
-        */
-
-        $facultyCount = User::where('department_id',$departmentId)
-            ->whereHas('roles', fn($q)=>$q->where('name','faculty'))
-            ->count();
-
-
-        /*
-        ------------------------------------------------
-        Recent Faculty
-        ------------------------------------------------
-        */
-
-        $recentFaculty = User::where('department_id',$departmentId)
-            ->whereHas('roles', fn($q)=>$q->where('name','faculty'))
+        $recentFaculty = User::where('department_id', $departmentId)
+            ->whereHas('roles', fn($q) => $q->where('name', 'faculty'))
             ->latest()
             ->take(5)
             ->get();
 
-
-        /*
-        ------------------------------------------------
-        Scheme Progress per Level
-        ------------------------------------------------
-        */
-
-        $levels = DepartmentLevelDetail::with('level')
-            ->where('department_id',$departmentId)
+        $levels = Levels::where('curriculum_year_id', $activeScheme->id)
+            ->orderBy('order_no')
             ->get();
-
 
         $schemeProgress = [];
 
-        foreach($levels as $row){
+        foreach ($levels as $level) {
 
-            $levelId = $row->level_id;
+            $offered = DepartmentLevelDetail::where('department_id', $departmentId)
+                ->where('level_id', $level->id)
+                ->value('courses_offered');
 
-            $coursesInLevel = $row->courses_offered;
-
-
-            $configuredInLevel = CourseDetail::where('is_configured',true)
-                ->whereHas('departmentCourse', function($q) use ($departmentId,$levelId,$activeScheme){
-
-                    $q->where('department_id',$departmentId)
-                    ->whereHas('course',function($c) use ($levelId,$activeScheme){
-
-                        $c->where('level_id',$levelId)
-                          ->where('curriculum_year_id',$activeScheme->id);
-
-                    });
-
-                })
-                ->count();
-
+            $configured = CourseDetail::whereHas('departmentCourse.course', function ($q) use ($level) {
+                $q->where('level_id', $level->id);
+            })->count();
 
             $schemeProgress[] = [
-
-                'name' => $row->level->name,
-
-                'offered' => $coursesInLevel,
-
-                'configured' => $configuredInLevel,
-
-                'remaining' => $coursesInLevel - $configuredInLevel
-
+                'level' => $level->name,
+                'offered' => $offered,
+                'configured' => $configured,
+                'remaining' => $offered - $configured
             ];
-
         }
 
-
-
-        return view('hod.dashboard',[
-            'department'=>$department,
-            'activeScheme'=>$activeScheme,
-            'coursesInScheme'=>$coursesInScheme,
-            'configuredCourses'=>$configuredCourses,
-            'remainingCourses'=>$remainingCourses,
-            'facultyCount'=>$facultyCount,
-            'recentFaculty'=>$recentFaculty,
-            'schemeProgress'=>$schemeProgress
-        ]);
-
+        return view('hod.dashboard', compact(
+            'departmentType',
+            'department',
+            'activeScheme',
+            'cards',
+            'recentFaculty',
+            'schemeProgress'
+        ));
     }
 
-}
+    /*
+    |--------------------------------------------------------------------------
+    | Service Department Dashboard
+    |--------------------------------------------------------------------------
+    */
 
+    $departmentId = $department->id;
+
+    $ownedCourses = Courses::where('owner_department_id', $departmentId)->count();
+
+    $coursesUsed = DepartmentCourse::whereHas('course', function ($q) use ($departmentId) {
+        $q->where('owner_department_id', $departmentId);
+    })->count();
+
+    $syllabusCompleted = Syllabus::whereHas('departmentCourse.course', function ($q) use ($departmentId) {
+        $q->where('owner_department_id', $departmentId);
+    })->where('is_submitted', true)->count();
+
+    $facultyCount = User::where('department_id', $departmentId)
+        ->whereHas('roles', fn($q) => $q->where('name', 'faculty'))
+        ->count();
+
+    $cards = [
+        'ownedCourses' => $ownedCourses,
+        'coursesUsed' => $coursesUsed,
+        'syllabusCompleted' => $syllabusCompleted,
+        'facultyCount' => $facultyCount
+    ];
+
+    $ownedCoursesTable = Courses::where('owner_department_id', $departmentId)
+        ->get();
+
+    $recentUpdates = Syllabus::whereHas('departmentCourse.course', function ($q) use ($departmentId) {
+        $q->where('owner_department_id', $departmentId);
+    })
+        ->latest()
+        ->take(5)
+        ->get();
+
+    return view('hod.dashboard', compact(
+        'departmentType',
+        'department',
+        'cards',
+        'ownedCoursesTable',
+        'recentUpdates'
+    ));
+}
+}

@@ -69,6 +69,10 @@ class User extends Authenticatable
         return $this->hasMany(ClassAwardConfiguration::class);
     }
     
+    public function syllabus()
+    {
+        return $this->hasMany(Syllabus::class,'created_by');
+    }
 
     /**
      * Get the attributes that should be cast.

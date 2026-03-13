@@ -10,7 +10,9 @@ use App\Http\Controllers\cdc\CDCDepartmentLevelController;
 use App\Http\Controllers\cdc\CDCSchemeController;
 use App\Http\Controllers\cdc\CDCUserController;
 use App\Http\Controllers\cdc\CDCVerifySchemeController;
+use App\Http\Controllers\hod\HODCourseController;
 use App\Http\Controllers\hod\HODDashboardController;
+use App\Http\Controllers\hod\HODElectiveController;
 use App\Http\Controllers\hod\HODSchemeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -131,5 +133,15 @@ Route::middleware(['auth', 'role:hod','active.scheme'])->prefix('hod')->name('ho
     Route::get('/dashboard',[HODDashboardController::class,'index'])->name('dashboard');
 
     Route::get('/scheme', [HODSchemeController::class,'index'])->name('scheme');
+
+    Route::get('/electives', [HODElectiveController::class, 'index'])->name('electives');
+
+    Route::post('/electives', [HODElectiveController::class, 'store'])->name('electives.store');
+
+    Route::delete('/electives/{group}', [HODElectiveController::class, 'destroy'])->name('electives.destroy');
+
+    Route::get('/courses', [HODCourseController::class,'index'])->name('courses');
+
+    Route::get('/courses/{level}/configure', [HODCourseController::class,'configure'])->name('courses.configure');
 
 });

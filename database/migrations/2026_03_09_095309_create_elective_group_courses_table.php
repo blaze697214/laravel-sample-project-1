@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('elective_group_id')->constrained('elective_groups')->cascadeOnDelete();
             $table->foreignId('course_id')->constrained('courses')->cascadeOnDelete();
+            $table->unique(['course_id']);
             $table->timestamps();
         });
     }

@@ -30,7 +30,8 @@ class ElectiveGroup extends Model
 
     public function courses()
     {
-        return $this->belongsToMany(Courses::class, 'elective_group_courses');
+        return $this->belongsToMany(Courses::class, 'elective_group_courses','elective_group_id',
+        'course_id');
     }
 
     public function classAwardConfigurations()

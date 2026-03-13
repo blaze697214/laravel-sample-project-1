@@ -24,7 +24,7 @@ class Levels extends Model
 
     public function courses()
     {
-        return $this->hasMany(Courses::class);
+        return $this->hasMany(Courses::class,'level_id');
     }
 
     public function departmentLevelDetails()

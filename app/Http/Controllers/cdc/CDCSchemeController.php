@@ -183,7 +183,7 @@ class CDCSchemeController extends Controller
         Ensure all departments configured
         */
 
-        $departments = Department::count();
+        $departments = Department::where('type','programme')->get();
 
         $configured = DepartmentLevelDetail::whereHas('level', function ($q) use ($schemeId) {
             $q->where('curriculum_year_id', $schemeId);
@@ -191,7 +191,7 @@ class CDCSchemeController extends Controller
             ->distinct('department_id')
             ->count('department_id');
 
-        if ($configured < $departments) {
+        if ($configured < $departments->count()) {
 
             return back()->withErrors([
                 'scheme' => 'All departments must be configured before saving the scheme.',

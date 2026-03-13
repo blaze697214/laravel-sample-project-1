@@ -15,11 +15,16 @@ class Syllabus extends Model
         'rationale',
         'created_by',
         'is_submitted',
-        'is_approved'
+        'is_approved',
     ];
 
     public function departmentCourse()
     {
-        return $this->belongsTo(Syllabus::class);
-    } 
+        return $this->belongsTo(DepartmentCourse::class);
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 }

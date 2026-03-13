@@ -10,6 +10,9 @@
 </head>
 
 <body class="flex bg-slate-100 font-sans">
+    @php
+        $departmentType = auth()->user()->department->type ?? 'programme';
+    @endphp
 
     <!-- Sidebar -->
     <div class="w-64 h-screen bg-slate-900 text-slate-200 flex flex-col justify-between fixed">
@@ -42,53 +45,76 @@
                 </a>
 
 
-                <h4 class="px-6 py-2 text-xs uppercase text-slate-400 mt-4">
-                    Scheme
-                </h4>
+                @if ($departmentType === 'programme')
+                    {{-- Scheme Section --}}
+                    <h4 class="px-6 py-2 text-xs uppercase text-slate-400 mt-4">
+                        Scheme
+                    </h4>
 
-                <a href="{{ route('hod.scheme') }}"
-                    class="block px-6 py-3 hover:bg-slate-800 transition
-               {{ request()->routeIs('hod.scheme') ? 'bg-slate-800' : '' }}">
-                    View Scheme Structure
-                </a>
+                    <a href="{{ route('hod.scheme') }}"
+                        class="block px-6 py-3 hover:bg-slate-800 transition
+           {{ request()->routeIs('hod.scheme') ? 'bg-slate-800' : '' }}">
+                        View Scheme Structure
+                    </a>
 
-                <a href="{{ route('hod.courses') }}"
-                    class="block px-6 py-3 hover:bg-slate-800 transition
-               {{ request()->routeIs('hod.courses') ? 'bg-slate-800' : '' }}">
-                    Configure Courses
-                </a>
+                    <a href="{{ route('hod.electives') }}"
+                        class="block px-6 py-3 hover:bg-slate-800 transition
+           {{ request()->routeIs('hod.electives') ? 'bg-slate-800' : '' }}">
+                        Elective Groups
+                    </a>
+                    
+                    <a href="{{ route('hod.courses') }}"
+                        class="block px-6 py-3 hover:bg-slate-800 transition
+           {{ request()->routeIs('hod.courses') ? 'bg-slate-800' : '' }}">
+                        Configure Courses
+                    </a>
 
-                <a href="{{ route('hod.electives') }}"
-                    class="block px-6 py-3 hover:bg-slate-800 transition
-               {{ request()->routeIs('hod.electives') ? 'bg-slate-800' : '' }}">
-                    Elective Groups
-                </a>
+                @else
+                    {{-- Service Department Courses --}}
+                    <h4 class="px-6 py-2 text-xs uppercase text-slate-400 mt-4">
+                        Courses
+                    </h4>
+{{-- {{ route('hod.owned-courses') }} --}}
+                    <a href=""
+                        class="block px-6 py-3 hover:bg-slate-800 transition
+           {{ request()->routeIs('hod.owned-courses') ? 'bg-slate-800' : '' }}">
+                        Owned Courses
+                    </a>
+{{-- {{ route('hod.syllabus') }} --}}
+                    <a href=""
+                        class="block px-6 py-3 hover:bg-slate-800 transition
+           {{ request()->routeIs('hod.syllabus') ? 'bg-slate-800' : '' }}">
+                        Syllabus
+                    </a>
+                @endif
 
 
+                {{-- Faculty Section --}}
                 <h4 class="px-6 py-2 text-xs uppercase text-slate-400 mt-4">
                     Faculty
                 </h4>
-
-                <a href="{{ route('hod.faculty') }}"
+{{-- {{ route('hod.faculty') }} --}}
+                <a href=""
                     class="block px-6 py-3 hover:bg-slate-800 transition
-               {{ request()->routeIs('hod.faculty') ? 'bg-slate-800' : '' }}">
+       {{ request()->routeIs('hod.faculty') ? 'bg-slate-800' : '' }}">
                     Faculty Users
                 </a>
-
-                <a href="{{ route('hod.assign-courses') }}"
+{{-- {{ route('hod.assign-courses') }} --}}
+                <a href=""
                     class="block px-6 py-3 hover:bg-slate-800 transition
-               {{ request()->routeIs('hod.assign-courses') ? 'bg-slate-800' : '' }}">
+       {{ request()->routeIs('hod.assign-courses') ? 'bg-slate-800' : '' }}">
                     Assign Courses
                 </a>
 
 
+                {{-- Reports --}}
                 <h4 class="px-6 py-2 text-xs uppercase text-slate-400 mt-4">
                     Reports
                 </h4>
-
-                <a href="{{ route('hod.reports') }}"
+{{-- {{ route('hod.reports') }} --}}
+                <a href=""
                     class="block px-6 py-3 hover:bg-slate-800 transition
-               {{ request()->routeIs('hod.reports') ? 'bg-slate-800' : '' }}">
+       {{ request()->routeIs('hod.reports') ? 'bg-slate-800' : '' }}">
                     Department Summary
                 </a>
 

@@ -218,6 +218,7 @@
                             <th class="px-4 py-3 text-sm font-semibold text-gray-600 w-100">Title</th>
                             <th class="px-4 py-3 text-sm font-semibold text-gray-600 w-60">Abbrev</th>
                             <th class="px-4 py-3 text-sm font-semibold text-gray-600 w-60">Departments</th>
+                            <th class="px-4 py-3 text-sm font-semibold text-gray-600 w-60">Created By</th>
                             <th class="px-4 py-3 text-sm font-semibold text-gray-600 text-center">Actions</th>
                         </tr>
 
@@ -265,6 +266,13 @@
 
                                         </td>
 
+                                        <td class="px-4 py-3">
+                                            <span
+                                                    class="inline-flex items-center bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded mr-1 mb-1 ml-3">
+                                            {{ $course->ownerDepartment->abbrevation }}
+                                            </span>
+                                        </td>
+
 
                                         <td class="px-4 py-3 space-x-2 flex justify-center">
 
@@ -307,7 +315,7 @@
         <a href="{{ route('cdc.schemes.levels.create', $scheme->id) }}">
 
             <button class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded">
-                Back & Edit Courses
+                Back & Edit Levels
             </button>
 
         </a>

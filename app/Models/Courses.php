@@ -15,7 +15,7 @@ class Courses extends Model
         'abbrevation',
         'curriculum_year_id',
         'level_id',
-        'owner_department_id'
+        'owner_department_id',
     ];
 
     public function curriculumYear()
@@ -28,10 +28,17 @@ class Courses extends Model
         return $this->belongsTo(Levels::class);
     }
 
+    
     public function departments()
     {
         return $this->belongsToMany(Department::class, 'department_course', 'course_id', 'department_id')->withPivot('is_elective');
     }
+
+    public function departmentCourses()
+    {
+        return $this->hasMany(DepartmentCourse::class, 'course_id');
+    }
+
 
     public function ownerDepartment()
     {
@@ -40,7 +47,8 @@ class Courses extends Model
 
     public function electiveGroup()
     {
-        return $this->belongsToMany(ElectiveGroup::class, 'elective_group_courses');
+        return $this->belongsToMany(ElectiveGroup::class, 'elective_group_courses','course_id',
+        'elective_group_id');
     }
 
     public function classAwardConfigurations()

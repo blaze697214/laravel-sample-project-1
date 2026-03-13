@@ -58,6 +58,7 @@ class CDCCourseController extends Controller
             'abbrevation' => 'required',
             'level_id' => 'required|exists:levels,id',
             'offered' => 'required|exists:departments,id',
+            'owner_department_id' => 'required'
         ]);
 
         $course = Courses::create([
