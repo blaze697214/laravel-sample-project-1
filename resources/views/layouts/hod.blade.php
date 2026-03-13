@@ -37,8 +37,7 @@
             <!-- Navigation -->
             <nav class="mt-4 space-y-1">
 
-                <a href="{{ route('hod.dashboard') }}"
-                    class="block px-6 py-3 hover:bg-slate-800 transition">
+                <a href="{{ route('hod.dashboard') }}" class="block px-6 py-3 hover:bg-slate-800 transition">
                     Dashboard
                 </a>
 
@@ -53,7 +52,7 @@
                     View Scheme Structure
                 </a>
 
-                {{-- <a href="{{ route('hod.courses') }}"
+                <a href="{{ route('hod.courses') }}"
                     class="block px-6 py-3 hover:bg-slate-800 transition
                {{ request()->routeIs('hod.courses') ? 'bg-slate-800' : '' }}">
                     Configure Courses
@@ -63,14 +62,14 @@
                     class="block px-6 py-3 hover:bg-slate-800 transition
                {{ request()->routeIs('hod.electives') ? 'bg-slate-800' : '' }}">
                     Elective Groups
-                </a> --}}
+                </a>
 
 
                 <h4 class="px-6 py-2 text-xs uppercase text-slate-400 mt-4">
                     Faculty
                 </h4>
 
-                {{-- <a href="{{ route('hod.faculty') }}"
+                <a href="{{ route('hod.faculty') }}"
                     class="block px-6 py-3 hover:bg-slate-800 transition
                {{ request()->routeIs('hod.faculty') ? 'bg-slate-800' : '' }}">
                     Faculty Users
@@ -80,18 +79,18 @@
                     class="block px-6 py-3 hover:bg-slate-800 transition
                {{ request()->routeIs('hod.assign-courses') ? 'bg-slate-800' : '' }}">
                     Assign Courses
-                </a> --}}
+                </a>
 
 
                 <h4 class="px-6 py-2 text-xs uppercase text-slate-400 mt-4">
                     Reports
                 </h4>
 
-                {{-- <a href="{{ route('hod.reports') }}"
+                <a href="{{ route('hod.reports') }}"
                     class="block px-6 py-3 hover:bg-slate-800 transition
                {{ request()->routeIs('hod.reports') ? 'bg-slate-800' : '' }}">
                     Department Summary
-                </a> --}}
+                </a>
 
             </nav>
 

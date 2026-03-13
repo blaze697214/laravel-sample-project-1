@@ -15,8 +15,7 @@ class CDCDepartmentLevelController extends Controller
     public function index($schemeId)
     {
 
-        $departments = Department::all();
-
+        $departments = Department::where('type','programme')->get();
         /*
         Check if department configuration exists
         */

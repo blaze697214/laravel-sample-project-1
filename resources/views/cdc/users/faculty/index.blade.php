@@ -36,7 +36,7 @@
         <form method="POST" action="{{ route('cdc.users.faculty.store') }}">
             @csrf
 
-            <div class="grid grid-cols-4 gap-4">
+            <div class="grid grid-cols-2 gap-8 gap-y-4">
 
                 <div>
                     <label class="block text-sm text-gray-600 mb-1">
@@ -89,7 +89,7 @@
             </div>
 
 
-            <button type="submit" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded">
+            <button type="submit" class="mt-8 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded">
                 Create Faculty
             </button>
 

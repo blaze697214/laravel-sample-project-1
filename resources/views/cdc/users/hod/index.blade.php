@@ -36,7 +36,7 @@
 
             @csrf
 
-            <div class="grid grid-cols-4 gap-4">
+            <div class="grid grid-cols-2 gap-8 gap-y-4">
 
                 <div>
                     <label class="block text-sm text-gray-600 mb-1">Name</label>
@@ -79,7 +79,7 @@
             </div>
 
 
-            <div class="mt-4">
+            <div class="mt-8">
 
                 <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded">
 

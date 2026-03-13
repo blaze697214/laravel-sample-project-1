@@ -23,8 +23,7 @@ class CDCVerifySchemeController extends Controller
     public function departments($schemeId, SchemeVerificationService $service)
     {
 
-        $departments = Department::all();
-
+        $departments = Department::where('type', 'programme')->get();
         $status = [];
 
         foreach ($departments as $department) {

@@ -5,8 +5,8 @@ namespace App\Http\Controllers\cdc;
 use App\Http\Controllers\Controller;
 use App\Models\Courses;
 use App\Models\CurriculumYears;
-use App\Models\Levels;
 use App\Models\Department;
+use App\Models\Levels;
 use Illuminate\Http\Request;
 
 class CDCCourseController extends Controller
@@ -32,7 +32,8 @@ class CDCCourseController extends Controller
             ->orderBy('order_no')
             ->get();
 
-        $departments = Department::all();
+        $programmeDepartments = Department::where('type', 'programme')->get();
+        $serviceDepartments = Department::where('type', 'service')->get();
 
         $courses = Courses::where('curriculum_year_id', $schemeId)
             ->with('departments')
@@ -41,7 +42,7 @@ class CDCCourseController extends Controller
 
         return view(
             'cdc.schemes.courses',
-            compact('scheme', 'levels', 'departments', 'courses')
+            compact('scheme', 'levels', 'programmeDepartments', 'serviceDepartments', 'courses')
         );
 
     }
@@ -55,8 +56,8 @@ class CDCCourseController extends Controller
         $request->validate([
             'title' => 'required',
             'abbrevation' => 'required',
-            'level_id' => 'required',
-            'offered' => 'required'
+            'level_id' => 'required|exists:levels,id',
+            'offered' => 'required|exists:departments,id',
         ]);
 
         $course = Courses::create([
@@ -65,6 +66,7 @@ class CDCCourseController extends Controller
             'abbrevation' => $request->input('abbrevation'),
             'curriculum_year_id' => $schemeId,
             'level_id' => $request->input('level_id'),
+            'owner_department_id' => $request->input('owner_department_id'),
 
         ]);
 

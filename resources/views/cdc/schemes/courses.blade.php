@@ -51,7 +51,7 @@
                         Title
                     </label>
 
-                    <input type="text" name="title" required
+                    <input type="text" name="title" required value="{{ old('title') }}"
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
 
                 </div>
@@ -64,7 +64,7 @@
                         Abbreviation
                     </label>
 
-                    <input type="text" name="abbrevation" required
+                    <input type="text" name="abbrevation" required value="{{ old('abbrevation') }}"
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
 
                 </div>
@@ -124,7 +124,7 @@
 
                     <tbody class="divide-y">
 
-                        @foreach ($departments as $department)
+                        @foreach ($programmeDepartments as $department)
                             <tr class="hover:bg-gray-50 border-gray-200">
 
                                 <td class="px-4 py-2">
@@ -136,6 +136,7 @@
 
                                     <input type="checkbox" name="offered[]" value="{{ $department->id }}"
                                         data-department="{{ $department->id }}"data-role="offered"
+                                        data-name="{{ $department->name }}"
                                         class="w-4 h-4 text-blue-600 border-gray-300 rounded">
 
                                 </td>
@@ -155,6 +156,34 @@
                     </tbody>
 
                 </table>
+
+                <!-- Owner Department -->
+
+                <div class="mt-6">
+
+                    <label class="block text-sm font-medium text-gray-600 mb-1">
+                        Owner Department
+                    </label>
+
+                    <select name="owner_department_id" id="owner_department"
+                        class="border border-gray-300 rounded-lg px-3 py-2 w-full">
+
+                        <option value="">
+                            -- Select Owner Department --
+                        </option>
+
+                        {{-- Service departments always appear --}}
+                        @foreach ($serviceDepartments as $department)
+                            <option value="{{ $department->id }}" data-type="service">
+
+                                {{ $department->name }}
+
+                            </option>
+                        @endforeach
+
+                    </select>
+
+                </div>
 
             </div>
 
@@ -328,5 +357,36 @@
             }
 
         }, 2000);
+
+        document.querySelectorAll('[data-role="offered"]').forEach(function(checkbox) {
+
+            checkbox.addEventListener('change', updateOwnerDropdown);
+
+        });
+
+        function updateOwnerDropdown() {
+
+            const dropdown = document.getElementById('owner_department');
+
+            const serviceOptions = dropdown.querySelectorAll('option[data-type="service"]');
+
+            // remove previous programme options
+            dropdown.querySelectorAll('option[data-type="programme"]').forEach(o => o.remove());
+
+            document.querySelectorAll('[data-role="offered"]:checked').forEach(function(cb) {
+
+                const option = document.createElement('option');
+
+                option.value = cb.value;
+
+                option.text = cb.dataset.name;
+
+                option.setAttribute('data-type', 'programme');
+
+                dropdown.appendChild(option);
+
+            });
+
+        }
     </script>
 @endsection

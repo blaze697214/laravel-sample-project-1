@@ -36,6 +36,28 @@
                 </div>
             </div>
 
+            <!-- Department Type -->
+            <div>
+
+                <label class="block text-sm font-medium text-gray-600 mb-1">
+                    Department Type
+                </label>
+
+                <select name="type"
+                    class="border border-gray-300 rounded-lg px-3 py-2 w-full focus:ring-2 focus:ring-blue-500">
+
+                    <option value="programme">
+                        Programme Department
+                    </option>
+
+                    <option value="service">
+                        Service Department
+                    </option>
+
+                </select>
+
+            </div>
+
             <button type="submit"
                 class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-medium transition">
                 Create Department
@@ -75,6 +97,10 @@
                         </th>
 
                         <th class="px-4 py-3 text-sm font-semibold text-gray-600">
+                            Department Type
+                        </th>
+
+                        <th class="px-4 py-3 text-sm font-semibold text-gray-600">
                             Actions
                         </th>
 
@@ -85,7 +111,7 @@
 
                 <tbody class="divide-y">
 
-                    @foreach ($departments as $department)
+                    @forelse ($departments as $department)
                         <tr class="hover:bg-gray-50 border-gray-200">
 
                             <td class="px-4 py-3">
@@ -109,6 +135,9 @@
                                     class="border border-gray-300 rounded px-2 py-1 w-48">
                             </td>
 
+                            <td class="px-4 py-3">
+                                {{ ucfirst($department->type) }}
+                            </td>
 
                             <td class="px-4 py-3 flex gap-2">
 
@@ -134,7 +163,13 @@
                             </td>
 
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="4" class="text-gray-500 text-center py-3">
+                                No Departments created yet
+                            </td>
+                        </tr>
+                    @endforelse
 
                 </tbody>
 

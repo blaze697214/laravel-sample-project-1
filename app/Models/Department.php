@@ -13,7 +13,7 @@ class Department extends Model
     protected $fillable = [
         'name',
         'abbrevation',
-        'type'
+        'type',
     ];
 
     public function users()
@@ -26,13 +26,18 @@ class Department extends Model
         return $this->belongsToMany(Courses::class, 'department_course', 'department_id', 'course_id')->withPivot('is_elective');
     }
 
+    public function ownedCourses()
+    {
+        return $this->hasMany(Courses::class, 'owner_department_id');
+    }
+
     public function departmentLevelDetails()
     {
         return $this->hasMany(DepartmentLevelDetail::class);
     }
 
     public function electiveGroups()
-    {   
+    {
         return $this->hasMany(ElectiveGroup::class);
     }
 
@@ -45,5 +50,4 @@ class Department extends Model
     {
         return $this->hasMany(SemesterPlacement::class);
     }
-    
 }

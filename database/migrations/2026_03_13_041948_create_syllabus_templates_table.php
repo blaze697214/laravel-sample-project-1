@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('courses', function (Blueprint $table) {
+        Schema::create('syllabus_templates', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('abbrevation');
-            $table->foreignId('curriculum_year_id')->constrained('curriculum_years')->cascadeOnDelete();
-            $table->foreignId('level_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('owner_department_id')->constrained('departments')->cascadeOnDelete();
+            $table->text('intro_text')->nullable();
+            $table->enum('section_type',['text','list','table','matrix']);
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('courses');
+        Schema::dropIfExists('syllabus_templates');
     }
 };

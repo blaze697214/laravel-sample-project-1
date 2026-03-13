@@ -20,7 +20,8 @@ class DepartmentController extends Controller
     {
         Department::create([
             'name'=>$request->input('name'),
-            'abbrevation'=>$request->input('abbrevation')
+            'abbrevation'=>$request->input('abbrevation'),
+            'type'=>$request->input('type')
         ]);
 
         return redirect()->back();
