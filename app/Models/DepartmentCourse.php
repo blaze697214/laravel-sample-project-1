@@ -25,7 +25,7 @@ class DepartmentCourse extends Model
         return $this->belongsTo(Courses::class);
     }
 
-    public function courseDetail()
+    public function courseDetails()
     {
         return $this->hasOne(CourseDetail::class);
     }

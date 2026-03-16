@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class SyllabusTemplateController extends Controller
+class CoPoPsoMappingsController extends Controller
 {
     //
 }

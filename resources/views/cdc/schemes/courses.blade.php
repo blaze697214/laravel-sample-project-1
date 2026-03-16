@@ -162,7 +162,7 @@
                 <div class="mt-6">
 
                     <label class="block text-sm font-medium text-gray-600 mb-1">
-                        Owner Department
+                        Syllabus Created by
                     </label>
 
                     <select name="owner_department_id" id="owner_department"

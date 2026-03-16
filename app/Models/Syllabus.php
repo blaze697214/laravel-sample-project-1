@@ -27,4 +27,33 @@ class Syllabus extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    public function sections()
+    {
+        return $this->hasMany(SyllabusSection::class)->orderBy('order_no');
+    }
+
+    public function listItems()
+    {
+        return $this->hasMany(SyllabusListItems::class)
+            ->orderBy('order_no');
+    }
+
+    public function units()
+    {
+        return $this->hasMany(SyllabusUnits::class)
+            ->orderBy('order');
+    }
+
+    public function courseOutcomes()
+    {
+        return $this->hasMany(CourseOutcomes::class)
+            ->orderBy('order');
+    }
+
+    public function practicalTasks()
+    {
+        return $this->hasMany(PracticalTasks::class)
+            ->orderBy('order_no');
+    }
 }

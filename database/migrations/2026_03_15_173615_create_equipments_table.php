@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('syllabus_sections', function (Blueprint $table) {
+        Schema::create('equipments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('syllabus_id')->constrained('syllabus')->cascadeOnDelete();
-            $table->string('title');
-            $table->foreignId('section_template_id')->constrained('section_templates')->cascadeOnDelete();
-            $table->tinyInteger('order_no');
             $table->timestamps();
         });
     }
@@ -26,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('syllabus_sections');
+        Schema::dropIfExists('equipments');
     }
 };

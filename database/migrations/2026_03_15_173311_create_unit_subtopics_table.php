@@ -11,12 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('syllabus_sections', function (Blueprint $table) {
+        Schema::create('unit_subtopics', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('syllabus_id')->constrained('syllabus')->cascadeOnDelete();
-            $table->string('title');
-            $table->foreignId('section_template_id')->constrained('section_templates')->cascadeOnDelete();
-            $table->tinyInteger('order_no');
+
+            $table->foreignId('unit_topic_id')
+                ->constrained('unit_topics')
+                ->cascadeOnDelete();
+
+            $table->text('subtopic');
+
+            $table->unsignedTinyInteger('order');
+
             $table->timestamps();
         });
     }
@@ -26,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('syllabus_sections');
+        Schema::dropIfExists('unit_subtopics');
     }
 };

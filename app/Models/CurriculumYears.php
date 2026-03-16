@@ -34,7 +34,7 @@ class CurriculumYears extends Model
     {
         return $this->hasMany(Courses::class);
     }
-    
+
     public function classAwardConfigurations()
     {
         return $this->hasMany(ClassAwardConfiguration::class);
@@ -44,4 +44,9 @@ class CurriculumYears extends Model
     {
         return $this->hasMany(SemesterPlacement::class);
     }
+
+    public function programmeOutcomes()
+{
+    return $this->hasMany(ProgrammeOutcomes::class);
+}
 }

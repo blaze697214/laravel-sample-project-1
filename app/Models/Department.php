@@ -50,4 +50,9 @@ class Department extends Model
     {
         return $this->hasMany(SemesterPlacement::class);
     }
+
+    public function programmeOutcomes()
+{
+    return $this->hasMany(ProgrammeOutcomes::class);
+}
 }

@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('syllabus_templates', function (Blueprint $table) {
+        Schema::create('tutorials', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('intro_text')->nullable();
-            $table->enum('section_type',['text','list','table','matrix']);
             $table->timestamps();
         });
     }
@@ -25,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('syllabus_templates');
+        Schema::dropIfExists('tutorials');
     }
 };

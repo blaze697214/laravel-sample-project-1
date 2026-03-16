@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('syllabi', function (Blueprint $table) {
+        Schema::create('syllabus', function (Blueprint $table) {
             $table->id();
             $table->foreignId('department_course_id')->constrained('department_course')->cascadeOnDelete();
-            $table->text('rationale'); 
+            $table->text('rationale');
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->boolean('is_submitted');
             $table->boolean('is_approved');
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('syllabi');
+        Schema::dropIfExists('syllabus');
     }
 };

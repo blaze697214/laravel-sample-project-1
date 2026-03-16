@@ -62,14 +62,20 @@ class HODCourseController extends Controller
 
     public function configure($levelId)
     {
-
         $department = Auth::user()->department;
 
         $activeScheme = CurriculumYears::where('is_active', true)->first();
 
         $level = Levels::findOrFail($levelId);
 
-        $courses = DepartmentCourse::where('department_id', $department->id)
+        /*
+        |--------------------------------------------------------------------------
+        | Compulsory Courses
+        |--------------------------------------------------------------------------
+        */
+
+        $compulsoryCourses = DepartmentCourse::where('department_id', $department->id)
+            ->where('is_elective', false)
             ->whereHas('course', function ($q) use ($levelId, $activeScheme) {
 
                 $q->where('level_id', $levelId)
@@ -79,21 +85,35 @@ class HODCourseController extends Controller
             ->with(['course', 'courseDetails'])
             ->get();
 
+        /*
+        |--------------------------------------------------------------------------
+        | Elective Groups
+        |--------------------------------------------------------------------------
+        */
+
         $electiveGroups = ElectiveGroup::where('department_id', $department->id)
             ->where('level_id', $levelId)
-            ->with('courses')
+            ->with(['courses.departmentCourses.courseDetails'])
             ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Level Totals
+        |--------------------------------------------------------------------------
+        */
 
         $levelDetails = DepartmentLevelDetail::where('department_id', $department->id)
             ->where('level_id', $levelId)
             ->first();
 
-        return view('hod.courses.configure', compact(
-            'level',
-            'courses',
-            'electiveGroups',
-            'levelDetails'
-        ));
-
+        return view(
+            'hod.courses.configure',
+            compact(
+                'level',
+                'compulsoryCourses',
+                'electiveGroups',
+                'levelDetails'
+            )
+        );
     }
 }

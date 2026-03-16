@@ -54,7 +54,7 @@ class HODElectiveController extends Controller
             ->orderBy('order_no')
             ->get();
 
-        $selectedLevel = $request->level ?? $levels->first()->id;
+        $selectedLevel = $request->level ?? $levels->first()->id ?? 0;
 
         /*
         |--------------------------------------------------------------------------

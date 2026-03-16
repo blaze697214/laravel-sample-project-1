@@ -160,7 +160,7 @@
 
                                     <input type="number" name="marks[{{ $level->id }}]"
                                         value="{{ old('marks.' . $level->id, $row->marks ?? '') }}"
-                                        class="marks w-16 border border-gray-300 rounded disabled:bg-gray-200 px-2 py-1"
+                                        class="marks w-20 border border-gray-300 rounded disabled:bg-gray-200 px-2 py-1"
                                         @if ($level->is_audit) disabled @endif>
 
                                 </td>
