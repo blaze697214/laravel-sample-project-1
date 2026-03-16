@@ -16,6 +16,7 @@ class CourseDetail extends Model
         'tu_hrs',
         'pr_hrs',
         'credits',
+        'th_paper_hrs',
         'th_marks',
         'test_marks',
         'pr_marks',

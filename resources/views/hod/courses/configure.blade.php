@@ -1,273 +1,515 @@
 @extends('layouts.hod')
 
 @section('content')
+    <h1 class="text-2xl font-bold text-gray-800 mb-2">
+        LEVEL - {{ $level->order_no }}
+    </h1>
 
-<h2>
-LEVEL - {{ $level->order_no }}
-</h2>
+    <h2 class="text-lg font-semibold text-gray-700 mb-6">
+        {{ strtoupper($level->name) }}
+    </h2>
 
-<h3>
-{{ strtoupper($level->name) }}
-</h3>
+    @php
+        $year = substr($activeScheme->year_start, -2);
+    @endphp
 
 
-<form method="POST" action="">
-{{-- {{ route('hod.courses.preview', $level->id) }} --}}
-@csrf
+    <form method="POST" action="{{ route('hod.courses.store', $level->id) }}">
 
+        @csrf
+        <input type="hidden" name="scheme_id" value="{{ $level->curriculum_year_id }}">
 
-<table cellpadding="6">
+        <div class="bg-white p-6 rounded-xl shadow">
 
-<thead>
-<tr>
+            <div class="overflow-x-auto">
 
-<th>Sr</th>
-<th>Course Code</th>
-<th>Course Title</th>
-<th>Abbr</th>
+                <table class="w-full text-sm border border-gray-200 ">
 
-<th>TH</th>
-<th>TU</th>
-<th>PR</th>
+                    <thead class="bg-gray-100">
 
-<th>Total Hours</th>
+                        <tr>
 
-<th>Credits</th>
+                            <th class="px-3 py-2 border border-gray-300">Sr</th>
+                            <th class="px-3 py-2 border border-gray-300">Course Code</th>
+                            <th class="px-3 py-2 border border-gray-300">Course Title</th>
+                            <th class="px-3 py-2 border border-gray-300">Abbr</th>
 
-<th>TH Marks</th>
-<th>Test</th>
-<th>PR</th>
-<th>OR</th>
-<th>TW</th>
+                            <th class="px-3 py-2 border border-gray-300">TH</th>
+                            <th class="px-3 py-2 border border-gray-300">TU</th>
+                            <th class="px-3 py-2 border border-gray-300">PR</th>
 
-</tr>
+                            <th class="px-3 py-2 border border-gray-300">Total Hours</th>
 
-</thead>
+                            <th class="px-3 py-2 border border-gray-300">Credits</th>
 
+                            <th class="px-3 py-2 border border-gray-300">Paper Hrs</th>
 
-<tbody>
 
-@foreach($courses as $index => $dc)
+                            <th class="px-3 py-2 border border-gray-300">TH Marks</th>
+                            <th class="px-3 py-2 border border-gray-300">Test</th>
+                            <th class="px-3 py-2 border border-gray-300">PR</th>
+                            <th class="px-3 py-2 border border-gray-300">OR</th>
+                            <th class="px-3 py-2 border border-gray-300">TW</th>
+                            <th class="px-3 py-2 border border-gray-300">Total</th>
 
-@php
-$course = $dc->course;
-$details = $dc->courseDetails ?? null;
-@endphp
+                        </tr>
 
-<tr>
+                    </thead>
 
-<td>
-{{ $index + 1 }}
-</td>
 
+                    <tbody class="divide-y">
 
-<td>
+                        @php
+                            $sr = 0;
+                        @endphp
 
-<input type="text"
-name="course_code[{{ $dc->id }}]"
-value="{{ old('course_code.'.$dc->id, $details->course_code ?? '') }}">
 
-</td>
+                        @foreach ($compulsoryCourses as $index => $dc)
+                            @php
+                                $course = $dc->course;
+                                $details = $dc->courseDetails ?? null;
+                            @endphp
 
+                            <tr class="hover:bg-gray-50">
 
-<td>
+                                <td class="px-2 py-2 border border-gray-200 border-gray-200 text-center">
+                                    {{  str_pad($index + 1, 2, '0', STR_PAD_LEFT)}}
+                                </td>
 
-{{ $course->title }}
 
-</td>
+                                <td class="border border-gray-200 px-2 py-2">
 
+                                    <div class="flex items-center gap-2">
+                                        <label>{{ $year . $level->order_no }}</label>
 
-<td>
+                                        <input type="text" name="course_code[{{ $dc->id }}]"
+                                            value="{{ substr(old('course_code.' . $dc->id, $details->course_code ?? ''),-2) }}"
+                                            class="w-10 border border-gray-200 border-gray-300 rounded px-2 py-1">
+                                    </div>
 
-{{ $course->abbrevation }}
+                                </td>
 
-</td>
 
+                                <td class="border border-gray-200 px-2 py-2">
+                                    {{ $course->title }}
+                                </td>
 
-<td>
+                                <td class="border border-gray-200 px-2 py-2">
+                                    {{ $course->abbrevation }}
+                                </td>
 
-<input class="th_hrs"
-type="number"
-name="th_hrs[{{ $dc->id }}]"
-value="{{ old('th_hrs.'.$dc->id, $details->th_hrs ?? '') }}">
 
-</td>
+                                <td class="border border-gray-200 px-2 py-2">
 
+                                    <input class="th_hrs w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                        type="number" name="th_hrs[{{ $dc->id }}]"
+                                        value="{{ old('th_hrs.' . $dc->id, $details->th_hrs ?? '') }}">
 
-<td>
+                                </td>
 
-<input class="tu_hrs"
-type="number"
-name="tu_hrs[{{ $dc->id }}]"
-value="{{ old('tu_hrs.'.$dc->id, $details->tu_hrs ?? '') }}">
 
-</td>
+                                <td class="border border-gray-200 px-2 py-2">
 
+                                    <input class="tu_hrs w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                        type="number" name="tu_hrs[{{ $dc->id }}]"
+                                        value="{{ old('tu_hrs.' . $dc->id, $details->tu_hrs ?? '') }}">
 
-<td>
+                                </td>
 
-<input class="pr_hrs"
-type="number"
-name="pr_hrs[{{ $dc->id }}]"
-value="{{ old('pr_hrs.'.$dc->id, $details->pr_hrs ?? '') }}">
 
-</td>
+                                <td class="border border-gray-200 px-2 py-2">
 
+                                    <input class="pr_hrs w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                        type="number" name="pr_hrs[{{ $dc->id }}]"
+                                        value="{{ old('pr_hrs.' . $dc->id, $details->pr_hrs ?? '') }}">
 
-<td>
+                                </td>
 
-<input class="credits"
-type="number"
-name="credits[{{ $dc->id }}]"
-value="{{ old('credits.'.$dc->id, $details->credits ?? '') }}">
 
-</td>
+                                <td class="border border-gray-200 px-2 py-2 total_hours text-center font-medium">
+                                    0
+                                </td>
 
 
-<td>
+                                <td class="border border-gray-200 px-2 py-2">
 
-<input class="th_marks"
-type="number"
-name="th_marks[{{ $dc->id }}]"
-value="{{ old('th_marks.'.$dc->id, $details->th_marks ?? '') }}">
+                                    <input class="credits w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                        type="number" name="credits[{{ $dc->id }}]"
+                                        value="{{ old('credits.' . $dc->id, $details->credits ?? '') }}">
 
-</td>
+                                </td>
 
+                                <td class="border border-gray-200 px-2 py-2">
 
-<td>
+                                    <input
+                                        class="th_paper_hrs w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                        type="number" name="th_paper_hrs[{{ $dc->id }}]"
+                                        value="{{ old('th_paper_hrs.' . $dc->id, $details->th_paper_hrs ?? '') }}">
 
-<input class="test_marks"
-type="number"
-name="test_marks[{{ $dc->id }}]"
-value="{{ old('test_marks.'.$dc->id, $details->test_marks ?? '') }}">
+                                </td>
 
-</td>
 
+                                <td class="border border-gray-200 px-2 py-2">
 
-<td>
+                                    <input class="th_marks w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                        type="number" name="th_marks[{{ $dc->id }}]"
+                                        value="{{ old('th_marks.' . $dc->id, $details->th_marks ?? '') }}">
 
-<input class="pr_marks"
-type="number"
-name="pr_marks[{{ $dc->id }}]"
-value="{{ old('pr_marks.'.$dc->id, $details->pr_marks ?? '') }}">
+                                </td>
 
-</td>
 
+                                <td class="border border-gray-200 px-2 py-2">
 
-<td>
+                                    <input class="test_marks w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                        type="number" name="test_marks[{{ $dc->id }}]"
+                                        value="{{ old('test_marks.' . $dc->id, $details->test_marks ?? '') }}">
 
-<input class="or_marks"
-type="number"
-name="or_marks[{{ $dc->id }}]"
-value="{{ old('or_marks.'.$dc->id, $details->or_marks ?? '') }}">
+                                </td>
 
-</td>
 
+                                <td class="border border-gray-200 px-2 py-2">
 
-<td>
+                                    <input class="pr_marks w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                        type="number" name="pr_marks[{{ $dc->id }}]"
+                                        value="{{ old('pr_marks.' . $dc->id, $details->pr_marks ?? '') }}">
 
-<input class="tw_marks"
-type="number"
-name="tw_marks[{{ $dc->id }}]"
-value="{{ old('tw_marks.'.$dc->id, $details->tw_marks ?? '') }}">
+                                </td>
 
-</td>
 
-</tr>
+                                <td class="border border-gray-200 px-2 py-2">
 
-@endforeach
+                                    <input class="or_marks w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                        type="number" name="or_marks[{{ $dc->id }}]"
+                                        value="{{ old('or_marks.' . $dc->id, $details->or_marks ?? '') }}">
 
-    
+                                </td>
 
 
+                                <td class="border border-gray-200 px-2 py-2">
 
-<tr>
+                                    <input class="tw_marks w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                        type="number" name="tw_marks[{{ $dc->id }}]"
+                                        value="{{ old('tw_marks.' . $dc->id, $details->tw_marks ?? '') }}">
 
-<td colspan="4">
-TOTAL
-</td>
+                                </td>
 
-<td id="total_th">0</td>
-<td id="total_tu">0</td>
-<td id="total_pr">0</td>
 
-<td id="total_credits">0</td>
+                                <td class="border border-gray-200 px-2 py-2 row_total_marks text-center font-medium">
+                                    0
+                                </td>
 
-<td id="total_th_marks">0</td>
-<td id="total_test_marks">0</td>
-<td id="total_pr_marks">0</td>
-<td id="total_or_marks">0</td>
-<td id="total_tw_marks">0</td>
+                            </tr>
+                        @endforeach
 
-</tr>
+                        @php
+                            $sr = count($compulsoryCourses)+1;
+                        @endphp
 
+                        @foreach ($electiveGroups as $group)
+                            <tr class="bg-gray-100">
 
-</tbody>
+                                <td colspan="15" class="px-3 py-2 font-semibold text-gray-700">
 
-</table>
+                                    {{ $group->name }} : ANY {{ $group->min_select_count }} OF THE FOLLOWING
 
+                                </td>
 
-<br>
+                            </tr>
 
-<button type="submit">
-Preview
-</button>
+                            @php
+                                $courses = $group->courses;
+                                $rowCount = $courses->count();
+                                $serialNumbers = [];
+                                for ($i = 0; $i < $group->min_select_count; $i++) {
+                                    $serialNumbers[] = '0'.($sr + $i);
+                                }
+                                $sr += $group->min_select_count;
+                                $serialText = implode(' & ', $serialNumbers);
+                            @endphp
 
+                            @foreach ($courses as $index => $course)
+                                @php
+                                    $dc = $course->departmentCourses->first();
+                                    $details = $dc->courseDetails ?? null;
+                                @endphp
 
-</form>
 
+                                <tr class="hover:bg-gray-50 ">
 
+                                    @if ($index == 0)
+                                        <td class="border border-gray-200 px-2 py-2 text-center whitespace-nowrap   "
+                                            rowspan="{{ $rowCount }}">
+                                            {{ str_pad($serialText, 2, '0', STR_PAD_LEFT) }}</td>
+                                    @endif
+
+
+                                    <td class="border border-gray-200 px-2 py-2">
+
+                                        <div class="flex items-center gap-2">
+                                            <label>{{ $year . $level->order_no }}</label>
+
+                                            <input type="text" name="course_code[{{ $dc->id }}]"
+                                                value="{{ substr(old('course_code.' . $dc->id, $details->course_code ?? ''),-2) }}"
+                                                class="w-10 border border-gray-200 border-gray-300 rounded px-2 py-1">
+                                        </div>
+
+                                    </td>
+
+
+                                    <td class="border border-gray-200 px-2 py-2">
+                                        {{ $course->title }}
+                                    </td>
+
+                                    <td class="border border-gray-200 px-2 py-2">
+                                        {{ $course->abbrevation }}
+                                    </td>
+
+
+                                    <td class="border border-gray-200 px-2 py-2">
+
+                                        <input class="th_hrs w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                            type="number" name="th_hrs[{{ $dc->id }}]"
+                                            value="{{ old('th_hrs.' . $dc->id, $details->th_hrs ?? '') }}">
+
+                                    </td>
+
+
+                                    <td class="border border-gray-200 px-2 py-2">
+
+                                        <input class="tu_hrs w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                            type="number" name="tu_hrs[{{ $dc->id }}]"
+                                            value="{{ old('tu_hrs.' . $dc->id, $details->tu_hrs ?? '') }}">
+
+                                    </td>
+
+
+                                    <td class="border border-gray-200 px-2 py-2">
+
+                                        <input class="pr_hrs w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                            type="number" name="pr_hrs[{{ $dc->id }}]"
+                                            value="{{ old('pr_hrs.' . $dc->id, $details->pr_hrs ?? '') }}">
+
+                                    </td>
+
+
+                                    <td class="border border-gray-200 px-2 py-2 total_hours text-center font-medium">
+                                        0
+                                    </td>
+
+
+                                    <td class="border border-gray-200 px-2 py-2">
+
+                                        <input
+                                            class="credits w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                            type="number" name="credits[{{ $dc->id }}]"
+                                            value="{{ old('credits.' . $dc->id, $details->credits ?? '') }}">
+
+                                    </td>
+
+                                    <td class="border border-gray-200 px-2 py-2">
+
+                                        <input
+                                            class="th_paper_hrs w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                            type="number" name="th_paper_hrs[{{ $dc->id }}]"
+                                            value="{{ old('th_paper_hrs.' . $dc->id, $details->th_paper_hrs ?? '') }}">
+
+                                    </td>
+
+
+                                    <td class="border border-gray-200 px-2 py-2">
+
+                                        <input
+                                            class="th_marks w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                            type="number" name="th_marks[{{ $dc->id }}]"
+                                            value="{{ old('th_marks.' . $dc->id, $details->th_marks ?? '') }}">
+
+                                    </td>
+
+
+                                    <td class="border border-gray-200 px-2 py-2">
+
+                                        <input
+                                            class="test_marks w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                            type="number" name="test_marks[{{ $dc->id }}]"
+                                            value="{{ old('test_marks.' . $dc->id, $details->test_marks ?? '') }}">
+
+                                    </td>
+
+
+                                    <td class="border border-gray-200 px-2 py-2">
+
+                                        <input
+                                            class="pr_marks w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                            type="number" name="pr_marks[{{ $dc->id }}]"
+                                            value="{{ old('pr_marks.' . $dc->id, $details->pr_marks ?? '') }}">
+
+                                    </td>
+
+
+                                    <td class="border border-gray-200 px-2 py-2">
+
+                                        <input
+                                            class="or_marks w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                            type="number" name="or_marks[{{ $dc->id }}]"
+                                            value="{{ old('or_marks.' . $dc->id, $details->or_marks ?? '') }}">
+
+                                    </td>
+
+
+                                    <td class="border border-gray-200 px-2 py-2">
+
+                                        <input
+                                            class="tw_marks w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                            type="number" name="tw_marks[{{ $dc->id }}]"
+                                            value="{{ old('tw_marks.' . $dc->id, $details->tw_marks ?? '') }}">
+
+                                    </td>
+
+
+                                    <td class="border border-gray-200 px-2 py-2 row_total_marks text-center font-medium">
+                                        0
+                                    </td>
+
+                                </tr>
+                            @endforeach
+                        @endforeach
+
+
+
+                        <tr class="bg-gray-100 font-semibold">
+
+                            <td colspan="4" class="px-3 py-2">
+                                TOTAL
+                            </td>
+
+                            <td id="total_th" class="px-3 py-2 text-center">0</td>
+                            <td id="total_tu" class="px-3 py-2 text-center">0</td>
+                            <td id="total_pr" class="px-3 py-2 text-center">0</td>
+
+                            <td id="total_hours" class="px-3 py-2 text-center"></td>
+
+                            <td id="total_credits" class="px-3 py-2 text-center">0</td>
+                            <td> </td>
+
+                            <td id="total_th_marks" class="px-3 py-2 text-center">0</td>
+                            <td id="total_test_marks" class="px-3 py-2 text-center">0</td>
+                            <td id="total_pr_marks" class="px-3 py-2 text-center">0</td>
+                            <td id="total_or_marks" class="px-3 py-2 text-center">0</td>
+                            <td id="total_tw_marks" class="px-3 py-2 text-center">0</td>
+
+                            <td id="total_marks" class="px-3 py-2 text-center"></td>
+
+                        </tr>
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="mt-6 flex justify-between">
+
+                {{-- <a href="{{ route('hod.courses') }}">
+
+                    <button class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded">
+                        Back & Configure Levels
+                    </button>
+
+                </a> --}}
+
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded">
+
+                    Save & Preview
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+@endsection
 
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
 
-function updateTotals() {
+        function updateTotals() {
+            let th = 0,
+                tu = 0,
+                pr = 0,
+                totalHours = 0
+            let credits = 0
+            let thMarks = 0,
+                test = 0,
+                prMarks = 0,
+                orMarks = 0,
+                twMarks = 0
+            let totalMarks = 0
 
-let th = 0
-let tu = 0
-let pr = 0
-let credits = 0
+            document.querySelectorAll('tbody tr').forEach(row => {
 
-let th_marks = 0
-let test = 0
-let pr_marks = 0
-let or_marks = 0
-let tw_marks = 0
+                let thInput = row.querySelector('.th_hrs')
+                if (!thInput) return // skip header/footer rows
 
+                let tuInput = row.querySelector('.tu_hrs')
+                let prInput = row.querySelector('.pr_hrs')
 
-document.querySelectorAll('.th_hrs').forEach(e => th += Number(e.value || 0))
-document.querySelectorAll('.tu_hrs').forEach(e => tu += Number(e.value || 0))
-document.querySelectorAll('.pr_hrs').forEach(e => pr += Number(e.value || 0))
+                let thv = Number(thInput.value || 0)
+                let tuv = Number(tuInput?.value || 0)
+                let prv = Number(prInput?.value || 0)
 
-document.querySelectorAll('.credits').forEach(e => credits += Number(e.value || 0))
+                let rowHours = thv + tuv + prv
 
-document.querySelectorAll('.th_marks').forEach(e => th_marks += Number(e.value || 0))
-document.querySelectorAll('.test_marks').forEach(e => test += Number(e.value || 0))
-document.querySelectorAll('.pr_marks').forEach(e => pr_marks += Number(e.value || 0))
-document.querySelectorAll('.or_marks').forEach(e => or_marks += Number(e.value || 0))
-document.querySelectorAll('.tw_marks').forEach(e => tw_marks += Number(e.value || 0))
+                row.querySelector('.total_hours').innerText = rowHours
 
+                th += thv
+                tu += tuv
+                pr += prv
+                totalHours += rowHours
 
-document.getElementById('total_th').innerText = th
-document.getElementById('total_tu').innerText = tu
-document.getElementById('total_pr').innerText = pr
+                let creditInput = row.querySelector('.credits')
+                credits += Number(creditInput?.value || 0)
 
-document.getElementById('total_credits').innerText = credits
+                let thm = Number(row.querySelector('.th_marks')?.value || 0)
+                let tm = Number(row.querySelector('.test_marks')?.value || 0)
+                let prm = Number(row.querySelector('.pr_marks')?.value || 0)
+                let orm = Number(row.querySelector('.or_marks')?.value || 0)
+                let twm = Number(row.querySelector('.tw_marks')?.value || 0)
 
-document.getElementById('total_th_marks').innerText = th_marks
-document.getElementById('total_test_marks').innerText = test
-document.getElementById('total_pr_marks').innerText = pr_marks
-document.getElementById('total_or_marks').innerText = or_marks
-document.getElementById('total_tw_marks').innerText = tw_marks
+                let rowTotalMarks = thm + tm + prm + orm + twm
+                row.querySelector('.row_total_marks').innerText = rowTotalMarks
 
-}
+                thMarks += thm
+                test += tm
+                prMarks += prm
+                orMarks += orm
+                twMarks += twm
 
-document.querySelectorAll('input').forEach(i => {
-i.addEventListener('input', updateTotals)
-})
+                totalMarks += rowTotalMarks
 
-updateTotals()
+            })
 
+            document.getElementById('total_th').innerText = th
+            document.getElementById('total_tu').innerText = tu
+            document.getElementById('total_pr').innerText = pr
+            document.getElementById('total_hours').innerText = totalHours
+            document.getElementById('total_credits').innerText = credits
+            document.getElementById('total_th_marks').innerText = thMarks
+            document.getElementById('total_test_marks').innerText = test
+            document.getElementById('total_pr_marks').innerText = prMarks
+            document.getElementById('total_or_marks').innerText = orMarks
+            document.getElementById('total_tw_marks').innerText = twMarks
+            document.getElementById('total_marks').innerText = totalMarks
+        }
+
+        // Attach input listener to all inputs in tbody
+        document.querySelectorAll('tbody input').forEach(i => {
+            i.addEventListener('input', updateTotals)
+        })
+
+        // Initial calculation
+        updateTotals()
+
+    })
 </script>
-
-
-@endsection

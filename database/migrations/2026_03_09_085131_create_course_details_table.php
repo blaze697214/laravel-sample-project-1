@@ -19,6 +19,7 @@ return new class extends Migration
             $table->tinyInteger('tu_hrs');
             $table->tinyInteger('pr_hrs');
             $table->smallInteger('credits');
+            $table->tinyInteger('th_paper_hrs');
             $table->tinyInteger('th_marks');
             $table->tinyInteger('test_marks');
             $table->tinyInteger('pr_marks');

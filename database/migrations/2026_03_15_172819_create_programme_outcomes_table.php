@@ -31,7 +31,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('order');
 
             $table->timestamps();
-            $table->unique(['programme_id','curriculum_year_id','code']);
+            $table->unique(['department_id','curriculum_year_id','code']);
         });
     }
 

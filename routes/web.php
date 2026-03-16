@@ -144,4 +144,8 @@ Route::middleware(['auth', 'role:hod','active.scheme'])->prefix('hod')->name('ho
 
     Route::get('/courses/{level}/configure', [HODCourseController::class,'configure'])->name('courses.configure');
 
+    Route::post('/courses/{level}/store',[HODCourseController::class,'store'])->name('courses.store');
+
+    Route::get('/courses/{level}/preview',[HODCourseController::class,'preview'])->name('courses.preview');
+
 });

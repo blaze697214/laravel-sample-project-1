@@ -79,6 +79,10 @@
 
                 <select name="level_id" class="border border-gray-300 rounded-lg px-3 py-2">
 
+                    <option value="">
+                        --Select Level--
+                    </option>
+
                     @foreach ($levels as $level)
                         <option value="{{ $level->id }}">
                             {{ $level->name }}

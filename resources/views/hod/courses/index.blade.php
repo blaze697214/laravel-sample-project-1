@@ -99,8 +99,8 @@
                                 <a href="{{ route('hod.courses.configure', $level->id) }}">
 
                                     <button
-                                        class="px-4 py-1 rounded text-white text-sm
-{{ $level->is_configured ? 'bg-yellow-500 hover:bg-yellow-600' : 'bg-blue-600 hover:bg-blue-700' }}">
+                                        class="px-4 py-1 rounded text-white text-sm cursor-pointer
+{{ $level->is_configured ? 'bg-yellow-500 hover:bg-yellow-600' : 'bg-blue-600 hover:bg-blue-700' }} ">
 
                                         @if ($level->is_configured)
                                             Edit

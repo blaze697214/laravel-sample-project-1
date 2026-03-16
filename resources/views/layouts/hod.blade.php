@@ -145,17 +145,17 @@
 
     <div class="ml-64 flex-1 p-8 min-h-screen">
 
-        <div class="bg-white shadow rounded-xl p-6 h-full">
+        <div class="bg-white shadow rounded-xl p-6 h-full overflow-auto">
 
             {{-- Alerts --}}
             @if (session('success'))
-                <div class="mb-4 p-4 bg-green-100 border border-green-300 text-green-800 rounded">
+                <div id="msg" class="mb-4 p-4 bg-green-100 border border-green-300 text-green-800 rounded">
                     {{ session('success') }}
                 </div>
             @endif
 
             @if ($errors->any())
-                <div class="mb-4 p-4 bg-red-100 border border-red-300 text-red-800 rounded">
+                <div id="msg" class="mb-4 p-4 bg-red-100 border border-red-300 text-red-800 rounded">
                     <ul class="list-disc pl-5">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
@@ -171,5 +171,17 @@
     </div>
 
 </body>
+
+<script>
+    setTimeout(function() {
+
+            const msg = document.getElementById('msg');
+
+            if (msg) {
+                msg.style.display = 'none';
+            }
+
+        }, 2000);
+</script>
 
 </html>
