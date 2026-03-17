@@ -69,6 +69,12 @@
                         Configure Courses
                     </a>
 
+                    <a href="{{ route('hod.classAward') }}"
+                        class="block px-6 py-3 hover:bg-slate-800 transition
+           {{ request()->routeIs('hod.courses') ? 'bg-slate-800' : '' }}">
+                        Class Award Courses
+                    </a>
+
                 @else
                     {{-- Service Department Courses --}}
                     <h4 class="px-6 py-2 text-xs uppercase text-slate-400 mt-4">

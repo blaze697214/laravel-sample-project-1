@@ -126,6 +126,11 @@
                             <span class="px-2 py-1 text-xs font-semibold bg-green-100 text-green-700 rounded">
                                 Configured
                             </span>
+                        @elseif ($verification['configuredCourses']>0)
+                            <span class="px-2 py-1 text-xs font-semibold bg-red-100 text-red-700 rounded">
+                                Not Configured
+                            </span>
+
                         @else
                             <span class="px-2 py-1 text-xs font-semibold bg-red-100 text-red-700 rounded">
                                 Missing
@@ -136,12 +141,12 @@
 
                     <td class="px-4 py-3">
 
-                        @if ($verification['courseDetails'])
-                            {{-- <a href="{{ route('cdc.verify.courseDetails', [$schemeId, $department->id]) }}"> --}}
+                        @if ($verification['courseDetails'] || $verification['configuredCourses']>0)
+                            <a href="{{ route('cdc.schemes.verify.courseDetails', [$schemeId, $department->id]) }}">
                             <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded text-sm">
                                 View
                             </button>
-                            {{-- </a> --}}
+                            </a>
                         @else
                             <button class="bg-gray-300 text-gray-600 px-4 py-1 rounded text-sm cursor-not-allowed">
                                 Unavailable

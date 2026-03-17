@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\ClassAwardConfiguration;
 use App\Models\CourseDetail;
+use App\Models\DepartmentCourse;
 use App\Models\DepartmentLevelDetail;
 use App\Models\SemesterPlacement;
 
@@ -13,14 +14,16 @@ class SchemeVerificationService
     {
 
         $departmentLevel = DepartmentLevelDetail::where('department_id', $departmentId)
-            // ->where('curriculum_year_id',$schemeId)
             ->exists();
 
-        $courseDetails = CourseDetail::whereHas('departmentCourse', function ($q) use ($departmentId) {
+        $requiredCourses = DepartmentCourse::where('department_id', $departmentId)
+            ->count();
 
+        $configuredCourses = CourseDetail::whereHas('departmentCourse', function ($q) use ($departmentId) {
             $q->where('department_id', $departmentId);
+        })->count();
 
-        })->exists();
+        $courseDetails = $requiredCourses > 0 && $requiredCourses == $configuredCourses;
 
         $classAward = ClassAwardConfiguration::where('department_id', $departmentId)
             ->where('curriculum_year_id', $schemeId)
@@ -36,15 +39,16 @@ class SchemeVerificationService
 
             'courseDetails' => $courseDetails,
 
+            'configuredCourses' => $configuredCourses,
+
             'classAward' => $classAward,
 
             'semesterPlacement' => $semesterPlacement,
 
             'complete' => $departmentLevel &&
-        $courseDetails &&
-        $classAward &&
-        $semesterPlacement,
-
+                $courseDetails &&
+                $classAward &&
+                $semesterPlacement,
         ];
     }
 }

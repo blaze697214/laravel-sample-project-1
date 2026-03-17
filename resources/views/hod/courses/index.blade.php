@@ -81,16 +81,22 @@
                             </td>
 
                             <td class="px-4 py-3 text-center">
-
-                                @if ($level->is_configured)
-                                    <span class="px-2 py-1 text-xs font-semibold bg-green-100 text-green-700 rounded">
-                                        Configured
+                                @if ($level->status === 'missing')
+                                    <span class="px-2 py-1 text-xs font-semibold bg-red-100 text-red-700 rounded">
+                                        Missing
                                     </span>
-                                @else
+                                @elseif($level->status === 'not_configured')
                                     <span class="px-2 py-1 text-xs font-semibold bg-red-100 text-red-700 rounded">
                                         Not Configured
                                     </span>
+                                @else
+                                    <span class="px-2 py-1 text-xs font-semibold bg-green-100 text-green-700 rounded">
+                                        Configured
+                                    </span>
                                 @endif
+
+
+
 
                             </td>
 
@@ -98,17 +104,22 @@
 
                                 <a href="{{ route('hod.courses.configure', $level->id) }}">
 
-                                    <button
-                                        class="px-4 py-1 rounded text-white text-sm cursor-pointer
-{{ $level->is_configured ? 'bg-yellow-500 hover:bg-yellow-600' : 'bg-blue-600 hover:bg-blue-700' }} ">
-
-                                        @if ($level->is_configured)
-                                            Edit
-                                        @else
+                                    @if ($level->status === 'missing')
+                                        <button
+                                            class="bg-gray-300 text-gray-600 px-4 py-1 rounded text-sm cursor-not-allowed" disabled>
+                                            Unavailable
+                                        </button>
+                                    @elseif($level->status === 'not_configured')
+                                        <button
+                                            class="bg-blue-600 text-white px-4 py-1 rounded text-sm  hover:bg-blue-700">
                                             Configure
-                                        @endif
-
-                                    </button>
+                                        </button>
+                                    @else
+                                        <button
+                                            class="px-4 py-1 rounded text-white text-sm cursor-pointer bg-yellow-600 hover:bg-yellow-700 ">
+                                            Edit
+                                        </button>
+                                    @endif
 
                                 </a>
 

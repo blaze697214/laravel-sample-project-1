@@ -3,11 +3,16 @@
 namespace App\Http\Controllers\cdc;
 
 use App\Http\Controllers\Controller;
+use App\Models\CourseDetail;
 use App\Models\CurriculumYears;
 use App\Models\Department;
+use App\Models\DepartmentCourse;
 use App\Models\DepartmentLevelDetail;
+use App\Models\ElectiveGroup;
+use App\Models\Levels;
 use App\Services\SchemeVerificationService;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\Shared\Html;
 
@@ -222,7 +227,7 @@ class CDCVerifySchemeController extends Controller
         ];
 
         $pdf = Pdf::loadView(
-            'cdc.schemes.verify.department-levels-pdf',
+            'pdf.department-levels',
             compact(
                 'department',
                 'schemeId',
@@ -235,104 +240,193 @@ class CDCVerifySchemeController extends Controller
         return $pdf->download('department_structure.pdf');
     }
 
-    public function downloadDepartmentLevelsWord($schemeId, $departmentId)
+    public function courseDetails($schemeId, $departmentId)
     {
 
         $department = Department::findOrFail($departmentId);
 
-        $rows = DepartmentLevelDetail::with('level')
-            ->where('department_id', $departmentId)
-            ->whereHas('level', function ($q) use ($schemeId) {
-                $q->where('curriculum_year_id', $schemeId);
+        $scheme = CurriculumYears::findOrFail($schemeId);
+
+        $levels = Levels::where('curriculum_year_id', $schemeId)
+            ->orderByRaw('is_audit = 1')
+            ->orderBy('order_no')
+            ->get();
+
+        $levels->transform(function ($level) use ($department) {
+
+            /*
+            |--------------------------------------------------------------------------
+            | Courses added for this level
+            |--------------------------------------------------------------------------
+            */
+
+            $coursesAdded = DepartmentCourse::where('department_id', $department->id)
+                ->whereHas('course', function ($q) use ($level) {
+
+                    $q->where('level_id', $level->id);
+
+                })
+                ->count();
+
+            /*
+            |--------------------------------------------------------------------------
+            | Courses configured by HOD
+            |--------------------------------------------------------------------------
+            */
+
+            $configured = CourseDetail::whereHas('departmentCourse.course', function ($q) use ($department, $level) {
+
+                $q->where('level_id', $level->id)
+                    ->whereHas('departmentCourses', function ($sub) use ($department) {
+
+                        $sub->where('department_id', $department->id);
+
+                    });
+
             })
-            ->get()
-            ->sortBy('level.order_no');
+                ->where('is_configured', true)
+                ->count();
 
-        $totals = [
-            'courses' => 0,
-            'completed' => 0,
-            'compulsory' => 0,
-            'elective' => 0,
-            'th' => 0,
-            'tu' => 0,
-            'pr' => 0,
-            'hours' => 0,
-            'credits' => 0,
-            'marks' => 0,
-        ];
+            /*
+            |--------------------------------------------------------------------------
+            | Status
+            |--------------------------------------------------------------------------
+            */
 
-        $auditRow = null;
+            if ($coursesAdded > 0 && $configured == $coursesAdded) {
 
-        foreach ($rows as $row) {
+                $level->status = 'configured';
 
-            $totalHours = $row->th_hrs + $row->tu_hrs + $row->pr_hrs;
-            $row->total_hours = $totalHours;
+            } else {
 
-            if ($row->level->is_audit) {
-
-                $auditRow = $row;
-
-                continue;
+                $level->status = 'missing';
 
             }
 
-            $totals['courses'] += $row->courses_offered;
+            return $level;
 
-            $totals['compulsory'] += $row->compulsory_to_complete;
-            $totals['elective'] += $row->elective_to_complete;
+        });
 
-            $completed = $row->compulsory_to_complete + $row->elective_to_complete;
-            $totals['completed'] += $completed;
-
-            $totals['th'] += $row->th_hrs;
-            $totals['tu'] += $row->tu_hrs;
-            $totals['pr'] += $row->pr_hrs;
-
-            $totals['hours'] += $totalHours;
-
-            $totals['credits'] += $row->credits;
-            $totals['marks'] += $row->marks;
-
-        }
-
-        $grand = [
-            'courses' => $totals['courses'] + ($auditRow->courses_offered ?? 0),
-            'completed' => $totals['completed'] + ($auditRow->compulsory_to_complete ?? 0),
-            'th' => $totals['th'] + ($auditRow->th_hrs ?? 0),
-            'tu' => $totals['tu'] + ($auditRow->tu_hrs ?? 0),
-            'pr' => $totals['pr'] + ($auditRow->pr_hrs ?? 0),
-            'hours' => $totals['hours'] + ($auditRow->total_hours ?? 0),
-            'credits' => $totals['credits'],
-            'marks' => $totals['marks'],
-        ];
-
-        $html = view(
-            'cdc.schemes.verify.department-levels-word',
+        return view(
+            'cdc.schemes.verify.course_details.levels',
             compact(
+                'scheme',
                 'department',
-                'schemeId',
-                'rows',
-                'totals',
-                'grand',
-                'auditRow'
+                'levels'
             )
-        )->render();
-        $html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
+        );
 
-        libxml_use_internal_errors(true);
+    }
 
-        $phpWord = new PhpWord;
+    public function showCourseDetails($schemeId, $departmentId, $levelId)
+    {
 
-        $section = $phpWord->addSection();
-        // dd($html);
+        $department = Department::findOrFail($departmentId);
 
-        Html::addHtml($section, $html, false, false);
+        $scheme = CurriculumYears::findOrFail($schemeId);
 
-        $file = storage_path('department_structure.docx');
+        $level = Levels::findOrFail($levelId);
 
-        $phpWord->save($file, 'Word2007');
+        /*
+        |--------------------------------------------------------------------------
+        | Compulsory Courses
+        |--------------------------------------------------------------------------
+        */
 
-        return response()->download($file);
+        $compulsoryCourses = DepartmentCourse::where('department_id', $department->id)
+            ->where('is_elective', false)
+            ->whereHas('course', function ($q) use ($levelId) {
 
+                $q->where('level_id', $levelId);
+
+            })
+            ->with(['course', 'courseDetails'])
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Elective Groups
+        |--------------------------------------------------------------------------
+        */
+
+        $electiveGroups = ElectiveGroup::where('department_id', $department->id)
+            ->where('level_id', $levelId)
+            ->with([
+                'courses.departmentCourses.courseDetails',
+                'courses',
+            ])
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Audit Level Details
+        |--------------------------------------------------------------------------
+        */
+
+        $auditDetails = DepartmentLevelDetail::where(
+            'department_id', $department->id
+        )
+            ->where('level_id', $levelId)
+            ->first();
+
+        return view(
+            'cdc.schemes.verify.course_details.show',
+            compact(
+                'scheme',
+                'department',
+                'level',
+                'compulsoryCourses',
+                'electiveGroups',
+                'auditDetails'
+            )
+        );
+
+    }
+
+    public function downloadCourseDetails($schemeId, $departmentId, $levelId)
+    {
+
+        $department = Department::findOrFail($departmentId);
+        $scheme = CurriculumYears::findOrFail($schemeId);
+        $level = Levels::findOrFail($levelId);
+
+        $compulsoryCourses = DepartmentCourse::where('department_id', $department->id)
+            ->where('is_elective', false)
+            ->whereHas('course', function ($q) use ($levelId) {
+
+                $q->where('level_id', $levelId);
+
+            })
+            ->with(['course', 'courseDetails'])
+            ->get();
+
+        $electiveGroups = ElectiveGroup::where('department_id', $department->id)
+            ->where('level_id', $levelId)
+            ->with([
+                'courses.departmentCourses.courseDetails',
+                'courses',
+            ])
+            ->get();
+
+        $auditDetails = DepartmentLevelDetail::where(
+            'department_id',
+            Auth::user()->department_id
+        )
+            ->where('level_id', $level->id)
+            ->first();
+
+        $pdf = Pdf::loadView(
+            'pdf.course-details',
+            compact(
+                'scheme',
+                'department',
+                'level',
+                'compulsoryCourses',
+                'electiveGroups',
+                'auditDetails'
+            )
+        );
+
+        return $pdf->download('course-details.pdf');
     }
 }

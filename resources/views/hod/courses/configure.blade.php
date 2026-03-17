@@ -142,10 +142,10 @@
                                 <td class="border border-gray-200 px-2 py-2">
 
                                     <input
-                                        class="th_paper_hrs w-20 border border-gray-200 rounded px-2 py-1 disabled:bg-gray-300"
+                                        class="th_paper_hrs w-20 border border-gray-200 rounded px-2 py-1 @if($level->is_audit) bg-gray-400 cursor-not-allowed @endif "
                                         type="number" name="th_paper_hrs[{{ $dc->id }}]"
                                         value="{{ old('th_paper_hrs.' . $dc->id, $details->th_paper_hrs ?? '') }}"
-                                        @if ($level->is_audit) disabled @endif>
+                                        @if ($level->is_audit) readonly value="0" @endif >
 
                                 </td>
 
@@ -153,10 +153,10 @@
                                 <td class="border border-gray-200 px-2 py-2">
 
                                     <input
-                                        class="th_marks w-20 border border-gray-200 rounded px-2 py-1 disabled:bg-gray-300"
+                                        class="th_marks w-20 border border-gray-200 rounded px-2 py-1 @if($level->is_audit) bg-gray-400 cursor-not-allowed @endif"
                                         type="number" name="th_marks[{{ $dc->id }}]"
                                         value="{{ old('th_marks.' . $dc->id, $details->th_marks ?? '') }}"
-                                        @if ($level->is_audit) disabled @endif>
+                                        @if ($level->is_audit) readonly value="0" @endif >
 
                                 </td>
 
@@ -164,10 +164,10 @@
                                 <td class="border border-gray-200 px-2 py-2">
 
                                     <input
-                                        class="test_marks w-20 border border-gray-200 rounded px-2 py-1 disabled:bg-gray-300"
+                                        class="test_marks w-20 border border-gray-200 rounded px-2 py-1 @if($level->is_audit) bg-gray-400 cursor-not-allowed @endif"
                                         type="number" name="test_marks[{{ $dc->id }}]"
                                         value="{{ old('test_marks.' . $dc->id, $details->test_marks ?? '') }}"
-                                        @if ($level->is_audit) disabled @endif>
+                                        @if ($level->is_audit) readonly value="0" @endif >
 
                                 </td>
 
@@ -175,10 +175,10 @@
                                 <td class="border border-gray-200 px-2 py-2">
 
                                     <input
-                                        class="pr_marks w-20 border border-gray-200 rounded px-2 py-1 disabled:bg-gray-300"
+                                        class="pr_marks w-20 border border-gray-200 rounded px-2 py-1 @if($level->is_audit) bg-gray-400 cursor-not-allowed @endif"
                                         type="number" name="pr_marks[{{ $dc->id }}]"
                                         value="{{ old('pr_marks.' . $dc->id, $details->pr_marks ?? '') }}"
-                                        @if ($level->is_audit) disabled @endif>
+                                        @if ($level->is_audit) readonly value="0" @endif >
 
                                 </td>
 
@@ -186,10 +186,10 @@
                                 <td class="border border-gray-200 px-2 py-2 ">
 
                                     <input
-                                        class="or_marks w-20 border border-gray-200 rounded px-2 py-1 disabled:bg-gray-300"
+                                        class="or_marks w-20 border border-gray-200 rounded px-2 py-1 @if($level->is_audit) bg-gray-400 cursor-not-allowed @endif"
                                         type="number" name="or_marks[{{ $dc->id }}]"
                                         value="{{ old('or_marks.' . $dc->id, $details->or_marks ?? '') }}"
-                                        @if ($level->is_audit) disabled @endif>
+                                        @if ($level->is_audit) readonly value="0" @endif >
 
                                 </td>
 
@@ -197,10 +197,10 @@
                                 <td class="border border-gray-200 px-2 py-2">
 
                                     <input
-                                        class="tw_marks w-20 border border-gray-200 rounded px-2 py-1 disabled:bg-gray-300"
+                                        class="tw_marks w-20 border border-gray-200 rounded px-2 py-1 @if($level->is_audit) bg-gray-400 cursor-not-allowed @endif"
                                         type="number" name="tw_marks[{{ $dc->id }}]"
                                         value="{{ old('tw_marks.' . $dc->id, $details->tw_marks ?? '') }}"
-                                        @if ($level->is_audit) disabled @endif>
+                                        @if ($level->is_audit) readonly value="0" @endif >
 
                                 </td>
 
@@ -250,7 +250,7 @@
                                     data-min="{{ $group->min_select_count }}">
 
                                     @if ($index == 0)
-                                        <td class="course_code border border-gray-200 px-2 py-2 text-center whitespace-nowrap   "
+                                        <td class=" border border-gray-200 px-2 py-2 text-center whitespace-nowrap   "
                                             rowspan="{{ $rowCount }}">
                                             {{ str_pad($serialText, 2, '0', STR_PAD_LEFT) }}</td>
                                     @endif
@@ -263,7 +263,7 @@
 
                                             <input type="text" name="course_code[{{ $dc->id }}]"
                                                 value="{{ substr(old('course_code.' . $dc->id, $details->course_code ?? ''), -2) }}"
-                                                class="w-10 border border-gray-200 rounded px-2 py-1">
+                                                class="course_code w-10 border border-gray-200 rounded px-2 py-1">
                                         </div>
 
                                     </td>
@@ -380,7 +380,9 @@
                             @endforeach
                         @endforeach
 
-
+                        
+                            
+                        
 
                         <tr class="bg-gray-100 font-semibold">
 
@@ -406,6 +408,8 @@
                             <td id="total_marks" class="px-3 py-2 text-center"></td>
 
                         </tr>
+
+                        
 
 
                     </tbody>
@@ -538,7 +542,10 @@
                     updateTotals()
                     return
                 }
+
                 let className = this.className.split(' ')[0]
+
+                // Skip course code
                 if (className === 'course_code') {
                     updateTotals()
                     return
@@ -547,20 +554,34 @@
                 let groupId = row.dataset.group
                 let value = this.value
 
+                // propagate values
                 document.querySelectorAll(`tr[data-group="${groupId}"] .${className}`)
                     .forEach(el => {
-
-                        if (el !== this) {
-                            el.value = value
-                        }
-
+                        el.value = value
                     })
+
+                // recompute row totals for all rows in this group
+                document.querySelectorAll(`tr[data-group="${groupId}"]`).forEach(gRow => {
+
+                    let thm = Number(gRow.querySelector('.th_marks')?.value || 0)
+                    let tm = Number(gRow.querySelector('.test_marks')?.value || 0)
+                    let prm = Number(gRow.querySelector('.pr_marks')?.value || 0)
+                    let orm = Number(gRow.querySelector('.or_marks')?.value || 0)
+                    let twm = Number(gRow.querySelector('.tw_marks')?.value || 0)
+
+                    let rowTotalMarks = thm + tm + prm + orm + twm
+
+                    let cell = gRow.querySelector('.row_total_marks')
+                    if (cell) cell.innerText = rowTotalMarks
+
+                })
 
                 updateTotals()
 
             })
 
         })
+        updateTotals()
 
     })
 </script>

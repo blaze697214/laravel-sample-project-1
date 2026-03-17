@@ -38,7 +38,7 @@ class ClassAwardConfiguration extends Model
         return $this->belongsToMany(ElectiveGroup::class,'class_award_elective_groups');
     }
 
-    public function courses()
+    public function compulsoryCourses()
     {
         return $this->belongsToMany(Courses::class,'class_award_compulsory_courses');
     }

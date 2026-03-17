@@ -15,58 +15,78 @@ use Illuminate\Support\Facades\Auth;
 class HODCourseController extends Controller
 {
     public function index()
-{
-    $department = Auth::user()->department;
+    {
+        $department = Auth::user()->department;
+        $activeScheme = CurriculumYears::where('is_active', true)->first();
+        $levels = Levels::where('curriculum_year_id', $activeScheme->id)->orderByRaw('is_audit = 1')->orderBy('order_no')->get();
+        $levels->transform(function ($level) use ($department) {
 
-    $activeScheme = CurriculumYears::where('is_active', true)->first();
+            $coursesOffered = DepartmentLevelDetail::where('department_id', $department->id)
+                ->where('level_id', $level->id)
+                ->value('courses_offered');
 
-    $levels = Levels::where('curriculum_year_id', $activeScheme->id)
-        ->orderByRaw('is_audit = 1')
-        ->orderBy('order_no')
-        ->get();
+            /*
+            |--------------------------------------------------------------------------
+            | Courses added by CDC
+            |--------------------------------------------------------------------------
+            */
 
-    $levels->transform(function ($level) use ($department,$activeScheme) {
+            $coursesAdded = DepartmentCourse::where('department_id', $department->id)
+                ->whereHas('course', function ($q) use ($level) {
 
-        // Courses offered as per department_level_details
-        $coursesOffered = DepartmentLevelDetail::where('department_id', $department->id)
-            ->where('level_id', $level->id)
-            ->value('courses_offered');
+                    $q->where('level_id', $level->id);
 
-        // Number of courses already added by CDC
-        $coursesAdded = DepartmentCourse::where('department_id', $department->id)
-            ->whereHas('course', function ($q) use ($level, $activeScheme) {
+                })
+                ->count();
+
+            /*
+            |--------------------------------------------------------------------------
+            | Courses configured by HOD
+            |--------------------------------------------------------------------------
+            */
+
+            $configured = CourseDetail::whereHas('departmentCourse.course', function ($q) use ($department, $level) {
+
                 $q->where('level_id', $level->id)
-                  ->where('curriculum_year_id', $activeScheme->id);
+                    ->whereHas('departmentCourses', function ($sub) use ($department) {
+
+                        $sub->where('department_id', $department->id);
+
+                    });
+
             })
-            ->count();
+                ->where('is_configured', true)
+                ->count();
 
-        // Number of courses configured by HOD
-        $configured = CourseDetail::whereHas('departmentCourse.course', function ($q) use ($department, $level) {
-            $q->where('level_id', $level->id)
-              ->whereHas('departmentCourses', function ($sub) use ($department) {
-                  $sub->where('department_id', $department->id);
-              });
-        })
-        ->where('is_configured', true)
-        ->count();
+            $level->courses_offered = $coursesOffered ?? 0;
+            $level->courses_added = $coursesAdded;
+            $level->configured = $configured;
 
-        $level->courses_offered = $coursesOffered ?? 0;
-        $level->courses_added = $coursesAdded;                  // NEW
-        $level->configured = $configured;
-        $level->is_configured = ($configured == $coursesOffered && $coursesOffered > 0);
+            /*
+            |--------------------------------------------------------------------------
+            | Determine status
+            |--------------------------------------------------------------------------
+            */
 
-        // NEW: can configure only if CDC has added all courses for this level
-        $level->can_configure = $coursesAdded >= ($coursesOffered ?? 0);
+            if ($coursesAdded < $coursesOffered) {
 
-        return $level;
-    });
+                $level->status = 'missing';
 
-    return view('hod.courses.index', compact(
-        'department',
-        'activeScheme',
-        'levels'
-    ));
-}
+            } elseif ($configured < $coursesOffered) {
+
+                $level->status = 'not_configured';
+
+            } else {
+
+                $level->status = 'configured';
+
+            }
+
+            return $level;
+        });
+
+        return view('hod.courses.index', compact('department', 'activeScheme', 'levels'));
+    }
 
     public function configure($levelId)
     {
@@ -158,24 +178,119 @@ class HODCourseController extends Controller
 
         ]);
 
+        if ($level->is_audit) {
+            $request->merge([
+                'th_marks' => array_fill_keys(array_keys($request->course_code), 0),
+                'test_marks' => array_fill_keys(array_keys($request->course_code), 0),
+                'pr_marks' => array_fill_keys(array_keys($request->course_code), 0),
+                'or_marks' => array_fill_keys(array_keys($request->course_code), 0),
+                'tw_marks' => array_fill_keys(array_keys($request->course_code), 0),
+            ]);
+        }
+
         /*
-        |--------------------------------------------------------------------------
-        | Calculate totals
-        |--------------------------------------------------------------------------
-        */
+|--------------------------------------------------------------------------
+| Get elective groups for this level
+|--------------------------------------------------------------------------
+*/
 
-        $totalTH = array_sum($request->th_hrs);
-        $totalTU = array_sum($request->tu_hrs);
-        $totalPR = array_sum($request->pr_hrs);
+        $groups = ElectiveGroup::where('department_id', $department->id)
+            ->where('level_id', $levelId)
+            ->with('courses')
+            ->get();
 
-        $totalCredits = array_sum($request->credits);
+        /* collect elective department_course ids */
 
-        $totalMarks =
-            array_sum($request->th_marks) +
-            array_sum($request->test_marks) +
-            array_sum($request->pr_marks) +
-            array_sum($request->or_marks) +
-            array_sum($request->tw_marks);
+        $electiveDcIds = [];
+
+        foreach ($groups as $group) {
+
+            foreach ($group->courses as $course) {
+
+                $dc = $course->departmentCourses
+                    ->where('department_id', $department->id)
+                    ->first();
+
+                if ($dc) {
+                    $electiveDcIds[] = $dc->id;
+                }
+
+            }
+        }
+
+        /*
+|--------------------------------------------------------------------------
+| Calculate totals (handle elective groups)
+|--------------------------------------------------------------------------
+*/
+
+        $totalTH = 0;
+        $totalTU = 0;
+        $totalPR = 0;
+
+        $totalCredits = 0;
+
+        $totalMarks = 0;
+
+        /* -----------------------------
+           Compulsory courses
+        ------------------------------*/
+
+        foreach ($request->th_hrs as $dcId => $th) {
+
+            if (! in_array($dcId, $electiveDcIds)) {
+
+                $totalTH += $request->th_hrs[$dcId] ?? 0;
+                $totalTU += $request->tu_hrs[$dcId] ?? 0;
+                $totalPR += $request->pr_hrs[$dcId] ?? 0;
+
+                $totalCredits += $request->credits[$dcId] ?? 0;
+
+                $totalMarks +=
+                    ($request->th_marks[$dcId] ?? 0) +
+                    ($request->test_marks[$dcId] ?? 0) +
+                    ($request->pr_marks[$dcId] ?? 0) +
+                    ($request->or_marks[$dcId] ?? 0) +
+                    ($request->tw_marks[$dcId] ?? 0);
+            }
+
+        }
+
+        /* -----------------------------
+           Elective groups
+        ------------------------------*/
+
+        foreach ($groups as $group) {
+
+            $course = $group->courses->first();
+
+            $dc = $course->departmentCourses
+                ->where('department_id', $department->id)
+                ->first();
+
+            if (! $dc) {
+                continue;
+            }
+
+            $dcId = $dc->id;
+
+            $multiplier = $group->min_select_count;
+
+            $totalTH += ($request->th_hrs[$dcId] ?? 0) * $multiplier;
+            $totalTU += ($request->tu_hrs[$dcId] ?? 0) * $multiplier;
+            $totalPR += ($request->pr_hrs[$dcId] ?? 0) * $multiplier;
+
+            $totalCredits += ($request->credits[$dcId] ?? 0) * $multiplier;
+
+            $totalMarks += (
+                ($request->th_marks[$dcId] ?? 0) +
+                ($request->test_marks[$dcId] ?? 0) +
+                ($request->pr_marks[$dcId] ?? 0) +
+                ($request->or_marks[$dcId] ?? 0) +
+                ($request->tw_marks[$dcId] ?? 0)
+            ) * $multiplier;
+
+        }
 
         /*
         |--------------------------------------------------------------------------
@@ -313,21 +428,42 @@ class HODCourseController extends Controller
             ])
             ->get();
 
-            $auditDetails = DepartmentLevelDetail::where(
-    'department_id',
-    Auth::user()->department_id
-)
-->where('level_id',$level->id)
-->first();
+        $auditDetails = DepartmentLevelDetail::where(
+            'department_id',
+            Auth::user()->department_id
+        )
+            ->where('level_id', $level->id)
+            ->first();
 
         return view(
             'hod.courses.preview',
             compact(
                 'level',
+                'department',
                 'compulsoryCourses',
                 'electiveGroups',
                 'auditDetails'
             )
         );
+    }
+
+    public function finalize($levelId)
+    {
+
+        $department = Auth::user()->department;
+
+        DepartmentLevelDetail::where(
+            'department_id',
+            $department->id
+        )
+            ->where('level_id', $levelId)
+            ->update([
+                'is_configured' => true,
+            ]);
+
+        return redirect()
+            ->route('hod.courses')
+            ->with('success', 'Level configured successfully');
+
     }
 }

@@ -10,6 +10,7 @@ use App\Http\Controllers\cdc\CDCDepartmentLevelController;
 use App\Http\Controllers\cdc\CDCSchemeController;
 use App\Http\Controllers\cdc\CDCUserController;
 use App\Http\Controllers\cdc\CDCVerifySchemeController;
+use App\Http\Controllers\hod\HODClassAwardController;
 use App\Http\Controllers\hod\HODCourseController;
 use App\Http\Controllers\hod\HODDashboardController;
 use App\Http\Controllers\hod\HODElectiveController;
@@ -105,9 +106,15 @@ Route::middleware(['auth', 'role:cdc'])->prefix('cdc')->name('cdc.')->group(func
 
     Route::get('/schemes/{scheme}/{department}/verify/department-levels', [CDCVerifySchemeController::class, 'departmentLevelsView'])->name('schemes.verify.departmentLevels');
 
+    Route::get('/schemes/{scheme}/verify/{department}/course-details',[CDCVerifySchemeController::class,'courseDetails'])->name('schemes.verify.courseDetails');
+
     Route::get('/schemes/{scheme}/{department}/verify/department-levels/pdf', [CDCVerifySchemeController::class, 'downloadDepartmentLevelsPdf'])->name('schemes.verify.departmentLevels.pdf');
 
     Route::get('/schemes/{scheme}/{department}/verify/department-levels/word', [CDCVerifySchemeController::class, 'downloadDepartmentLevelsWord'])->name('schemes.verify.departmentLevels.word');
+
+    Route::get('/schemes/{scheme}/verify/{department}/course-details/{level}',[CDCVerifySchemeController::class,'showCourseDetails'])->name('schemes.verify.courseDetails.show');
+    
+    Route::get('/schemes/{scheme}/verify/{department}/course-details/{level}/pdf',[CDCVerifySchemeController::class,'downloadCourseDetails'])->name('schemes.verify.courseDetails.download');
 
     Route::get('/users/hod', [CDCUserController::class, 'hodIndex'])->name('users.hod');
 
@@ -147,5 +154,13 @@ Route::middleware(['auth', 'role:hod','active.scheme'])->prefix('hod')->name('ho
     Route::post('/courses/{level}/store',[HODCourseController::class,'store'])->name('courses.store');
 
     Route::get('/courses/{level}/preview',[HODCourseController::class,'preview'])->name('courses.preview');
+
+    Route::post('/courses/{level}/finalize',[HODCourseController::class,'finalize'])->name('courses.finalize');
+
+    Route::get('/class-award',[HODClassAwardController::class,'index'])->name('classAward');
+
+    Route::post('/class-award/preview',[HODClassAwardController::class,'preview'])->name('classAward.preview');
+
+    Route::post('/class-award/save',[HODClassAwardController::class,'store'])->name('classAward.store');
 
 });
