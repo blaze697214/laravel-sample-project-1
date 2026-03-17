@@ -72,8 +72,8 @@
 
                             <tr class="hover:bg-gray-50">
 
-                                <td class="px-2 py-2 border border-gray-200 border-gray-200 text-center">
-                                    {{  str_pad($index + 1, 2, '0', STR_PAD_LEFT)}}
+                                <td class="px-2 py-2 border border-gray-200  text-center">
+                                    {{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}
                                 </td>
 
 
@@ -83,8 +83,8 @@
                                         <label>{{ $year . $level->order_no }}</label>
 
                                         <input type="text" name="course_code[{{ $dc->id }}]"
-                                            value="{{ substr(old('course_code.' . $dc->id, $details->course_code ?? ''),-2) }}"
-                                            class="w-10 border border-gray-200 border-gray-300 rounded px-2 py-1">
+                                            value="{{ substr(old('course_code.' . $dc->id, $details->course_code ?? ''), -2) }}"
+                                            class="w-10 border border-gray-200  rounded px-2 py-1">
                                     </div>
 
                                 </td>
@@ -101,8 +101,8 @@
 
                                 <td class="border border-gray-200 px-2 py-2">
 
-                                    <input class="th_hrs w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
-                                        type="number" name="th_hrs[{{ $dc->id }}]"
+                                    <input class="th_hrs w-20 border border-gray-200 rounded px-2 py-1" type="number"
+                                        name="th_hrs[{{ $dc->id }}]"
                                         value="{{ old('th_hrs.' . $dc->id, $details->th_hrs ?? '') }}">
 
                                 </td>
@@ -110,8 +110,8 @@
 
                                 <td class="border border-gray-200 px-2 py-2">
 
-                                    <input class="tu_hrs w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
-                                        type="number" name="tu_hrs[{{ $dc->id }}]"
+                                    <input class="tu_hrs w-20 border border-gray-200 rounded px-2 py-1" type="number"
+                                        name="tu_hrs[{{ $dc->id }}]"
                                         value="{{ old('tu_hrs.' . $dc->id, $details->tu_hrs ?? '') }}">
 
                                 </td>
@@ -119,8 +119,8 @@
 
                                 <td class="border border-gray-200 px-2 py-2">
 
-                                    <input class="pr_hrs w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
-                                        type="number" name="pr_hrs[{{ $dc->id }}]"
+                                    <input class="pr_hrs w-20 border border-gray-200 rounded px-2 py-1" type="number"
+                                        name="pr_hrs[{{ $dc->id }}]"
                                         value="{{ old('pr_hrs.' . $dc->id, $details->pr_hrs ?? '') }}">
 
                                 </td>
@@ -133,8 +133,8 @@
 
                                 <td class="border border-gray-200 px-2 py-2">
 
-                                    <input class="credits w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
-                                        type="number" name="credits[{{ $dc->id }}]"
+                                    <input class="credits w-20 border border-gray-200 rounded px-2 py-1" type="number"
+                                        name="credits[{{ $dc->id }}]"
                                         value="{{ old('credits.' . $dc->id, $details->credits ?? '') }}">
 
                                 </td>
@@ -142,54 +142,65 @@
                                 <td class="border border-gray-200 px-2 py-2">
 
                                     <input
-                                        class="th_paper_hrs w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                        class="th_paper_hrs w-20 border border-gray-200 rounded px-2 py-1 disabled:bg-gray-300"
                                         type="number" name="th_paper_hrs[{{ $dc->id }}]"
-                                        value="{{ old('th_paper_hrs.' . $dc->id, $details->th_paper_hrs ?? '') }}">
+                                        value="{{ old('th_paper_hrs.' . $dc->id, $details->th_paper_hrs ?? '') }}"
+                                        @if ($level->is_audit) disabled @endif>
 
                                 </td>
 
 
                                 <td class="border border-gray-200 px-2 py-2">
 
-                                    <input class="th_marks w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                    <input
+                                        class="th_marks w-20 border border-gray-200 rounded px-2 py-1 disabled:bg-gray-300"
                                         type="number" name="th_marks[{{ $dc->id }}]"
-                                        value="{{ old('th_marks.' . $dc->id, $details->th_marks ?? '') }}">
+                                        value="{{ old('th_marks.' . $dc->id, $details->th_marks ?? '') }}"
+                                        @if ($level->is_audit) disabled @endif>
 
                                 </td>
 
 
                                 <td class="border border-gray-200 px-2 py-2">
 
-                                    <input class="test_marks w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                    <input
+                                        class="test_marks w-20 border border-gray-200 rounded px-2 py-1 disabled:bg-gray-300"
                                         type="number" name="test_marks[{{ $dc->id }}]"
-                                        value="{{ old('test_marks.' . $dc->id, $details->test_marks ?? '') }}">
+                                        value="{{ old('test_marks.' . $dc->id, $details->test_marks ?? '') }}"
+                                        @if ($level->is_audit) disabled @endif>
 
                                 </td>
 
 
                                 <td class="border border-gray-200 px-2 py-2">
 
-                                    <input class="pr_marks w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                    <input
+                                        class="pr_marks w-20 border border-gray-200 rounded px-2 py-1 disabled:bg-gray-300"
                                         type="number" name="pr_marks[{{ $dc->id }}]"
-                                        value="{{ old('pr_marks.' . $dc->id, $details->pr_marks ?? '') }}">
+                                        value="{{ old('pr_marks.' . $dc->id, $details->pr_marks ?? '') }}"
+                                        @if ($level->is_audit) disabled @endif>
 
                                 </td>
 
 
-                                <td class="border border-gray-200 px-2 py-2">
+                                <td class="border border-gray-200 px-2 py-2 ">
 
-                                    <input class="or_marks w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                    <input
+                                        class="or_marks w-20 border border-gray-200 rounded px-2 py-1 disabled:bg-gray-300"
                                         type="number" name="or_marks[{{ $dc->id }}]"
-                                        value="{{ old('or_marks.' . $dc->id, $details->or_marks ?? '') }}">
+                                        value="{{ old('or_marks.' . $dc->id, $details->or_marks ?? '') }}"
+                                        @if ($level->is_audit) disabled @endif>
 
                                 </td>
 
 
                                 <td class="border border-gray-200 px-2 py-2">
 
-                                    <input class="tw_marks w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                    <input
+                                        class="tw_marks w-20 border border-gray-200 rounded px-2 py-1 disabled:bg-gray-300"
                                         type="number" name="tw_marks[{{ $dc->id }}]"
-                                        value="{{ old('tw_marks.' . $dc->id, $details->tw_marks ?? '') }}">
+                                        value="{{ old('tw_marks.' . $dc->id, $details->tw_marks ?? '') }}"
+                                        @if ($level->is_audit) disabled @endif>
 
                                 </td>
 
@@ -202,7 +213,7 @@
                         @endforeach
 
                         @php
-                            $sr = count($compulsoryCourses)+1;
+                            $sr = count($compulsoryCourses) + 1;
                         @endphp
 
                         @foreach ($electiveGroups as $group)
@@ -221,7 +232,7 @@
                                 $rowCount = $courses->count();
                                 $serialNumbers = [];
                                 for ($i = 0; $i < $group->min_select_count; $i++) {
-                                    $serialNumbers[] = '0'.($sr + $i);
+                                    $serialNumbers[] = '0' . ($sr + $i);
                                 }
                                 $sr += $group->min_select_count;
                                 $serialText = implode(' & ', $serialNumbers);
@@ -234,10 +245,12 @@
                                 @endphp
 
 
-                                <tr class="hover:bg-gray-50 ">
+
+                                <tr class="hover:bg-gray-50 elective-row" data-group="{{ $group->id }}"
+                                    data-min="{{ $group->min_select_count }}">
 
                                     @if ($index == 0)
-                                        <td class="border border-gray-200 px-2 py-2 text-center whitespace-nowrap   "
+                                        <td class="course_code border border-gray-200 px-2 py-2 text-center whitespace-nowrap   "
                                             rowspan="{{ $rowCount }}">
                                             {{ str_pad($serialText, 2, '0', STR_PAD_LEFT) }}</td>
                                     @endif
@@ -249,8 +262,8 @@
                                             <label>{{ $year . $level->order_no }}</label>
 
                                             <input type="text" name="course_code[{{ $dc->id }}]"
-                                                value="{{ substr(old('course_code.' . $dc->id, $details->course_code ?? ''),-2) }}"
-                                                class="w-10 border border-gray-200 border-gray-300 rounded px-2 py-1">
+                                                value="{{ substr(old('course_code.' . $dc->id, $details->course_code ?? ''), -2) }}"
+                                                class="w-10 border border-gray-200 rounded px-2 py-1">
                                         </div>
 
                                     </td>
@@ -267,8 +280,8 @@
 
                                     <td class="border border-gray-200 px-2 py-2">
 
-                                        <input class="th_hrs w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
-                                            type="number" name="th_hrs[{{ $dc->id }}]"
+                                        <input class="th_hrs w-20 border border-gray-200 rounded px-2 py-1" type="number"
+                                            name="th_hrs[{{ $dc->id }}]"
                                             value="{{ old('th_hrs.' . $dc->id, $details->th_hrs ?? '') }}">
 
                                     </td>
@@ -276,7 +289,7 @@
 
                                     <td class="border border-gray-200 px-2 py-2">
 
-                                        <input class="tu_hrs w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                        <input class="tu_hrs w-20 border border-gray-200  rounded px-2 py-1"
                                             type="number" name="tu_hrs[{{ $dc->id }}]"
                                             value="{{ old('tu_hrs.' . $dc->id, $details->tu_hrs ?? '') }}">
 
@@ -285,7 +298,7 @@
 
                                     <td class="border border-gray-200 px-2 py-2">
 
-                                        <input class="pr_hrs w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                        <input class="pr_hrs w-20 border border-gray-200  rounded px-2 py-1"
                                             type="number" name="pr_hrs[{{ $dc->id }}]"
                                             value="{{ old('pr_hrs.' . $dc->id, $details->pr_hrs ?? '') }}">
 
@@ -299,8 +312,7 @@
 
                                     <td class="border border-gray-200 px-2 py-2">
 
-                                        <input
-                                            class="credits w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                        <input class="credits w-20 border border-gray-200  rounded px-2 py-1"
                                             type="number" name="credits[{{ $dc->id }}]"
                                             value="{{ old('credits.' . $dc->id, $details->credits ?? '') }}">
 
@@ -308,8 +320,7 @@
 
                                     <td class="border border-gray-200 px-2 py-2">
 
-                                        <input
-                                            class="th_paper_hrs w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                        <input class="th_paper_hrs w-20 border border-gray-200  rounded px-2 py-1"
                                             type="number" name="th_paper_hrs[{{ $dc->id }}]"
                                             value="{{ old('th_paper_hrs.' . $dc->id, $details->th_paper_hrs ?? '') }}">
 
@@ -318,8 +329,7 @@
 
                                     <td class="border border-gray-200 px-2 py-2">
 
-                                        <input
-                                            class="th_marks w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                        <input class="th_marks w-20 border border-gray-200  rounded px-2 py-1"
                                             type="number" name="th_marks[{{ $dc->id }}]"
                                             value="{{ old('th_marks.' . $dc->id, $details->th_marks ?? '') }}">
 
@@ -328,8 +338,7 @@
 
                                     <td class="border border-gray-200 px-2 py-2">
 
-                                        <input
-                                            class="test_marks w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                        <input class="test_marks w-20 border border-gray-200  rounded px-2 py-1"
                                             type="number" name="test_marks[{{ $dc->id }}]"
                                             value="{{ old('test_marks.' . $dc->id, $details->test_marks ?? '') }}">
 
@@ -338,8 +347,7 @@
 
                                     <td class="border border-gray-200 px-2 py-2">
 
-                                        <input
-                                            class="pr_marks w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                        <input class="pr_marks w-20 border border-gray-200  rounded px-2 py-1"
                                             type="number" name="pr_marks[{{ $dc->id }}]"
                                             value="{{ old('pr_marks.' . $dc->id, $details->pr_marks ?? '') }}">
 
@@ -348,8 +356,7 @@
 
                                     <td class="border border-gray-200 px-2 py-2">
 
-                                        <input
-                                            class="or_marks w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                        <input class="or_marks w-20 border border-gray-200  rounded px-2 py-1"
                                             type="number" name="or_marks[{{ $dc->id }}]"
                                             value="{{ old('or_marks.' . $dc->id, $details->or_marks ?? '') }}">
 
@@ -358,8 +365,7 @@
 
                                     <td class="border border-gray-200 px-2 py-2">
 
-                                        <input
-                                            class="tw_marks w-20 border border-gray-200 border-gray-300 rounded px-2 py-1"
+                                        <input class="tw_marks w-20 border border-gray-200  rounded px-2 py-1"
                                             type="number" name="tw_marks[{{ $dc->id }}]"
                                             value="{{ old('tw_marks.' . $dc->id, $details->tw_marks ?? '') }}">
 
@@ -446,11 +452,12 @@
                 orMarks = 0,
                 twMarks = 0
             let totalMarks = 0
+            let processedGroups = new Set()
 
             document.querySelectorAll('tbody tr').forEach(row => {
 
                 let thInput = row.querySelector('.th_hrs')
-                if (!thInput) return // skip header/footer rows
+                if (!thInput) return
 
                 let tuInput = row.querySelector('.tu_hrs')
                 let prInput = row.querySelector('.pr_hrs')
@@ -460,16 +467,33 @@
                 let prv = Number(prInput?.value || 0)
 
                 let rowHours = thv + tuv + prv
-
                 row.querySelector('.total_hours').innerText = rowHours
 
-                th += thv
-                tu += tuv
-                pr += prv
-                totalHours += rowHours
+                let multiplier = 1
+
+                if (row.classList.contains('elective-row')) {
+
+                    let groupId = row.dataset.group
+
+                    if (processedGroups.has(groupId)) {
+                        return
+                    }
+
+                    processedGroups.add(groupId)
+
+                    multiplier = Number(row.dataset.min)
+
+                }
+
+                th += thv * multiplier
+                tu += tuv * multiplier
+                pr += prv * multiplier
+                totalHours += rowHours * multiplier
+
 
                 let creditInput = row.querySelector('.credits')
-                credits += Number(creditInput?.value || 0)
+                credits += Number(creditInput?.value || 0) * multiplier
+
 
                 let thm = Number(row.querySelector('.th_marks')?.value || 0)
                 let tm = Number(row.querySelector('.test_marks')?.value || 0)
@@ -480,13 +504,13 @@
                 let rowTotalMarks = thm + tm + prm + orm + twm
                 row.querySelector('.row_total_marks').innerText = rowTotalMarks
 
-                thMarks += thm
-                test += tm
-                prMarks += prm
-                orMarks += orm
-                twMarks += twm
+                thMarks += thm * multiplier
+                test += tm * multiplier
+                prMarks += prm * multiplier
+                orMarks += orm * multiplier
+                twMarks += twm * multiplier
 
-                totalMarks += rowTotalMarks
+                totalMarks += rowTotalMarks * multiplier
 
             })
 
@@ -504,12 +528,39 @@
         }
 
         // Attach input listener to all inputs in tbody
-        document.querySelectorAll('tbody input').forEach(i => {
-            i.addEventListener('input', updateTotals)
-        })
+        document.querySelectorAll('tbody input').forEach(input => {
 
-        // Initial calculation
-        updateTotals()
+            input.addEventListener('input', function() {
+
+                let row = this.closest('tr')
+
+                if (!row.classList.contains('elective-row')) {
+                    updateTotals()
+                    return
+                }
+                let className = this.className.split(' ')[0]
+                if (className === 'course_code') {
+                    updateTotals()
+                    return
+                }
+
+                let groupId = row.dataset.group
+                let value = this.value
+
+                document.querySelectorAll(`tr[data-group="${groupId}"] .${className}`)
+                    .forEach(el => {
+
+                        if (el !== this) {
+                            el.value = value
+                        }
+
+                    })
+
+                updateTotals()
+
+            })
+
+        })
 
     })
 </script>

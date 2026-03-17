@@ -336,9 +336,9 @@
 
                     <tbody class="divide-y">
 
-                        <tr class="bg-gray-100 border-1">
+                        <tr class="bg-gray-100 border">
                             <td colspan="9" class="px-3 py-2 text-left font-semibold">
-                                Any of the following
+                                Any of {{ $auditDetails->courses_offered }} the following
                             </td>
                         </tr>
 
@@ -413,7 +413,7 @@
 
             <p class="text-gray-700">
                 Total Courses :
-                <strong>04</strong>
+                <strong>{{ $auditDetails->courses_offered }}</strong>
             </p>
 
             <p class="text-gray-700">

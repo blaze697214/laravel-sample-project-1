@@ -313,12 +313,20 @@ class HODCourseController extends Controller
             ])
             ->get();
 
+            $auditDetails = DepartmentLevelDetail::where(
+    'department_id',
+    Auth::user()->department_id
+)
+->where('level_id',$level->id)
+->first();
+
         return view(
             'hod.courses.preview',
             compact(
                 'level',
                 'compulsoryCourses',
-                'electiveGroups'
+                'electiveGroups',
+                'auditDetails'
             )
         );
     }
