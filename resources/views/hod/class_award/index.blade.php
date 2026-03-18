@@ -1,222 +1,194 @@
 @extends('layouts.hod')
 
 @section('content')
-    <h1 class="text-2xl font-bold text-gray-800 mb-6">
-        Class Award Configuration
-    </h1>
 
+<h2>Class Award Configuration</h2>
 
-    <div class="bg-white p-6 rounded-xl shadow mb-8">
+@if($levels->isEmpty())
 
-        <p class="text-gray-700">
-            Department :
-            <strong>{{ $department->name }}</strong>
-        </p>
+<p>
+No configured levels found. Please complete course configuration before creating class award configuration.
+</p>
 
-        <p class="text-gray-600 mt-1">
-            Scheme :
-            <strong>{{ $scheme->year_start }} - {{ $scheme->year_end }}</strong>
-        </p>
+@else
 
-    </div>
+<form method="POST" action="{{ route('hod.classAward.store') }}">
 
+@csrf
+<input type="hidden" name="scheme_id" value="{{ $scheme->id }}">
 
 
-    <form method="POST" action="{{ route('hod.classAward.store') }}">
+<div>
+    <label>Total Courses for Class Award</label>
+    <input
+        type="number"
+        name="total_class_award_courses"
+        value="{{ old('total_class_award_courses', $config->total_class_award_courses ?? '') }}"
+        required
+    >
+</div>
 
-        <input type="hidden" name="scheme_id" value="{{ $scheme->id }}">
+<hr>
 
-        @csrf
+<h3>Compulsory Courses</h3>
 
+@foreach($levels as $level)
 
-        {{-- Total Courses --}}
-        <div class="bg-white p-6 rounded-xl shadow mb-8">
+<details open>
 
-            <label class="block text-sm font-medium text-gray-600 mb-2">
-                Total Courses for Class Award
-            </label>
+<summary>
+<strong>
+Level {{ $level->order_no }} : {{ $level->name }}
+</strong>
+</summary>
 
-            <input type="number" name="total_class_award_courses"
-                value="{{ old('total_class_award_courses', $config->total_class_award_courses ?? '') }}" required
-                class="border border-gray-300 rounded px-3 py-2 w-64">
+<table border="1" cellpadding="6" style="margin-top:10px">
 
-        </div>
+<thead>
+<tr>
+<th>Select</th>
+<th>Course Title</th>
+<th>Abbreviation</th>
+</tr>
+</thead>
 
+<tbody>
 
+@foreach($compulsoryCourses[$level->id] ?? [] as $dc)
 
-        {{-- Compulsory Courses --}}
-        <div class="bg-white p-6 rounded-xl shadow mb-8">
+<tr>
 
-            <h2 class="text-lg font-semibold text-gray-800 mb-4">
-                Compulsory Courses
-            </h2>
+<td>
+<input
+type="checkbox"
+name="compulsory_courses[]"
+value="{{ $dc->course->id }}"
+@if(isset($config) && $config->compulsoryCourses->contains($dc->course->id)) checked @endif
+>
+</td>
 
-            @foreach ($levels as $level)
-                <details class="mb-3 border rounded-lg">
+<td>
+{{ $dc->course->title }}
+</td>
 
-                    <summary class="cursor-pointer px-4 py-2 bg-gray-100 font-medium">
+<td>
+{{ $dc->course->abbrevation }}
+</td>
 
-                        Level {{ $level->order_no }} - {{ $level->name }}
+</tr>
 
-                    </summary>
+@endforeach
 
-                    <div class="p-4">
+</tbody>
 
-                        <table class="w-full text-left border border-gray-200">
+</table>
 
-                            <thead class="bg-gray-100">
-                                <tr>
-                                    <th class="px-4 py-2">Select</th>
-                                    <th class="px-4 py-2">Course Code</th>
-                                    <th class="px-4 py-2">Course Title</th>
-                                </tr>
-                            </thead>
+</details>
 
-                            <tbody class="divide-y">
+@endforeach
 
-                                @foreach ($compulsoryCourses->where('level_id', $level->id) as $course)
-                                    <tr class="hover:bg-gray-50">
 
-                                        <td class="px-4 py-2">
+<hr>
 
-                                            <input type="checkbox" name="compulsory_courses[]"
-                                                value="{{ $course->course->id }}"
-                                                @if (isset($config) && $config->compulsoryCourses->contains($course->course->id)) checked @endif>
+<h3>Elective Groups</h3>
 
-                                        </td>
+<table border="1" cellpadding="6">
 
-                                        <td class="px-4 py-2">
-                                            {{ $course->course->code ?? '' }}
-                                        </td>
+<thead>
+<tr>
+<th>Select</th>
+<th>Group Name</th>
+<th>Group Courses</th>
+<th>Min Select</th>
+</tr>
+</thead>
 
-                                        <td class="px-4 py-2">
-                                            {{ $course->course->title }}
-                                        </td>
+<tbody>
 
-                                    </tr>
-                                @endforeach
+@foreach($electiveGroups as $group)
 
-                            </tbody>
+<tr>
 
-                        </table>
+<td>
+<input
+type="checkbox"
+name="elective_groups[]"
+value="{{ $group->id }}"
+data-min="{{ $group->min_select_count }}"
+@if(isset($config) && $config->electiveGroups->contains($group->id)) checked @endif
+>
+</td>
 
-                    </div>
+<td>
+{{ $group->name }}
+</td>
 
-                </details>
-            @endforeach
+<td>
+@foreach($group->courses as $course)
+{{ $course->abbrevation }}@if(!$loop->last), @endif
+@endforeach
+</td>
 
-        </div>
+<td>
+{{ $group->min_select_count }}
+</td>
 
+</tr>
 
+@endforeach
 
-        {{-- Elective Groups --}}
-        <div class="bg-white p-6 rounded-xl shadow mb-8">
+</tbody>
 
-            <h2 class="text-lg font-semibold text-gray-800 mb-4">
-                Elective Groups
-            </h2>
+</table>
 
-            <div class="overflow-x-auto">
 
-                <table class="w-full text-left border border-gray-200">
+<hr>
 
-                    <thead class="bg-gray-100">
+<p>
+Selected Course Count :
+<strong id="selectedCount">0</strong>
+</p>
 
-                        <tr>
-                            <th class="px-4 py-3 text-sm font-semibold text-gray-600">Select</th>
-                            <th class="px-4 py-3 text-sm font-semibold text-gray-600">Group Name</th>
-                            <th class="px-4 py-3 text-sm font-semibold text-gray-600">Min Select</th>
-                        </tr>
+<button type="submit">
+Save Configuration
+</button>
 
-                    </thead>
+</form>
 
-                    <tbody class="divide-y">
 
-                        @foreach ($electiveGroups as $group)
-                            <tr class="hover:bg-gray-50 border-gray-200">
+<script>
 
-                                <td class="px-4 py-3">
+function updateCount(){
 
-                                    <input type="checkbox" name="elective_groups[]" value="{{ $group->id }}"
-                                        data-min="{{ $group->min_select_count }}"
-                                        @if (isset($config) && $config->electiveGroups->contains($group->id)) checked @endif>
+let compulsory = document.querySelectorAll(
+'input[name="compulsory_courses[]"]:checked'
+).length
 
-                                </td>
+let elective = 0
 
-                                <td class="px-4 py-3">
-                                    {{ $group->name }}
-                                </td>
+document.querySelectorAll(
+'input[name="elective_groups[]"]:checked'
+).forEach(function(e){
 
-                                <td class="px-4 py-3">
-                                    {{ $group->min_select_count }}
-                                </td>
+elective += Number(e.dataset.min)
 
-                            </tr>
-                        @endforeach
+})
 
-                    </tbody>
+document.getElementById('selectedCount').innerText =
+compulsory + elective
 
-                </table>
+}
 
-            </div>
+document.querySelectorAll('input[type="checkbox"]').forEach(function(cb){
 
-        </div>
+cb.addEventListener('change',updateCount)
 
+})
 
+updateCount()
 
-        {{-- Selected Count --}}
-        <div class="bg-white p-6 rounded-xl shadow mb-8">
+</script>
 
-            <p class="text-gray-700">
-                Selected Course Count :
-                <strong id="selectedCount">0</strong>
-            </p>
+@endif
 
-        </div>
-
-
-
-        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded">
-
-            Save Configuration
-
-        </button>
-
-    </form>
-
-
-
-    <script>
-        function updateCount() {
-
-            let compulsory =
-                document.querySelectorAll(
-                    'input[name="compulsory_courses[]"]:checked'
-                ).length
-
-            let elective = 0
-
-            document.querySelectorAll(
-                'input[name="elective_groups[]"]:checked'
-            ).forEach(e => {
-
-                elective += Number(e.dataset.min)
-
-            })
-
-            document.getElementById('selectedCount').innerText =
-                compulsory + elective
-
-        }
-
-        document.querySelectorAll(
-            'input[type="checkbox"]'
-        ).forEach(cb => {
-
-            cb.addEventListener('change', updateCount)
-
-        })
-
-        updateCount()
-    </script>
 @endsection
