@@ -53,6 +53,6 @@ class Courses extends Model
 
     public function classAwardConfigurations()
     {
-        return $this->belongsToMany(ClassAwardConfiguration::class, 'class_award_compulsory_courses');
+        return $this->belongsToMany(ClassAwardConfiguration::class, 'class_award_compulsory_courses','course_id','award_configurations_id');
     }
 }

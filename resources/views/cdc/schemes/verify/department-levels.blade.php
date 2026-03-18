@@ -47,15 +47,6 @@
 
                 </a>
 
-
-                {{-- <a href="{{ route('cdc.schemes.verify.departmentLevels.word', [$schemeId, $department->id]) }}">
-
-                    <button class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded text-sm">
-                        Download Word
-                    </button>
-
-                </a> --}}
-
             </div>
 
         </div>

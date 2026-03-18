@@ -15,6 +15,7 @@ use App\Http\Controllers\hod\HODCourseController;
 use App\Http\Controllers\hod\HODDashboardController;
 use App\Http\Controllers\hod\HODElectiveController;
 use App\Http\Controllers\hod\HODSchemeController;
+use App\Http\Controllers\hod\HODSemesterPlacementController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -108,14 +109,19 @@ Route::middleware(['auth', 'role:cdc'])->prefix('cdc')->name('cdc.')->group(func
 
     Route::get('/schemes/{scheme}/verify/{department}/course-details',[CDCVerifySchemeController::class,'courseDetails'])->name('schemes.verify.courseDetails');
 
+    Route::get('/schemes/{scheme}/verify/{department}/class-award',[CDCVerifySchemeController::class,'classAward'])->name('schemes.verify.classAward');
+
+    
     Route::get('/schemes/{scheme}/{department}/verify/department-levels/pdf', [CDCVerifySchemeController::class, 'downloadDepartmentLevelsPdf'])->name('schemes.verify.departmentLevels.pdf');
-
-    Route::get('/schemes/{scheme}/{department}/verify/department-levels/word', [CDCVerifySchemeController::class, 'downloadDepartmentLevelsWord'])->name('schemes.verify.departmentLevels.word');
-
+    
+    // Route::get('/schemes/{scheme}/{department}/verify/department-levels/word', [CDCVerifySchemeController::class, 'downloadDepartmentLevelsWord'])->name('schemes.verify.departmentLevels.word');
+    
     Route::get('/schemes/{scheme}/verify/{department}/course-details/{level}',[CDCVerifySchemeController::class,'showCourseDetails'])->name('schemes.verify.courseDetails.show');
     
     Route::get('/schemes/{scheme}/verify/{department}/course-details/{level}/pdf',[CDCVerifySchemeController::class,'downloadCourseDetails'])->name('schemes.verify.courseDetails.download');
-
+    
+    Route::get('/schemes/{scheme}/verify/{department}/class-award/pdf',[CDCVerifySchemeController::class,'downloadClassAward'])->name('schemes.verify.classAward.download');
+    
     Route::get('/users/hod', [CDCUserController::class, 'hodIndex'])->name('users.hod');
 
     Route::post('/users/hod', [CDCUserController::class, 'storeHod'])->name('users.hod.store');
@@ -159,8 +165,15 @@ Route::middleware(['auth', 'role:hod','active.scheme'])->prefix('hod')->name('ho
 
     Route::get('/class-award',[HODClassAwardController::class,'index'])->name('classAward');
 
-    Route::post('/class-award/preview',[HODClassAwardController::class,'preview'])->name('classAward.preview');
+    Route::get('/class-award/preview',[HODClassAwardController::class,'preview'])->name('classAward.preview');
 
     Route::post('/class-award/save',[HODClassAwardController::class,'store'])->name('classAward.store');
 
+    Route::get('/semester-placement', [HODSemesterPlacementController::class, 'index'])->name('semesterPlacement');
+
+    Route::get('/semester-placement/configure', [HODSemesterPlacementController::class, 'configure'])->name('semesterPlacement.configure');
+
+    Route::post('/semester-placement/store',[HODSemesterPlacementController::class,'store'])->name('semesterPlacement.store');
+
+    Route::get('/semester-placement/preview', [HODSemesterPlacementController::class, 'preview'])->name('semesterPlacement.preview');
 });

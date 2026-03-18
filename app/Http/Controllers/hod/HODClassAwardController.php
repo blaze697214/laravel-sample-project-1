@@ -54,8 +54,8 @@ class HODClassAwardController extends Controller
         */
 
         $levels = Levels::where('curriculum_year_id', $scheme->id)
+            ->where('is_audit', false)
             ->whereIn('id', $configuredLevels)
-            ->orderByRaw('is_audit = 1')
             ->orderBy('order_no')
             ->get();
 
@@ -77,7 +77,7 @@ class HODClassAwardController extends Controller
             ->get()
             ->groupBy(function ($dc) {
 
-                return $dc->course->levels->id ?? ' ';
+                return $dc->course->level_id ?? ' ';
 
             });
 
@@ -212,5 +212,93 @@ class HODClassAwardController extends Controller
             'hod.classAward.preview'
         )->with('success', 'Class award configuration saved');
 
+    }
+
+    public function preview()
+    {
+        $department = Auth::user()->department;
+
+        $scheme = CurriculumYears::where('is_active', true)->first();
+
+        $config = ClassAwardConfiguration::where('department_id', $department->id)
+            ->where('curriculum_year_id', $scheme->id)
+            ->firstOrFail();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Compulsory Courses
+        |--------------------------------------------------------------------------
+        */
+
+        $compulsoryCourses = DepartmentCourse::where('department_id', $department->id)
+            ->whereIn('course_id', $config->compulsoryCourses->pluck('id'))
+            ->with(['course', 'courseDetails'])
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Elective Groups
+        |--------------------------------------------------------------------------
+        */
+
+        $electiveGroups = ElectiveGroup::whereIn(
+            'id',
+            $config->electiveGroups->pluck('id')
+        )
+            ->with([
+                'courses.departmentCourses.courseDetails',
+                'courses',
+            ])
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Totals (for footer)
+        |--------------------------------------------------------------------------
+        */
+
+        $totalCredits = 0;
+        $totalMarks = 0;
+        $totalTH = 0;
+        $totalTU = 0;
+        $totalPR = 0;
+
+        foreach ($compulsoryCourses as $dc) {
+
+            $details = $dc->courseDetails;
+
+            if (! $details) {
+                continue;
+            }
+
+            $totalCredits += $details->credits;
+
+            $totalTH += $details->th_hrs;
+            $totalTU += $details->tu_hrs;
+            $totalPR += $details->pr_hrs;
+
+            $totalMarks +=
+                $details->th_marks +
+                $details->test_marks +
+                $details->pr_marks +
+                $details->or_marks +
+                $details->tw_marks;
+        }
+
+        return view(
+            'hod.class_award.preview',
+            compact(
+                'department',
+                'scheme',
+                'config',
+                'compulsoryCourses',
+                'electiveGroups',
+                'totalCredits',
+                'totalMarks',
+                'totalTH',
+                'totalTU',
+                'totalPR'
+            )
+        );
     }
 }

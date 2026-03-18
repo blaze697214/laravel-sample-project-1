@@ -71,8 +71,14 @@
 
                     <a href="{{ route('hod.classAward') }}"
                         class="block px-6 py-3 hover:bg-slate-800 transition
-           {{ request()->routeIs('hod.courses') ? 'bg-slate-800' : '' }}">
+           {{ request()->routeIs('hod.classAward') ? 'bg-slate-800' : '' }}">
                         Class Award Courses
+                    </a>
+
+                    <a href="{{ route('hod.semesterPlacement') }}"
+                        class="block px-6 py-3 hover:bg-slate-800 transition
+           {{ request()->routeIs('hod.semesterPlacement') ? 'bg-slate-800' : '' }}">
+                        Semester Placements
                     </a>
 
                 @else

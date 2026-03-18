@@ -64,6 +64,7 @@ class HODDashboardController extends Controller
             ->get();
 
         $levels = Levels::where('curriculum_year_id', $activeScheme->id)
+            ->orderByRaw('order_no=0')
             ->orderBy('order_no')
             ->get();
 

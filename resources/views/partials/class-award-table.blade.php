@@ -1,24 +1,12 @@
-<h1 class="text-3xl font-bold text-gray-800 text-center mb-2">
+<h1 class="text-3xl font-bold text-gray-800 text-center mb-5">
         PROGRAMME - DIPLOMA IN {{ strtoupper($department->name) }}
     </h1>
 
     <h1 class="text-2xl font-bold text-gray-800 text-center mb-2">
-        PROGRAMME STRUCTURE
+        Courses for Award of Class
     </h1>
 
-    @if (!$level->is_audit)
-        <h2 class="text-lg font-semibold text-center text-gray-700">
-            LEVEL - {{ $level->order_no }}
-        </h2>
-    @endif
-
-    <h2 class="text-lg font-semibold text-center text-gray-700 mb-6">
-        {{ strtoupper($level->name) }}
-    </h2>
-
-
-    @if (!$level->is_audit)
-        <div class="bg-white p-6 rounded-xl shadow mb-8">
+    <div class="bg-white p-6 rounded-xl shadow mb-8">
 
             <div class="overflow-x-auto">
 
@@ -182,7 +170,7 @@
                                 $rowCount = $courses->count();
                                 $serialNumbers = [];
                                 for ($i = 0; $i < $group->min_select_count; $i++) {
-                                    $serialNumbers[] = '0' . ($sr + $i);
+                                    $serialNumbers[] = sprintf('%02d', $sr + $i);
                                 }
                                 $sr += $group->min_select_count;
                                 $serialText = implode(' & ', $serialNumbers);
@@ -309,11 +297,8 @@
             </div>
 
         </div>
-        <div class="bg-white p-6 rounded-xl shadow mb-8">
 
-            <p class="mb-2">
-                Level : <strong>{{ $level->order_no }}</strong>
-            </p>
+        <div class="bg-white p-6 rounded-xl shadow mb-8">
 
             <p class="mb-2">
                 Total Courses : <strong>{{ $sr - 1 }}</strong>
@@ -328,155 +313,3 @@
             </p>
 
         </div>
-    @else
-        <div class="bg-white p-6 rounded-xl shadow mb-8">
-
-            <div class="overflow-x-auto">
-
-                <table class="w-full text-sm border border-gray-200 text-center">
-
-                    <thead class="bg-gray-100">
-
-                        <tr>
-                            <th rowspan="3" class="px-3 py-2 border">Sr.</th>
-                            <th rowspan="3" class="px-3 py-2 border">Course Code</th>
-                            <th rowspan="3" class="px-3 py-2 border">Course Title</th>
-                            <th rowspan="3" class="px-3 py-2 border">Course Abbr.</th>
-
-                            <th colspan="5" class="px-3 py-2 border">TEACHING SCHEME</th>
-                        </tr>
-
-                        <tr>
-                            <th colspan="4" class="px-3 py-2 border">Hours per Week</th>
-                            <th rowspan="2" class="px-3 py-2 border">Total Credits</th>
-                        </tr>
-
-                        <tr>
-                            <th class="px-3 py-2 border">TH</th>
-                            <th class="px-3 py-2 border">TU</th>
-                            <th class="px-3 py-2 border">PR</th>
-                            <th class="px-3 py-2 border">Total Hours</th>
-                        </tr>
-
-                    </thead>
-
-
-                    <tbody class="divide-y">
-
-                        <tr class="bg-gray-100 border">
-                            <td colspan="9" class="px-3 py-2 text-left font-semibold">
-                                Any of {{ $auditDetails->compulsory_to_complete }} the following
-                            </td>
-                        </tr>
-
-
-                        @php
-                            $sr = 1;
-                            $totalH = 0;
-                            $totalTH = 0;
-                            $totalTU = 0;
-                            $totalPR = 0;
-                            $totalHours = 0;
-                        @endphp
-
-
-                        @foreach ($compulsoryCourses as $dc)
-                            @php
-                                $details = $dc->courseDetails;
-                                $totalH = $details->th_hrs + $details->tu_hrs + $details->pr_hrs;
-                                $totalTH += $details->th_hrs;
-                                $totalTU += $details->tu_hrs;
-                                $totalPR += $details->pr_hrs;
-
-                                $totalHours += $totalH;
-                            @endphp
-
-                            <tr class="hover:bg-gray-50">
-
-                                <td class="px-3 py-2 border">
-                                    {{ str_pad($sr++, 2, '0', STR_PAD_LEFT) }}
-                                </td>
-
-                                <td class="px-3 py-2 border">
-                                    {{ $details->course_code }}
-                                </td>
-
-                                <td class="px-3 py-2 border text-left">
-                                    {{ $dc->course->title }}
-                                </td>
-
-                                <td class="px-3 py-2 border">
-                                    {{ $dc->course->abbrevation }}
-                                </td>
-
-                                <td class="px-3 py-2 border">
-                                    {{ $details->th_hrs ?: '--' }}
-                                </td>
-
-                                <td class="px-3 py-2 border">
-                                    {{ $details->tu_hrs ?: '--' }}
-                                </td>
-
-                                <td class="px-3 py-2 border">
-                                    {{ $details->pr_hrs ?: '--' }}
-                                </td>
-
-                                <td class="px-3 py-2 border">
-                                    {{ $totalH }}
-                                </td>
-
-                                <td class="px-3 py-2 border">
-                                    --
-                                </td>
-
-                            </tr>
-                        @endforeach
-                        <tr class="bg-gray-100 font-semibold">
-
-                            <td colspan="4" class="px-3 py-2 border">
-                                TOTAL
-                            </td>
-
-                            <td class="border">{{ $totalTH }}</td>
-                            <td class="border">{{ $totalTU }}</td>
-                            <td class="border">{{ $totalPR }}</td>
-
-                            <td class="border">{{ $totalHours }}</td>
-
-                            <td class="border">   -- </td>
-
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
-
-
-        <div class="bg-white p-6 rounded-xl shadow">
-
-            <p class="mb-2 font-semibold">
-                Audit Courses :
-            </p>
-
-            <p class="text-gray-700">
-                Total Courses :
-                <strong>{{ $auditDetails->compulsory_to_complete }}</strong>
-            </p>
-
-            <p class="text-gray-700">
-                Total Credits :
-                <strong>Nil</strong>
-            </p>
-
-            <p class="text-gray-700">
-                Total Marks :
-                <strong>--</strong>
-            </p>
-
-        </div>
-    @endif

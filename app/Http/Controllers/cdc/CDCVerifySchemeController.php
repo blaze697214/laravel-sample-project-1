@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\cdc;
 
 use App\Http\Controllers\Controller;
+use App\Models\ClassAwardConfiguration;
 use App\Models\CourseDetail;
 use App\Models\CurriculumYears;
 use App\Models\Department;
@@ -13,8 +14,6 @@ use App\Models\Levels;
 use App\Services\SchemeVerificationService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
-use PhpOffice\PhpWord\PhpWord;
-use PhpOffice\PhpWord\Shared\Html;
 
 class CDCVerifySchemeController extends Controller
 {
@@ -428,5 +427,195 @@ class CDCVerifySchemeController extends Controller
         );
 
         return $pdf->download('course-details.pdf');
+    }
+
+    public function classAward($schemeId, $departmentId)
+    {
+
+        $department = Department::findOrFail($departmentId);
+
+        $scheme = CurriculumYears::findOrFail($schemeId);
+
+        $config = ClassAwardConfiguration::where('department_id', $department->id)
+            ->where('curriculum_year_id', $scheme->id)
+            ->firstOrFail();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Compulsory Courses
+        |--------------------------------------------------------------------------
+        */
+
+        $compulsoryCourses = DepartmentCourse::where('department_id', $department->id)
+            ->whereIn('course_id', $config->compulsoryCourses->pluck('id'))
+            ->with(['course', 'courseDetails'])
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Elective Groups
+        |--------------------------------------------------------------------------
+        */
+
+        $electiveGroups = ElectiveGroup::whereIn(
+            'id',
+            $config->electiveGroups->pluck('id')
+        )
+            ->with([
+                'courses.departmentCourses.courseDetails',
+                'courses',
+            ])
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Totals
+        |--------------------------------------------------------------------------
+        */
+
+        $totalCredits = 0;
+        $totalMarks = 0;
+        $totalTH = 0;
+        $totalTU = 0;
+        $totalPR = 0;
+
+        foreach ($compulsoryCourses as $dc) {
+
+            $details = $dc->courseDetails;
+
+            if (! $details) {
+                continue;
+            }
+
+            $totalCredits += $details->credits;
+
+            $totalTH += $details->th_hrs;
+            $totalTU += $details->tu_hrs;
+            $totalPR += $details->pr_hrs;
+
+            $totalMarks +=
+                $details->th_marks +
+                $details->test_marks +
+                $details->pr_marks +
+                $details->or_marks +
+                $details->tw_marks;
+        }
+
+        return view(
+            'cdc.schemes.verify.class-award',
+            compact(
+                'department',
+                'scheme',
+                'config',
+                'compulsoryCourses',
+                'electiveGroups',
+                'totalCredits',
+                'totalMarks',
+                'totalTH',
+                'totalTU',
+                'totalPR'
+            )
+        );
+
+    }
+
+    public function downloadClassAward($schemeId, $departmentId)
+    {
+
+        $department = Department::findOrFail($departmentId);
+
+        $scheme = CurriculumYears::findOrFail($schemeId);
+
+        $config = ClassAwardConfiguration::where('department_id', $department->id)
+            ->where('curriculum_year_id', $scheme->id)
+            ->firstOrFail();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Compulsory Courses
+        |--------------------------------------------------------------------------
+        */
+
+        $compulsoryCourses = DepartmentCourse::where('department_id', $department->id)
+            ->whereIn('course_id', $config->compulsoryCourses->pluck('id'))
+            ->with(['course', 'courseDetails'])
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Elective Groups
+        |--------------------------------------------------------------------------
+        */
+
+        $electiveGroups = ElectiveGroup::whereIn(
+            'id',
+            $config->electiveGroups->pluck('id')
+        )
+            ->with([
+                'courses.departmentCourses.courseDetails',
+                'courses',
+            ])
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Totals
+        |--------------------------------------------------------------------------
+        */
+
+        $totalCredits = 0;
+        $totalMarks = 0;
+        $totalTH = 0;
+        $totalTU = 0;
+        $totalPR = 0;
+
+        foreach ($compulsoryCourses as $dc) {
+
+            $details = $dc->courseDetails;
+
+            if (! $details) {
+                continue;
+            }
+
+            $totalCredits += $details->credits;
+
+            $totalTH += $details->th_hrs;
+            $totalTU += $details->tu_hrs;
+            $totalPR += $details->pr_hrs;
+
+            $totalMarks +=
+                $details->th_marks +
+                $details->test_marks +
+                $details->pr_marks +
+                $details->or_marks +
+                $details->tw_marks;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Render PDF
+        |--------------------------------------------------------------------------
+        */
+
+        $pdf = Pdf::loadView(
+            'pdf.class-award',
+            compact(
+                'department',
+                'scheme',
+                'config',
+                'compulsoryCourses',
+                'electiveGroups',
+                'totalCredits',
+                'totalMarks',
+                'totalTH',
+                'totalTU',
+                'totalPR'
+            )
+        );
+
+        return $pdf->download(
+            'class_award_'.$department->abbrevation.'.pdf'
+        );
+
     }
 }

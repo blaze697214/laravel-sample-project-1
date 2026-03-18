@@ -15,6 +15,7 @@
         "vite": "^7.0.7"
     },
     "dependencies": {
-        "puppeteer": "^24.39.0"
+        "puppeteer": "^24.39.0",
+        "sortablejs": "^1.15.7"
     }
 }

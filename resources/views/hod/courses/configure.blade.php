@@ -584,4 +584,5 @@
         updateTotals()
 
     })
+    updateTotals()
 </script>

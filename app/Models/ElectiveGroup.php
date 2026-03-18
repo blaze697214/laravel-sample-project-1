@@ -36,7 +36,7 @@ class ElectiveGroup extends Model
 
     public function classAwardConfigurations()
     {
-        return $this->belongsToMany(ClassAwardConfiguration::class, 'class_award_elective_groups');
+        return $this->belongsToMany(ClassAwardConfiguration::class, 'class_award_elective_groups','elective_group_id','award_configurations_id');
     }
 
     public function semesterPlacements()

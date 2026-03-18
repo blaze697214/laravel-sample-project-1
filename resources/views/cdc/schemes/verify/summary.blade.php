@@ -182,13 +182,13 @@
 
                     <td class="px-4 py-3">
                         @if ($verification['classAward'])
-                            {{-- <a href="{{ route('cdc.verify.classAward', [$schemeId, $department->id]) }}"> --}}
+                            <a href="{{ route('cdc.schemes.verify.classAward', [$schemeId, $department->id]) }}">
 
                             <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded text-sm">
                                 View
                             </button>
 
-                            {{-- </a> --}}
+                            </a>
                         @else
                             <button class="bg-gray-300 text-gray-600 px-4 py-1 rounded text-sm cursor-not-allowed">
                                 Unavailable

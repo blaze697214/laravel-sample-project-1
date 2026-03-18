@@ -133,6 +133,7 @@
         text-align: center;
         line-height: 1.1;
         border-right: black;
+        word-wrap: break-word
     }
 
     td.text-left {
@@ -152,6 +153,29 @@
     .level-container {
         page-break-inside: avoid;
     }
+
+    table th:nth-child(1){width:3%;}
+table th:nth-child(2){width:6%;}
+table th:nth-child(3){width:14%;}
+table th:nth-child(4){width:6%;}
+
+table th:nth-child(5),
+table th:nth-child(6),
+table th:nth-child(7){width:4%;}
+
+table th:nth-child(8){width:5%;}
+table th:nth-child(9){width:5%;}
+
+table th:nth-child(10),
+table th:nth-child(11){width:5%;}
+
+table th:nth-child(12),
+table th:nth-child(13),
+table th:nth-child(14),
+table th:nth-child(15),
+table th:nth-child(16){width:4%;}
+
+table th:nth-child(17){width:6%;}
 </style>
 
 <div class="level-container">
