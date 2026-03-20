@@ -105,8 +105,8 @@
                 <h4 class="px-6 py-2 text-xs uppercase text-slate-400 mt-4">
                     Faculty
                 </h4>
-{{-- {{ route('hod.faculty') }} --}}
-                <a href=""
+
+                <a href="{{ route('hod.faculty') }}"
                     class="block px-6 py-3 hover:bg-slate-800 transition
        {{ request()->routeIs('hod.faculty') ? 'bg-slate-800' : '' }}">
                     Faculty Users

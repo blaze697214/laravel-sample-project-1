@@ -14,6 +14,7 @@ use App\Http\Controllers\hod\HODClassAwardController;
 use App\Http\Controllers\hod\HODCourseController;
 use App\Http\Controllers\hod\HODDashboardController;
 use App\Http\Controllers\hod\HODElectiveController;
+use App\Http\Controllers\hod\HODFacultyController;
 use App\Http\Controllers\hod\HODSchemeController;
 use App\Http\Controllers\hod\HODSemesterPlacementController;
 use App\Http\Controllers\UserController;
@@ -176,4 +177,13 @@ Route::middleware(['auth', 'role:hod','active.scheme'])->prefix('hod')->name('ho
     Route::post('/semester-placement/store',[HODSemesterPlacementController::class,'store'])->name('semesterPlacement.store');
 
     Route::get('/semester-placement/preview', [HODSemesterPlacementController::class, 'preview'])->name('semesterPlacement.preview');
+
+    Route::get('/faculty', [HODFacultyController::class, 'index'])->name('faculty');
+
+    Route::post('/faculty', [HODFacultyController::class, 'store'])->name('faculty.store');
+
+    Route::put('/faculty/{id}', [HODFacultyController::class, 'update'])->name('faculty.update');
+
+    Route::delete('/faculty/{id}', [HODFacultyController::class, 'destroy'])->name('faculty.delete');
+
 });
